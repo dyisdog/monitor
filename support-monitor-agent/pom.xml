@@ -17,6 +17,7 @@
     <modules>
         <module>support-monitor-agent-core</module>
         <module>support-monitor-agent-collect</module>
+        <module>support-monitor-agent-sdk</module>
     </modules>
 
     <distributionManagement>

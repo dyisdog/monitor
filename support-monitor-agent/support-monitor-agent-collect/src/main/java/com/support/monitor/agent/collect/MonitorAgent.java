@@ -1,19 +1,18 @@
 package com.support.monitor.agent.collect;
 
+import com.support.monitor.agent.core.matcher.matcher.MatcherBuilderFactory;
+import com.support.monitor.agent.core.matcher.matcher.MethodMatcher;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.SuperMethodCall;
-import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.instrument.Instrumentation;
-
-import static net.bytebuddy.matcher.ElementMatchers.*;
 
 /**
  * 数据采集agent
@@ -26,23 +25,12 @@ public class MonitorAgent {
 
     public static void premain(String agentArgs, Instrumentation instrumentation) {
         LOG.debug(">>>>> monitor agent collect <<<<<");
+        final MatcherBuilderFactory builderFactory = new MatcherBuilderFactory();
         final ByteBuddy byteBuddy = new ByteBuddy();
         new AgentBuilder.Default(byteBuddy)
-                .ignore(
-                        nameStartsWith("net.bytebuddy")
-                                .or(nameStartsWith("org.slf4j"))
-                                .or(nameStartsWith("org.apache.logging"))
-                                .or(nameStartsWith("org.groovy"))
-                                .or(nameContains("javassist"))
-                                .or(nameContains(".asm."))
-                                .or(nameStartsWith("sun.reflect"))
-                                .or(ElementMatchers.<TypeDescription>isSynthetic()))
-                .type(nameStartsWithIgnoreCase("com.example.demoes")
-                        .and(nameEndsWith("Controller"))
-                        .and(not(isInterface()))
-                        .and(not(isStatic()))
-                )
-                .transform(new AgentTransform())
+                .ignore(builderFactory.ignoreMatcher().matcher())
+                .type(builderFactory.typeMatcher().matcher())
+                .transform(new AgentTransform(builderFactory.methodMatcher()))
                 .with(new AgentListener())
                 .installOn(instrumentation);
     }
@@ -53,13 +41,17 @@ public class MonitorAgent {
 
     private static class AgentTransform implements AgentBuilder.Transformer {
 
-        public AgentTransform() {
+        private MethodMatcher methodMatcher;
+
+        public AgentTransform(MethodMatcher methodMatcher) {
+            this.methodMatcher = methodMatcher;
         }
 
         @Override
         public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module) {
 
-            return builder.method(ElementMatchers.any())
+            System.out.println(typeDescription);
+            return builder.method(methodMatcher.matcher())
                     .intercept(MethodDelegation
                             .to(AgentMethodInterceptor.class)
                             .andThen(SuperMethodCall.INSTANCE)
