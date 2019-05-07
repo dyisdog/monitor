@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>cn.wine</groupId>
+        <artifactId>support-dependencies-parent</artifactId>
+        <version>1.1.0.BUILD-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>support-monitor-dependencies</artifactId>
+
+    <properties>
+        <bytebuddy.version>1.9.12</bytebuddy.version>
+        <lombok.version>1.16.22</lombok.version>
+        <log4j.api.version>2.11.1</log4j.api.version>
+        <logback.classic.version>1.2.3</logback.classic.version>
+        <guava.version>27.1-jre</guava.version>
+        <commons.version>3.9</commons.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.support.monitor</groupId>
+                <artifactId>support-monitor-commons</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <!--探针收集器-->
+            <dependency>
+                <groupId>com.support.monitor</groupId>
+                <artifactId>support-monitor-agent-collect</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <!--探针核心实现-->
+            <dependency>
+                <groupId>com.support.monitor</groupId>
+                <artifactId>support-monitor-agent-core</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy -->
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${bytebuddy.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy-agent</artifactId>
+                <version>${bytebuddy.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j.api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.classic.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons.version}</version>
+            </dependency>
+
+
+        </dependencies>
+    </dependencyManagement>
+
+</project>
