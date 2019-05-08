@@ -1,14 +1,18 @@
 package com.support.monitor.agent.collect;
 
-import com.support.monitor.agent.core.matcher.matcher.MatcherBuilderFactory;
-import com.support.monitor.agent.core.matcher.matcher.MethodMatcher;
+import com.support.monitor.agent.core.config.ConfigLoader;
+import com.support.monitor.agent.core.matcher.IJunctionLoader;
+import com.support.monitor.agent.core.matcher.JunctionLoaderFactory;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
+import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.SuperMethodCall;
+import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.utility.JavaModule;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,35 +27,39 @@ public class MonitorAgent {
 
     private static final Logger LOG = LoggerFactory.getLogger(MonitorAgent.class);
 
+    private static String agentConfPath(String agentArgs) {
+        return StringUtils.isNotBlank(agentArgs) ? agentArgs : ConfigLoader.DEFAULT_CONFIG_PATH;
+    }
+
     public static void premain(String agentArgs, Instrumentation instrumentation) {
         LOG.debug(">>>>> monitor agent collect <<<<<");
-        final MatcherBuilderFactory builderFactory = new MatcherBuilderFactory();
         final ByteBuddy byteBuddy = new ByteBuddy();
+        final IJunctionLoader junctionLoader = JunctionLoaderFactory.builder(agentConfPath(agentArgs));
+
         new AgentBuilder.Default(byteBuddy)
-                .ignore(builderFactory.ignoreMatcher().matcher())
-                .type(builderFactory.typeMatcher().matcher())
-                .transform(new AgentTransform(builderFactory.methodMatcher()))
+                .ignore(junctionLoader.ignoreJunction())
+                .type(junctionLoader.typeJunction())
+                .transform(new AgentTransform(junctionLoader.methodJunction()))
                 .with(new AgentListener())
                 .installOn(instrumentation);
     }
 
+
     /**
      * @author 江浩
      */
-
     private static class AgentTransform implements AgentBuilder.Transformer {
 
-        private MethodMatcher methodMatcher;
+        private ElementMatcher.Junction<? super MethodDescription> methodJunction;
 
-        public AgentTransform(MethodMatcher methodMatcher) {
-            this.methodMatcher = methodMatcher;
+        public AgentTransform(ElementMatcher.Junction<? super MethodDescription> methodJunction) {
+            this.methodJunction = methodJunction;
         }
 
         @Override
         public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module) {
 
-            System.out.println(typeDescription);
-            return builder.method(methodMatcher.matcher())
+            return builder.method(methodJunction)
                     .intercept(MethodDelegation
                             .to(AgentMethodInterceptor.class)
                             .andThen(SuperMethodCall.INSTANCE)
