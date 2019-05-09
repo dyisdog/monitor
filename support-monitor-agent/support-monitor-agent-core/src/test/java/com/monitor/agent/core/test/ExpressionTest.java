@@ -6,6 +6,7 @@ import com.support.monitor.agent.core.matcher.expression.NameNoneTerminalExpress
 import com.support.monitor.agent.core.matcher.expression.NameTerminalExpression;
 import lombok.Builder;
 import lombok.Data;
+import net.bytebuddy.matcher.ElementMatchers;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
@@ -13,17 +14,23 @@ import java.util.LinkedList;
 
 public class ExpressionTest {
 
+    //1.    *.xxx 以.xxx结尾
+    //2.    xxx.* 以xxx.开头
+    //3.    *xxx* 包含xxx
+    private static String str = "com.example.demoes.controller.*Controller&com.*";
 
     @Test
     public void express2() {
         IExpression expression = new NameNoneTerminalExpression(new NameTerminalExpression());
-        System.out.println(expression.expression("com.example.demoes"));
+        System.out.println(expression.expression(str));
+
+        System.out.println(ElementMatchers.nameMatches("com.example.demoes.controller.*Controller"));
     }
 
 
     @Test
     public void expressionTest() {
-        String str = ".cn. | .com&org. , com.example ,com &.cn";
+
 //        System.out.println(StringUtils.substringBefore(str, "|"));
 //        System.out.println(StringUtils.substringAfter(str, "|"));
 //        System.out.println(StringUtils.replaceChars(str, ",", "|"));

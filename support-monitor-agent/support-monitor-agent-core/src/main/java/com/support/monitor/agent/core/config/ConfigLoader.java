@@ -69,7 +69,8 @@ public class ConfigLoader {
     }
 
     public String ignore() {
-        return getString("agent.ignore");
+        String ignore = getString("agent.ignore");
+        return StringUtils.isBlank(ignore) ? "NONE" : ignore;
     }
 
     public String type() {

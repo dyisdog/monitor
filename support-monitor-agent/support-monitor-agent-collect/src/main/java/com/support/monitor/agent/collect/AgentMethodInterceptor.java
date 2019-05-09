@@ -29,7 +29,13 @@ public class AgentMethodInterceptor {
             @SuperCall Callable<?> callable) throws Exception {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        Object result = callable.call();
+        Object result = null;
+        try {
+            result = callable.call();
+        } catch (Exception e) {
+            LOG.error("agent interceptor exception: {}->{}", clazz.getName(), method.getName());
+            throw e;
+        }
         LOG.info("agent interceptor: {} use {} ms", format(clazz, method, allArguments), stopWatch.getTime());
         return result;
     }

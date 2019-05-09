@@ -40,8 +40,8 @@ public class ConfigFileJunctionLoader extends AbstractLoadJunctionLoader {
         if (!Objects.isNull(nextJunction)) {
             thisJunction.or(nextJunction);
         }
-        ElementMatcher.Junction<TypeDescription> response = thisJunction.or(ElementMatchers.isAnnotatedWith(AgentCollect.class));
-        LOG.info("loaded ignore: {}", response);
+        ElementMatcher.Junction<TypeDescription> response = thisJunction.or(ElementMatchers.isSynthetic());
+        LOG.info("loaded ignore: {}", thisJunction);
         return response;
     }
 
