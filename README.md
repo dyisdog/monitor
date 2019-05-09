@@ -7,11 +7,7 @@
 	* 连接符
 		* 或者使用了两种占位符号`|` `,`;并且使用`&`(英文)
 	* 匹配方式
-		* 使用`.`做前后占位操作例如:`.com. | .com|com.`
-		* '.'开头结尾，`.com.`加载 `a.com.b,c.com.z` 执行 `nameConstainsWith(com)`
-		* '.'只开头,`.com` 加载`a.com,b.com`执行`nameEndWith(com)`
-		* '.'只结尾,`com.`加载`com.a,com.b`执行`nameStartWith(com)`
-		* "" 前后不含`.`,`com`加载`com`执行`nameEques(com)`
+		* 目前只支持连接符左右两边正则表达式匹配方式 `com.example.demoes.controller.*Controller|com.example.demoes.*.*Service` 
 		* annotation 只会在`method,type`两个配置上生效
 		* 以`.`开头结尾的将会截取操作如:`.com.cn.=>com.cn`,`.com.cn=>com.cn`,`com.cn.=>com.cn`,如果确实需要有`.`的存在`..com.cn=>.com.cn`
 		``` 
@@ -19,7 +15,7 @@
 			{
 			  agent: {
 				ignore: ".com.typesafe.|com.java.&com.jdk,javax.javafx",
-				type: "com.example.demoes.controller.&.Controller",
+				type: "com.example.demoes.controller.*Controller|com.example.demoes.*.*Service",
 				method: "",
 				annotation: false
 			  }

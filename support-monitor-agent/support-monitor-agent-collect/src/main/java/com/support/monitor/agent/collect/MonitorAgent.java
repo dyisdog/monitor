@@ -13,6 +13,7 @@ import net.bytebuddy.implementation.SuperMethodCall;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.utility.JavaModule;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,12 +37,16 @@ public class MonitorAgent {
         final ByteBuddy byteBuddy = new ByteBuddy();
         final IJunctionLoader junctionLoader = JunctionLoaderFactory.builder(agentConfPath(agentArgs));
 
-        new AgentBuilder.Default(byteBuddy)
-                .ignore(junctionLoader.ignoreJunction())
-                .type(junctionLoader.typeJunction())
-                .transform(new AgentTransform(junctionLoader.methodJunction()))
-                .with(new AgentListener())
-                .installOn(instrumentation);
+        try {
+            new AgentBuilder.Default(byteBuddy)
+                    .ignore(junctionLoader.ignoreJunction())
+                    .type(junctionLoader.typeJunction())
+                    .transform(new AgentTransform(junctionLoader.methodJunction()))
+                    .with(new AgentListener())
+                    .installOn(instrumentation);
+        } catch (Exception e) {
+            LOG.error("agent init error: {}", ExceptionUtils.getMessage(e));
+        }
     }
 
 
@@ -79,7 +84,7 @@ public class MonitorAgent {
         @Override
         public void onTransformation(TypeDescription typeDescription, ClassLoader classLoader, JavaModule module,
                                      boolean loaded, DynamicType dynamicType) {
-            LOG.info("onTransformation class {}.", typeDescription.getName());
+            LOG.info("onTransformation class {}", typeDescription.getName());
             //TODO 加载类信息
         }
 
@@ -91,7 +96,7 @@ public class MonitorAgent {
         @Override
         public void onError(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded,
                             Throwable throwable) {
-            LOG.error("Enhance class " + typeName + " error.", throwable);
+            LOG.error("Enhance class " + typeName + " error", throwable);
         }
 
         @Override
