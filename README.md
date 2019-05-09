@@ -9,7 +9,6 @@
 	* 匹配方式
 		* 目前只支持连接符左右两边正则表达式匹配方式 `com.example.demoes.controller.*Controller|com.example.demoes.*.*Service` 
 		* annotation 只会在`method,type`两个配置上生效
-		* 以`.`开头结尾的将会截取操作如:`.com.cn.=>com.cn`,`.com.cn=>com.cn`,`com.cn.=>com.cn`,如果确实需要有`.`的存在`..com.cn=>.com.cn`
 		``` 
 		示例配置文件:
 			{
