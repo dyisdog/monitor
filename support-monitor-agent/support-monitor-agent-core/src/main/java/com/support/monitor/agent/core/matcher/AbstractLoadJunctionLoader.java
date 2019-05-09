@@ -1,13 +1,12 @@
 package com.support.monitor.agent.core.matcher;
 
-import com.support.monitor.agent.core.matcher.expression.IExpression;
-import com.support.monitor.agent.core.matcher.expression.NamedFixedExpression;
-import com.support.monitor.agent.core.matcher.expression.NoneTerminalExpression;
+import com.support.monitor.agent.core.matcher.expression.NameNoneTerminalExpression;
+import com.support.monitor.agent.core.matcher.expression.NameTerminalExpression;
 import lombok.Setter;
-import net.bytebuddy.description.method.MethodDescription;
-import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,34 +22,25 @@ public abstract class AbstractLoadJunctionLoader implements IJunctionLoader {
 
     protected IJunctionLoader junctionLoader;
 
-
     public AbstractLoadJunctionLoader(IJunctionLoader junctionLoader) {
         this.junctionLoader = junctionLoader;
     }
 
     /**
      * 语义解析
+     * <p>
+     * 1.该方法只支持名字的解析 <br>
+     * 2.格式.cn.|.com&org.,com.example <br>
+     * </p>
      *
-     * @param args :
-     *             <p>
-     *             .cn.|.com&org.,com.example <br>
-     *             </p>
-     * @return : net.bytebuddy.matcher.ElementMatcher.Junction<? super net.bytebuddy.description.type.TypeDescription>
+     * @param args : .cn.|.com&org.,com.example
+     * @return : net.bytebuddy.matcher.ElementMatcher.Junction<net.bytebuddy.description.NamedElement>
      * @author 江浩
      */
-    protected ElementMatcher.Junction<? super TypeDescription> interpretOfType(String args) {
-        IExpression expression = new NoneTerminalExpression(args,
-                new NamedFixedExpression(),
-                new NamedFixedExpression()
-        );
-        return ElementMatchers.none().and(expression.expression(args));
-    }
-
-    protected ElementMatcher.Junction<? super MethodDescription> interpretOfMethod(String args) {
-        IExpression expression = new NoneTerminalExpression(args,
-                new NamedFixedExpression(),
-                new NamedFixedExpression()
-        );
-        return ElementMatchers.none().and(expression.expression(args));
+    protected ElementMatcher.Junction<NamedElement> interpret(String args) {
+        if (StringUtils.isBlank(args)) {
+            return ElementMatchers.any();
+        }
+        return new NameNoneTerminalExpression(new NameTerminalExpression()).expression(args);
     }
 }

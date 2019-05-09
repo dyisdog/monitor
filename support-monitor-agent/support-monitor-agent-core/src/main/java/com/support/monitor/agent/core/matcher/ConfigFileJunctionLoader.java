@@ -2,9 +2,9 @@ package com.support.monitor.agent.core.matcher;
 
 import com.support.monitor.agent.core.config.ConfigLoader;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.description.method.MethodDescription;
-import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.matcher.ElementMatcher;
+import net.bytebuddy.matcher.ElementMatchers;
 
 import java.util.Objects;
 
@@ -30,35 +30,41 @@ public class ConfigFileJunctionLoader extends AbstractLoadJunctionLoader {
     }
 
     @Override
-    public ElementMatcher.Junction<? super TypeDescription> ignoreJunction() {
-        ElementMatcher.Junction<? super TypeDescription> nextJunction =
-                Objects.isNull(this.junctionLoader) ? null : this.junctionLoader.ignoreJunction();
-        ElementMatcher.Junction<? super TypeDescription> thisJunction = this.interpretOfType(configLoader.ignore());
+    public ElementMatcher.Junction<NamedElement> ignoreJunction() {
+        ElementMatcher.Junction<NamedElement> nextJunction =
+                Objects.isNull(this.junctionLoader) ? ElementMatchers.any() : this.junctionLoader.ignoreJunction();
+        ElementMatcher.Junction<NamedElement> thisJunction = this.interpret(configLoader.ignore());
         if (!Objects.isNull(nextJunction)) {
             thisJunction.or(nextJunction);
         }
+
+        LOG.info("loaded ignore: {}", thisJunction);
         return thisJunction;
     }
 
     @Override
-    public ElementMatcher.Junction<? super TypeDescription> typeJunction() {
-        ElementMatcher.Junction<? super TypeDescription> nextJunction =
-                Objects.isNull(this.junctionLoader) ? null : this.junctionLoader.typeJunction();
-        ElementMatcher.Junction<? super TypeDescription> thisJunction = this.interpretOfType(configLoader.type());
+    public ElementMatcher.Junction<NamedElement> typeJunction() {
+        ElementMatcher.Junction<NamedElement> nextJunction =
+                Objects.isNull(this.junctionLoader) ? ElementMatchers.any() : this.junctionLoader.typeJunction();
+        ElementMatcher.Junction<NamedElement> thisJunction = this.interpret(configLoader.type());
+
         if (!Objects.isNull(nextJunction)) {
             thisJunction.or(nextJunction);
         }
+
+        LOG.info("loaded type: {}", thisJunction);
         return thisJunction;
     }
 
     @Override
-    public ElementMatcher.Junction<? super MethodDescription> methodJunction() {
-        ElementMatcher.Junction<? super MethodDescription> nextJunction =
-                Objects.isNull(this.junctionLoader) ? null : this.junctionLoader.methodJunction();
-        ElementMatcher.Junction<? super MethodDescription> thisJunction = this.interpretOfMethod(configLoader.method());
+    public ElementMatcher.Junction<NamedElement> methodJunction() {
+        ElementMatcher.Junction<NamedElement> nextJunction =
+                Objects.isNull(this.junctionLoader) ? ElementMatchers.any() : this.junctionLoader.methodJunction();
+        ElementMatcher.Junction<NamedElement> thisJunction = this.interpret(configLoader.method());
         if (!Objects.isNull(nextJunction)) {
             thisJunction.or(nextJunction);
         }
+        LOG.info("loaded method: {}", thisJunction);
         return thisJunction;
     }
 }

@@ -32,7 +32,7 @@ public class MonitorAgent {
     }
 
     public static void premain(String agentArgs, Instrumentation instrumentation) {
-        LOG.debug(">>>>> monitor agent collect <<<<<");
+        LOG.info(">>>>> monitor agent collect <<<<<");
         final ByteBuddy byteBuddy = new ByteBuddy();
         final IJunctionLoader junctionLoader = JunctionLoaderFactory.builder(agentConfPath(agentArgs));
 

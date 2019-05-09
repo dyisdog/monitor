@@ -1,7 +1,6 @@
 package com.support.monitor.agent.core.matcher;
 
-import net.bytebuddy.description.method.MethodDescription;
-import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.matcher.ElementMatcher;
 
 /**
@@ -14,24 +13,20 @@ public class PluginJunctionLoader extends AbstractLoadJunctionLoader {
         super(junctionLoader);
     }
 
+
     @Override
-    public ElementMatcher.Junction<? super TypeDescription> ignoreJunction() {
-        System.out.println("plugin.....ignore");
-        super.junctionLoader.ignoreJunction();
-        return null;
+    public ElementMatcher.Junction<NamedElement> ignoreJunction() {
+
+        return junctionLoader.ignoreJunction();
     }
 
     @Override
-    public ElementMatcher.Junction<? super TypeDescription> typeJunction() {
-        System.out.println("plugin.....type");
-        return null;
+    public ElementMatcher.Junction<NamedElement> typeJunction() {
+        return junctionLoader.typeJunction();
     }
 
     @Override
-    public ElementMatcher.Junction<? super MethodDescription> methodJunction() {
-        System.out.println("plugin.....method");
-        return null;
+    public ElementMatcher.Junction<NamedElement> methodJunction() {
+        return junctionLoader.methodJunction();
     }
-
-
 }

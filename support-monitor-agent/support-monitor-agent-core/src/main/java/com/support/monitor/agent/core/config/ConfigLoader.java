@@ -3,8 +3,10 @@ package com.support.monitor.agent.core.config;
 import com.google.common.collect.Lists;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import java.util.List;
  *
  * @author 江浩
  */
+@Getter
 public class ConfigLoader {
 
     public static final String DEFAULT_CONFIG_PATH = "agent.conf";
@@ -26,7 +29,11 @@ public class ConfigLoader {
     }
 
     public ConfigLoader(String path) {
-        this.config = ConfigFactory.load(path);
+        if (StringUtils.isBlank(path) || StringUtils.equalsIgnoreCase(DEFAULT_CONFIG_PATH, path)) {
+            this.config = ConfigFactory.load(path);
+        } else {
+            this.config = ConfigFactory.parseFile(new File(path));
+        }
     }
 
     public List<String> getStringList(String key, List<String> defaultValue) {

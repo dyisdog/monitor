@@ -1,5 +1,6 @@
 package com.support.monitor.agent.core.matcher.expression;
 
+import net.bytebuddy.description.NamedElement;
 import net.bytebuddy.matcher.ElementMatcher;
 
 /**
@@ -7,15 +8,20 @@ import net.bytebuddy.matcher.ElementMatcher;
  *
  * @author 江浩
  */
-public interface IExpression<R> {
+public interface IExpression {
 
     /**
      * 语义解析
+     * .cn <br>
+     * org. <br>
+     * .cn. <br>
+     * com.example <br>
      *
      * @param content :
-     * @return : net.bytebuddy.matcher.ElementMatcher.Junction<? super net.bytebuddy.description.type.TypeDescription>
+     * @return : net.bytebuddy.matcher.ElementMatcher.Junction<NamedElement>
      * @author 江浩
      */
-    ElementMatcher.Junction<? super R> expression(String content);
+    ElementMatcher.Junction<NamedElement> expression(String content);
+
 
 }

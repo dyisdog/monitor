@@ -1,6 +1,9 @@
 package com.monitor.agent.core.test;
 
 import com.google.common.collect.Lists;
+import com.support.monitor.agent.core.matcher.expression.IExpression;
+import com.support.monitor.agent.core.matcher.expression.NameNoneTerminalExpression;
+import com.support.monitor.agent.core.matcher.expression.NameTerminalExpression;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +12,14 @@ import org.junit.Test;
 import java.util.LinkedList;
 
 public class ExpressionTest {
+
+
+    @Test
+    public void express2() {
+        IExpression expression = new NameNoneTerminalExpression(new NameTerminalExpression());
+        System.out.println(expression.expression("com.example.demoes"));
+    }
+
 
     @Test
     public void expressionTest() {
