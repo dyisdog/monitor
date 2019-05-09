@@ -1,8 +1,11 @@
 package com.support.monitor.agent.core.matcher;
 
 import com.support.monitor.agent.core.config.ConfigLoader;
+import com.support.monitor.agent.sdk.annotation.AgentCollect;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.description.NamedElement;
+import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
@@ -30,8 +33,8 @@ public class ConfigFileJunctionLoader extends AbstractLoadJunctionLoader {
     }
 
     @Override
-    public ElementMatcher.Junction<NamedElement> ignoreJunction() {
-        ElementMatcher.Junction<NamedElement> nextJunction =
+    public ElementMatcher.Junction<TypeDescription> ignoreJunction() {
+        ElementMatcher.Junction<TypeDescription> nextJunction =
                 Objects.isNull(this.junctionLoader) ? ElementMatchers.any() : this.junctionLoader.ignoreJunction();
         ElementMatcher.Junction<NamedElement> thisJunction = this.interpret(configLoader.ignore());
         if (!Objects.isNull(nextJunction)) {
@@ -39,12 +42,12 @@ public class ConfigFileJunctionLoader extends AbstractLoadJunctionLoader {
         }
 
         LOG.info("loaded ignore: {}", thisJunction);
-        return thisJunction;
+        return thisJunction.or(ElementMatchers.isAnnotatedWith(AgentCollect.class));
     }
 
     @Override
-    public ElementMatcher.Junction<NamedElement> typeJunction() {
-        ElementMatcher.Junction<NamedElement> nextJunction =
+    public ElementMatcher.Junction<TypeDescription> typeJunction() {
+        ElementMatcher.Junction<TypeDescription> nextJunction =
                 Objects.isNull(this.junctionLoader) ? ElementMatchers.any() : this.junctionLoader.typeJunction();
         ElementMatcher.Junction<NamedElement> thisJunction = this.interpret(configLoader.type());
 
@@ -53,18 +56,18 @@ public class ConfigFileJunctionLoader extends AbstractLoadJunctionLoader {
         }
 
         LOG.info("loaded type: {}", thisJunction);
-        return thisJunction;
+        return thisJunction.or(ElementMatchers.isAnnotatedWith(AgentCollect.class));
     }
 
     @Override
-    public ElementMatcher.Junction<NamedElement> methodJunction() {
-        ElementMatcher.Junction<NamedElement> nextJunction =
+    public ElementMatcher.Junction<MethodDescription> methodJunction() {
+        ElementMatcher.Junction<MethodDescription> nextJunction =
                 Objects.isNull(this.junctionLoader) ? ElementMatchers.any() : this.junctionLoader.methodJunction();
         ElementMatcher.Junction<NamedElement> thisJunction = this.interpret(configLoader.method());
         if (!Objects.isNull(nextJunction)) {
             thisJunction.or(nextJunction);
         }
         LOG.info("loaded method: {}", thisJunction);
-        return thisJunction;
+        return thisJunction.or(ElementMatchers.isAnnotatedWith(AgentCollect.class));
     }
 }

@@ -1,6 +1,7 @@
 package com.support.monitor.agent.core.matcher;
 
-import net.bytebuddy.description.NamedElement;
+import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
 /**
@@ -11,28 +12,12 @@ import net.bytebuddy.matcher.ElementMatcher;
 public interface IJunctionLoader {
 
 
-    /**
-     * 过滤匹配
-     *
-     * @return : net.bytebuddy.matcher.ElementMatcher.Junction<net.bytebuddy.description.NamedElement>
-     * @author 江浩
-     */
-    ElementMatcher.Junction<NamedElement> ignoreJunction();
+    ElementMatcher.Junction<TypeDescription> ignoreJunction();
 
-    /**
-     * 类型匹配
-     *
-     * @return : net.bytebuddy.matcher.ElementMatcher.Junction<net.bytebuddy.description.NamedElement>
-     * @author 江浩
-     */
-    ElementMatcher.Junction<NamedElement> typeJunction();
 
-    /**
-     * 方法匹配
-     *
-     * @return : net.bytebuddy.matcher.ElementMatcher.Junction<net.bytebuddy.description.NamedElement>
-     * @author 江浩
-     */
-    ElementMatcher.Junction<NamedElement> methodJunction();
+    ElementMatcher.Junction<TypeDescription> typeJunction();
+
+
+    ElementMatcher.Junction<MethodDescription> methodJunction();
 
 }

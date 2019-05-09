@@ -1,6 +1,7 @@
 package com.support.monitor.agent.core.matcher;
 
-import net.bytebuddy.description.NamedElement;
+import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
@@ -11,20 +12,18 @@ import net.bytebuddy.matcher.ElementMatchers;
  */
 public class DefaultTypeJunctionLoader implements IJunctionLoader {
 
-
     @Override
-    public ElementMatcher.Junction<NamedElement> ignoreJunction() {
+    public ElementMatcher.Junction<TypeDescription> ignoreJunction() {
         return ElementMatchers.any();
     }
 
     @Override
-    public ElementMatcher.Junction<NamedElement> typeJunction() {
+    public ElementMatcher.Junction<TypeDescription> typeJunction() {
         return ElementMatchers.any();
     }
 
-
     @Override
-    public ElementMatcher.Junction<NamedElement> methodJunction() {
+    public ElementMatcher.Junction<MethodDescription> methodJunction() {
         return ElementMatchers.any();
     }
 }
