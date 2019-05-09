@@ -40,9 +40,9 @@ public class ConfigFileJunctionLoader extends AbstractLoadJunctionLoader {
         if (!Objects.isNull(nextJunction)) {
             thisJunction.or(nextJunction);
         }
-
-        LOG.info("loaded ignore: {}", thisJunction);
-        return thisJunction.or(ElementMatchers.isAnnotatedWith(AgentCollect.class));
+        ElementMatcher.Junction<TypeDescription> response = thisJunction.or(ElementMatchers.isAnnotatedWith(AgentCollect.class));
+        LOG.info("loaded ignore: {}", response);
+        return response;
     }
 
     @Override
@@ -55,8 +55,10 @@ public class ConfigFileJunctionLoader extends AbstractLoadJunctionLoader {
             thisJunction.or(nextJunction);
         }
 
-        LOG.info("loaded type: {}", thisJunction);
-        return thisJunction.or(ElementMatchers.isAnnotatedWith(AgentCollect.class));
+        ElementMatcher.Junction<TypeDescription> response =
+                thisJunction.or(ElementMatchers.isAnnotatedWith(AgentCollect.class));
+        LOG.info("loaded type: {}", response);
+        return response;
     }
 
     @Override
@@ -67,7 +69,8 @@ public class ConfigFileJunctionLoader extends AbstractLoadJunctionLoader {
         if (!Objects.isNull(nextJunction)) {
             thisJunction.or(nextJunction);
         }
-        LOG.info("loaded method: {}", thisJunction);
-        return thisJunction.or(ElementMatchers.isAnnotatedWith(AgentCollect.class));
+        ElementMatcher.Junction<MethodDescription> response = thisJunction.or(ElementMatchers.isAnnotatedWith(AgentCollect.class));
+        LOG.info("loaded method: {}", response);
+        return response;
     }
 }
