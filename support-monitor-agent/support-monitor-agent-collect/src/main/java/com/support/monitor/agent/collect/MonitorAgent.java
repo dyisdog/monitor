@@ -9,7 +9,7 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.implementation.SuperMethodCall;
+import net.bytebuddy.implementation.bind.annotation.Morph;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.utility.JavaModule;
 import org.apache.commons.lang3.StringUtils;
@@ -66,8 +66,12 @@ public class MonitorAgent {
 
             return builder.method(methodJunction)
                     .intercept(MethodDelegation
+                            .withDefaultConfiguration()
+                            // 覆写参数
+                            .withBinders(
+                                    Morph.Binder.install(OverrideCallable.class)
+                            )
                             .to(AgentMethodInterceptor.class)
-                            .andThen(SuperMethodCall.INSTANCE)
                     );
         }
     }

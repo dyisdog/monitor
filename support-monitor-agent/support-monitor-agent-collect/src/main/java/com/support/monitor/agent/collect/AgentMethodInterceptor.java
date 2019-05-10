@@ -1,16 +1,16 @@
 package com.support.monitor.agent.collect;
 
 import net.bytebuddy.implementation.bind.annotation.AllArguments;
+import net.bytebuddy.implementation.bind.annotation.Morph;
 import net.bytebuddy.implementation.bind.annotation.Origin;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
-import net.bytebuddy.implementation.bind.annotation.SuperCall;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
 
 /**
  * 方法拦截委托实现
@@ -26,14 +26,15 @@ public class AgentMethodInterceptor {
             @Origin Class<?> clazz,
             @Origin Method method,
             @AllArguments Object[] allArguments,
-            @SuperCall Callable<?> callable) throws Exception {
+            @Morph OverrideCallable callable) throws Exception {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         Object result = null;
+        //TODO
         try {
-            result = callable.call();
+            result = callable.call(ArrayUtils.add(allArguments, "tid:xxxxxx"));
         } catch (Exception e) {
-            LOG.error("agent interceptor exception: {}->{}", clazz.getName(), method.getName());
+            LOG.error("agent interceptor exception: {}->{}({})", clazz.getName(), method.getName(), allArguments);
             throw e;
         }
         LOG.info("agent interceptor: {} use {} ms", format(clazz, method, allArguments), stopWatch.getTime());
