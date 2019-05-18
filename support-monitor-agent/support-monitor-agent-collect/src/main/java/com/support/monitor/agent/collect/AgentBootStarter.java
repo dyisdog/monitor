@@ -1,11 +1,11 @@
 package com.support.monitor.agent.collect;
 
-import com.support.monitor.agent.collect.config.AgentConfig;
+import com.google.inject.*;
+import com.google.inject.name.Names;
+import com.support.monitor.agent.core.module.ApplicationContextModuleFactory;
 import com.support.monitor.agent.core.plugin.PluginDefine;
 import com.support.monitor.agent.core.plugin.PluginLoader;
-import com.support.monitor.agent.core.plugin.SpiPluginLoader;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.bind.annotation.Morph;
@@ -13,6 +13,8 @@ import org.apache.commons.collections.CollectionUtils;
 
 import java.lang.instrument.Instrumentation;
 import java.util.List;
+
+import static com.support.monitor.agent.core.module.PluginModule.SPI;
 
 /**
  * 探针启动类
@@ -25,20 +27,27 @@ public class AgentBootStarter {
 
     private final ClassLoader parentClassLoader;
 
-    private final AgentConfig agentConfig;
+    private ApplicationContextModuleFactory applicationContextModuleFactory;
 
     private Instrumentation instrumentation;
 
-    private AgentBuilder agentBuilder = new AgentBuilder.Default(new ByteBuddy());
+    private AgentBuilder agentBuilder;
 
-    private PluginLoader<PluginDefine> pluginLoader = new SpiPluginLoader();
+    private PluginLoader<PluginDefine> pluginLoader;
+
+    private Injector injector;
+
 
     public AgentBootStarter(ClassLoader parentClassLoader,
-                            AgentConfig agentConfig,
+                            ApplicationContextModuleFactory applicationContextModuleFactory,
                             Instrumentation instrumentation) {
         this.parentClassLoader = parentClassLoader;
-        this.agentConfig = agentConfig;
         this.instrumentation = instrumentation;
+        this.injector = Guice.createInjector(Stage.PRODUCTION, applicationContextModuleFactory.newModule());
+        this.agentBuilder = this.injector.getInstance(AgentBuilder.class);
+        //plugin ref loader
+        this.pluginLoader = this.injector.getInstance(Key.get(new TypeLiteral<PluginLoader<PluginDefine>>() {
+        }, Names.named(SPI)));
     }
 
     public boolean init() {

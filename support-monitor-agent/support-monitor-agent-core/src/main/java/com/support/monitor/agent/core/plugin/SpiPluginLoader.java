@@ -1,5 +1,6 @@
 package com.support.monitor.agent.core.plugin;
 
+import com.google.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -11,7 +12,9 @@ import java.util.Objects;
  * @author 江浩
  */
 @Slf4j
+@Singleton
 public class SpiPluginLoader implements PluginLoader<PluginDefine> {
+
 
     @Override
     public List<PluginDefine> loadPlugin() {

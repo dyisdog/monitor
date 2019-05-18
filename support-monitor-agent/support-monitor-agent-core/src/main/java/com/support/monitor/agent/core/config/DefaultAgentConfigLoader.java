@@ -1,8 +1,9 @@
-package com.support.monitor.agent.collect.config;
+package com.support.monitor.agent.core.config;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 
@@ -11,20 +12,28 @@ import java.io.File;
  *
  * @author 江浩
  */
-public class AgentConfig {
+@Singleton
+public class DefaultAgentConfigLoader implements ConfigLoader {
 
     private static final String DEFAULT_CONFIG_CLASSPATH = "agent.conf";
 
     private Config config;
 
-    public AgentConfig(String fullPath) {
-        if (StringUtils.isNotBlank(fullPath)) {
-            this.config = ConfigFactory.parseFile(new File(fullPath));
-        } else {
-            this.config = ConfigFactory.load(DEFAULT_CONFIG_CLASSPATH);
-        }
+    @Inject
+    public DefaultAgentConfigLoader() {
 
     }
+
+    @Override
+    public Config load() {
+        return this.config = ConfigFactory.load(DEFAULT_CONFIG_CLASSPATH);
+    }
+
+    @Override
+    public Config load(String fullPath) {
+        return this.config = ConfigFactory.parseFile(new File(fullPath));
+    }
+
 
     public String getString(String key, String defaultValue) {
         try {

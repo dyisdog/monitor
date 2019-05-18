@@ -20,6 +20,12 @@
             <artifactId>support-monitor-agent-core</artifactId>
         </dependency>
 
+        <!--plugins-->
+        <dependency>
+            <groupId>com.support.monitor</groupId>
+            <artifactId>support-monitor-plugins-demo</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>

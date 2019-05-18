@@ -1,6 +1,6 @@
 package com.support.monitor.agent.collect;
 
-import com.support.monitor.agent.collect.config.AgentConfig;
+import com.support.monitor.agent.core.module.ApplicationContextModuleFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -33,10 +33,10 @@ public class AgentCollect {
 
         log.info("classLoader: {}", defaultClassLoader);
 
-        AgentConfig agentConfig = new AgentConfig(agentArgs);
+        ApplicationContextModuleFactory applicationContextModuleFactory = new ApplicationContextModuleFactory();
 
         try {
-            AgentBootStarter agentBootStarter = new AgentBootStarter(defaultClassLoader, agentConfig, instrumentation);
+            AgentBootStarter agentBootStarter = new AgentBootStarter(defaultClassLoader, applicationContextModuleFactory, instrumentation);
             agentBootStarter.init();
         } catch (Exception e) {
             log.error("agent init error: {}", ExceptionUtils.getMessage(e));
