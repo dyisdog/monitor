@@ -5,18 +5,13 @@
     <parent>
         <artifactId>support-monitor-agent</artifactId>
         <groupId>com.support.monitor</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1.0-Final</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>support-monitor-agent-core</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>com.support.monitor</groupId>
-            <artifactId>support-monitor-agent-sdk</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
@@ -59,6 +54,11 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
         </dependency>
 
 

@@ -5,15 +5,14 @@
     <parent>
         <artifactId>support-monitor-agent</artifactId>
         <groupId>com.support.monitor</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1.0-Final</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>support-monitor-agent-collect</artifactId>
 
     <properties>
-        <premain.class>com.support.monitor.agent.collect.MonitorAgent</premain.class>
+        <premain.class>com.support.monitor.agent.collect.AgentCollect</premain.class>
     </properties>
-
 
     <dependencies>
         <dependency>
@@ -52,11 +51,28 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
 
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+
     </dependencies>
 
     <build>
         <finalName>monitor-agent-collect</finalName>
         <plugins>
+
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
@@ -67,10 +83,18 @@
                         </goals>
                         <configuration>
                             <shadedArtifactAttached>false</shadedArtifactAttached>
-                            <createDependencyReducedPom>true</createDependencyReducedPom>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                             <createSourcesJar>true</createSourcesJar>
                             <shadeSourcesContent>true</shadeSourcesContent>
                             <transformers>
+                                <!--文件追加-->
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>
+                                        META-INF/services/com.support.monitor.agent.core.plugin.PluginDefine
+                                    </resource>
+                                </transformer>
+
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
@@ -78,6 +102,26 @@
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
+
+                            <!--
+                            由于一些包重复引用，
+                            打包后的 META-INF 目录多出了一些 *.SF 等文件，
+                            执行jar包时，
+                            可能会抛出java.lang.SecurityException:
+                            Invalid signature file digest for Manifest main attributes
+                            异常。可以通过配置下面的filters来避免问题
+                            -->
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+
                         </configuration>
                     </execution>
                 </executions>

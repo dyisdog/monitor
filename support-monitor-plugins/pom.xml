@@ -5,10 +5,16 @@
     <parent>
         <artifactId>support-monitor</artifactId>
         <groupId>com.support.monitor</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1.0-Final</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <artifactId>support-monitor-plugins</artifactId>
     <packaging>pom</packaging>
+
+    <modules>
+        <module>support-monitor-plugins-spring</module>
+        <module>support-monitor-plugins-demo</module>
+    </modules>
 
 </project>

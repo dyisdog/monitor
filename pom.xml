@@ -2,9 +2,10 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <groupId>com.support.monitor</groupId>
     <artifactId>support-monitor</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1.0-Final</version>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,6 +16,7 @@
         <module>support-monitor-dependencies</module>
         <module>support-monitor-agent</module>
         <module>support-monitor-transfer</module>
+        <module>support-monitor-store</module>
     </modules>
 
     <properties>
@@ -38,6 +40,17 @@
 
     <build>
         <plugins>
+
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                </configuration>
+            </plugin>
+
+
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
@@ -47,6 +60,8 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
+
+
         </plugins>
     </build>
 
