@@ -1,6 +1,7 @@
 package com.support.monitor.plugins.demo;
 
 import com.support.monitor.agent.core.interceptor.AroundInterceptor;
+import com.support.monitor.agent.core.interceptor.TargetInterceptPoint;
 import com.support.monitor.agent.core.plugin.PluginDefine;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
@@ -14,31 +15,24 @@ import net.bytebuddy.matcher.ElementMatchers;
  */
 public class DemoPlugin implements PluginDefine {
 
-    private static final String DEFAULT_PLUGIN_NAME = "Demo";
-
 
     @Override
-    public ElementMatcher<? super TypeDescription> ignoreMatcher() {
-        return ElementMatchers.none();
+    public TargetInterceptPoint targetInterceptPoint() {
+        return new TargetInterceptPoint() {
+            @Override
+            public ElementMatcher<? super TypeDescription> classMatcher() {
+                return ElementMatchers.nameStartsWithIgnoreCase("com.example.");
+            }
+
+            @Override
+            public ElementMatcher<? super MethodDescription> methodMatcher() {
+                return ElementMatchers.any();
+            }
+        };
     }
 
     @Override
-    public ElementMatcher<? super TypeDescription> classMatcher() {
-        return ElementMatchers.nameMatches("com.example.*");
-    }
-
-    @Override
-    public ElementMatcher<? super MethodDescription> methodMatcher() {
-        return ElementMatchers.any();
-    }
-
-    @Override
-    public AroundInterceptor interceptor() {
+    public AroundInterceptor aroundInterceptor() {
         return new DemoAroundInterceptor();
-    }
-
-    @Override
-    public String pluginName() {
-        return DEFAULT_PLUGIN_NAME;
     }
 }
