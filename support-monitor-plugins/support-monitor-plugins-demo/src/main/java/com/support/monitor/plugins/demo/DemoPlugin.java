@@ -15,6 +15,13 @@ import net.bytebuddy.matcher.ElementMatchers;
  */
 public class DemoPlugin implements PluginDefine {
 
+    private static final String PLUGIN_NAME = "Demo";
+
+
+    @Override
+    public String pluginName() {
+        return PLUGIN_NAME;
+    }
 
     @Override
     public TargetInterceptPoint targetInterceptPoint() {

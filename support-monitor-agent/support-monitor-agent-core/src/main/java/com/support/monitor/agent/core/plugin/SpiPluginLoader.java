@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 @Slf4j
 @Singleton
-public class SpiPluginLoader implements PluginLoader<PluginDefine> {
+public class SpiPluginLoader implements PluginLoader {
 
 
     @Override

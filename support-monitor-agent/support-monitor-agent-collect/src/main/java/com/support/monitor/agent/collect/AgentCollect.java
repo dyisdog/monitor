@@ -34,9 +34,8 @@ public class AgentCollect {
         log.info("classLoader: {}", defaultClassLoader);
 
         ApplicationContextModuleFactory applicationContextModuleFactory = new ApplicationContextModuleFactory();
-
         try {
-            AgentBootStarter agentBootStarter = new AgentBootStarter(defaultClassLoader, applicationContextModuleFactory, instrumentation);
+            AgentBootStarter agentBootStarter = new AgentBootStarter(agentArgs, defaultClassLoader, applicationContextModuleFactory, instrumentation);
             agentBootStarter.init();
         } catch (Exception e) {
             log.error("agent init error: {}", ExceptionUtils.getMessage(e));

@@ -15,6 +15,13 @@ import net.bytebuddy.matcher.ElementMatchers;
  */
 public class SpringPlugin implements PluginDefine {
 
+    private static final String PLUGIN_NAME = "Spring";
+
+    @Override
+    public String pluginName() {
+        return PLUGIN_NAME;
+    }
+
     @Override
     public TargetInterceptPoint targetInterceptPoint() {
         return new TargetInterceptPoint() {

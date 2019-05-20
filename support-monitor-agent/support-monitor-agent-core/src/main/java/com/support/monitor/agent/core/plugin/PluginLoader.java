@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author 江浩
  */
-public interface PluginLoader<P> {
+public interface PluginLoader {
 
 
     /**
@@ -16,7 +16,7 @@ public interface PluginLoader<P> {
      * @return : java.util.List<P>
      * @author 江浩
      */
-    default List<P> loadPlugin() {
+    default List<PluginDefine> loadPlugin() {
         return null;
     }
 }

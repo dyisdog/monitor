@@ -1,21 +1,20 @@
 package com.support.monitor.agent.core.module;
 
-import com.google.inject.PrivateModule;
+import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
-import net.bytebuddy.agent.builder.AgentBuilder;
+import com.google.inject.name.Names;
+import com.support.monitor.agent.core.bytecode.ByteBuddyHandler;
+import com.support.monitor.agent.core.bytecode.ByteCodeHandler;
 
 /**
  * byte处理
  *
  * @author 江浩
  */
-public class ByteCodeModule extends PrivateModule {
+public class ByteCodeModule extends AbstractModule {
 
     @Override
     protected void configure() {
-
-        bind(AgentBuilder.class).to(AgentBuilder.Default.class).in(Scopes.SINGLETON);
-        //暂 TODO
-        expose(AgentBuilder.class);
+        bind(ByteCodeHandler.class).annotatedWith(Names.named("byteBuddy")).to(ByteBuddyHandler.class).in(Scopes.SINGLETON);
     }
 }
