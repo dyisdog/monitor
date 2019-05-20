@@ -44,17 +44,4 @@ public interface AgentConfig {
      */
     String getString(String key, String defaultValue);
 
-    /**
-     * 获取插件加载方式
-     *
-     * @return
-     */
-    String getPluginLoadType();
-
-    /**
-     * 获取字节码处理方式
-     *
-     * @return
-     */
-    String getByteCodeType();
 }

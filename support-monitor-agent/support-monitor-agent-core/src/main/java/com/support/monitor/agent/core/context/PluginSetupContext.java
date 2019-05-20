@@ -28,4 +28,5 @@ public interface PluginSetupContext {
      * @author 江浩
      */
     List<PluginContext> getPluginContexts();
+
 }

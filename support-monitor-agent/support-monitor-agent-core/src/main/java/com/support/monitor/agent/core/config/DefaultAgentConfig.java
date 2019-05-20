@@ -19,6 +19,10 @@ public class DefaultAgentConfig implements AgentConfig {
 
     private Config config;
 
+    public DefaultAgentConfig() {
+        this.load();
+    }
+
     @Override
     public void load() {
         this.config = ConfigFactory.load(DEFAULT_CONFIG_CLASSPATH);
