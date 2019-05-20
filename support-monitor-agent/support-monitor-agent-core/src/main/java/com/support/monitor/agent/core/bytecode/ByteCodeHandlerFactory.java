@@ -21,7 +21,6 @@ public class ByteCodeHandlerFactory implements ByteCodeHandler {
 
     private final Injector injector;
 
-
     private final AgentConfig agentConfig;
 
     private ByteCodeHandler byteCodeHandler;

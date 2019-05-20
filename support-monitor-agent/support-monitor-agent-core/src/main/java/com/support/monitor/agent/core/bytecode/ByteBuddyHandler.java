@@ -64,6 +64,8 @@ public class ByteBuddyHandler implements ByteCodeHandler {
                                 ))
                 .installOn(instrumentation);
 
+        //next plugin context setting
+        this.handle(instrumentation, pluginContexts, ++index);
     }
 
 }
