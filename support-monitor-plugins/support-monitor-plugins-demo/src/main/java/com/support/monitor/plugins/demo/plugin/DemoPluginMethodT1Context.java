@@ -11,10 +11,6 @@ import net.bytebuddy.matcher.ElementMatchers;
  * demo 第一个测试插件拦截类容
  */
 public class DemoPluginMethodT1Context implements PluginContext {
-    @Override
-    public String tag() {
-        return "method-t1";
-    }
 
     @Override
     public ElementMatcher<? super TypeDescription> classMatcher() {

@@ -5,6 +5,8 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
+import java.util.UUID;
+
 /**
  * 插件环境
  *
@@ -18,7 +20,9 @@ public interface PluginContext {
      *
      * @return
      */
-    String tag();
+    default String tag() {
+        return UUID.randomUUID().toString();
+    }
 
 
     /**
