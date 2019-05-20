@@ -1,6 +1,6 @@
 package com.support.monitor.agent.collect.test;
 
-import com.support.monitor.agent.collect.AgentBootStarter;
+import com.support.monitor.agent.core.AgentBootStarter;
 import com.support.monitor.agent.core.config.DefaultAgentAgentConfig;
 import org.junit.Test;
 

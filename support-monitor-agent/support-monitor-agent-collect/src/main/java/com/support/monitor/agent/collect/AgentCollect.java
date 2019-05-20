@@ -2,7 +2,6 @@ package com.support.monitor.agent.collect;
 
 import com.support.monitor.agent.core.module.ApplicationContextModuleFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.lang.instrument.Instrumentation;
 
@@ -28,19 +27,10 @@ public class AgentCollect {
     public static void premain(String agentArgs, Instrumentation instrumentation) {
 
         ClassLoader defaultClassLoader = defaultClassLoader();
-
         log.info("agent args: {}", agentArgs);
-
         log.info("classLoader: {}", defaultClassLoader);
-
         ApplicationContextModuleFactory applicationContextModuleFactory = new ApplicationContextModuleFactory();
-        try {
-            AgentBootStarter agentBootStarter = new AgentBootStarter(agentArgs, defaultClassLoader, applicationContextModuleFactory, instrumentation);
-            agentBootStarter.init();
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("agent init error: {}", ExceptionUtils.getMessage(e));
-        }
+        applicationContextModuleFactory.load(agentArgs, instrumentation);
 
     }
 

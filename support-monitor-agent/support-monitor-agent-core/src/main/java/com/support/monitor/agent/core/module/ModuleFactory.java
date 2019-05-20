@@ -2,6 +2,8 @@ package com.support.monitor.agent.core.module;
 
 import com.google.inject.Module;
 
+import java.lang.instrument.Instrumentation;
+
 /**
  * 模块相关信息
  *
@@ -14,6 +16,12 @@ public interface ModuleFactory {
      *
      * @return
      */
-    Module newModule();
+    Module initModule();
+
+    /**
+     * 模块加载
+     */
+    void load(String args, Instrumentation instrumentation);
+
 
 }
