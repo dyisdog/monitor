@@ -4,8 +4,8 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
 import com.support.monitor.agent.core.config.AgentConfig;
+import lombok.extern.slf4j.Slf4j;
 
-import java.lang.instrument.Instrumentation;
 import java.util.List;
 
 /**
@@ -13,20 +13,21 @@ import java.util.List;
  *
  * @author 江浩
  */
+@Slf4j
 public class PluginLoaderFactory implements PluginLoader {
 
     private final Injector injector;
-    private final Instrumentation instrumentation;
     private final PluginLoader pluginLoader;
     private AgentConfig agentConfig;
 
-    public PluginLoaderFactory(Injector injector, AgentConfig agentConfig, Instrumentation instrumentation) {
-        this.instrumentation = instrumentation;
+    public PluginLoaderFactory(Injector injector, AgentConfig agentConfig) {
         this.injector = injector;
         this.agentConfig = agentConfig;
 
         //plugin default use spi loader
-        this.pluginLoader = this.injector.getInstance(Key.get(PluginLoader.class, Names.named(agentConfig.getPluginLoadType())));
+        String loadType = agentConfig.getPluginLoadType();
+        log.info("plugin loader type={}", loadType);
+        this.pluginLoader = this.injector.getInstance(Key.get(PluginLoader.class, Names.named(loadType)));
     }
 
     @Override

@@ -1,6 +1,5 @@
-package com.support.monitor.agent.collect;
+package com.support.monitor.agent.core.interceptor;
 
-import com.support.monitor.agent.core.interceptor.AroundInterceptor;
 import net.bytebuddy.implementation.bind.annotation.AllArguments;
 import net.bytebuddy.implementation.bind.annotation.Morph;
 import net.bytebuddy.implementation.bind.annotation.Origin;

@@ -2,6 +2,7 @@ package com.support.monitor.agent.core.bytecode;
 
 import com.support.monitor.agent.core.plugin.PluginDefine;
 
+import java.lang.instrument.Instrumentation;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -15,13 +16,22 @@ public interface ByteCodeHandler {
     /**
      * 具体的处理方式
      *
-     * @param supplier :
+     * @param instrumentation
+     * @param supplier        :
      * @return : void
      * @author 江浩
      */
-    void handle(Supplier<List<PluginDefine>> supplier);
+    default void handle(Instrumentation instrumentation, Supplier<List<PluginDefine>> supplier) {
+        this.handle(instrumentation, supplier.get());
+    }
 
-    void handle(List<PluginDefine> pluginDefines);
-
+    /**
+     * 处理方式
+     *
+     * @param instrumentation
+     * @param pluginDefines
+     */
+    default void handle(Instrumentation instrumentation, List<PluginDefine> pluginDefines) {
+    }
 
 }

@@ -43,13 +43,13 @@ public class AgentBootStarter {
 
         // instrumentation module ?
         //init factory
-        this.pluginLoaderFactory = new PluginLoaderFactory(this.injector, agentConfig, this.instrumentation);
-        this.byteCodeHandlerFactory = new ByteCodeHandlerFactory(this.injector, agentConfig, this.instrumentation);
+        this.pluginLoaderFactory = new PluginLoaderFactory(this.injector, agentConfig);
+        this.byteCodeHandlerFactory = new ByteCodeHandlerFactory(this.injector, agentConfig);
     }
 
     public boolean init() {
 
-        this.byteCodeHandlerFactory.handle(() -> {
+        this.byteCodeHandlerFactory.handle(this.instrumentation, () -> {
             return this.pluginLoaderFactory.loadPlugin();
         });
 
