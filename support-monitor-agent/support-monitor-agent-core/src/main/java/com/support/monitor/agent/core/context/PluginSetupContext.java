@@ -1,5 +1,7 @@
 package com.support.monitor.agent.core.context;
 
+import com.support.monitor.agent.core.interceptor.PluginInterceptor;
+
 import java.util.List;
 
 /**
@@ -22,11 +24,11 @@ public interface PluginSetupContext {
     String getPluginName();
 
     /**
-     * 同一个插件可能设置多个拦截处理方式
+     * 插件拦截器
      *
-     * @return : java.util.List<com.support.monitor.agent.core.context.PluginContext>
+     * @return : java.util.List<com.support.monitor.agent.core.interceptor.PluginInterceptor>
      * @author 江浩
      */
-    List<PluginContext> getPluginContexts();
+    List<PluginInterceptor> interceptors();
 
 }

@@ -1,7 +1,7 @@
 package com.support.monitor.agent.core.plugin.request;
 
 /**
- * header 操作
+ * Trace 信息设置
  *
  * @author 江浩
  */

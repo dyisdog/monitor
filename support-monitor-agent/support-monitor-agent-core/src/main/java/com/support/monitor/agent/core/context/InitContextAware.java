@@ -13,19 +13,8 @@ import java.lang.instrument.Instrumentation;
 public interface InitContextAware {
 
 
-    default void initAware(AgentConfig config) {
-        this.initAware(config, null, null);
-    }
-
-    default void initAware(Injector injector) {
-        this.initAware(null, injector, null);
-    }
-
-    default void initAware(Instrumentation instrumentation) {
-        this.initAware(null, null, instrumentation);
-    }
-
     default void initAware(AgentConfig config, Injector injector, Instrumentation instrumentation) {
+
     }
 
 }

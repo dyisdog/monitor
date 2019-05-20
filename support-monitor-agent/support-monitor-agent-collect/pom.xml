@@ -31,6 +31,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.support.monitor</groupId>
+            <artifactId>support-monitor-plugins-servlet</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
         </dependency>

@@ -12,6 +12,12 @@
     <artifactId>support-monitor-agent-core</artifactId>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.support.monitor</groupId>
+            <artifactId>support-monitor-commons</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
@@ -59,6 +65,11 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>compile</scope>
         </dependency>
 
 

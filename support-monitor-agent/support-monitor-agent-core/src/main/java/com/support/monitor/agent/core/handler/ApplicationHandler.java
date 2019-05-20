@@ -1,4 +1,4 @@
-package com.support.monitor.agent.core.bytecode;
+package com.support.monitor.agent.core.handler;
 
 import com.support.monitor.agent.core.context.InitContextAware;
 import com.support.monitor.agent.core.plugin.PluginDefine;
@@ -11,7 +11,7 @@ import java.util.function.Supplier;
  *
  * @author 江浩
  */
-public interface ByteCodeHandler extends InitContextAware {
+public interface ApplicationHandler extends InitContextAware {
 
     /**
      * 具体的处理方式

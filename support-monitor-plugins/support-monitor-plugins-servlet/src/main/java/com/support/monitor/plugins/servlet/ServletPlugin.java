@@ -1,27 +1,27 @@
-package com.support.monitor.plugins.demo;
+package com.support.monitor.plugins.servlet;
 
 import com.support.monitor.agent.core.context.AbstractPluginSetupContext;
 import com.support.monitor.agent.core.context.PluginSetupContext;
 import com.support.monitor.agent.core.plugin.PluginDefine;
-import com.support.monitor.plugins.demo.interceptor.DemoPluginMethod1Interceptor;
-import com.support.monitor.plugins.demo.interceptor.DemoPluginMethod2Interceptor;
+import com.support.monitor.plugins.servlet.interceptor.JavaxServletPluginInterceptor;
 
-public class DemoPlugin implements PluginDefine {
+public class ServletPlugin implements PluginDefine {
+
+    private static final String PLUGIN_NAME = "javax.servlet";
+
     @Override
     public PluginSetupContext getPluginSetupContext() {
-
         return new AbstractPluginSetupContext() {
             @Override
             public void init() {
-                //method 1
-                binder(new DemoPluginMethod1Interceptor());
-                //method 2
-                binder(new DemoPluginMethod2Interceptor());
+
+                binder(new JavaxServletPluginInterceptor());
+
             }
 
             @Override
             public String getPluginName() {
-                return "Demo";
+                return PLUGIN_NAME;
             }
         };
     }

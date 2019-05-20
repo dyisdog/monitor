@@ -12,10 +12,12 @@ public class ApplicationContextModuleFactory implements ModuleFactory {
 
     @Override
     public Module newModule() {
+        final Module init = new InitModule();
         final Module byteCode = new ByteCodeModule();
         final Module config = new ConfigModule();
         final Module plugin = new PluginModule();
-        return Modules.combine(byteCode, config, plugin);
+        final TraceModule trace = new TraceModule();
+        return Modules.combine(init, byteCode, config, plugin, trace);
     }
 
 }

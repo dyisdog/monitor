@@ -18,7 +18,8 @@ public interface AroundInterceptor {
      * @param allArguments
      * @param parameterTypes TODO MethodInterceptResult result
      */
-    void beforeMethod(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes);
+    default void beforeMethod(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
+    }
 
     /**
      * 方法执行之后
@@ -31,7 +32,9 @@ public interface AroundInterceptor {
      * @return : java.lang.Object
      * @author 江浩
      */
-    Object afterMethod(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object ret);
+    default Object afterMethod(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object ret) {
+        return ret;
+    }
 
     /**
      * 执行异常
@@ -44,6 +47,8 @@ public interface AroundInterceptor {
      * @return : void
      * @author 江浩
      */
-    void handleMethodException(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes,
-                               Throwable t);
+    default void handleMethodException(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes,
+                                       Throwable t) {
+
+    }
 }

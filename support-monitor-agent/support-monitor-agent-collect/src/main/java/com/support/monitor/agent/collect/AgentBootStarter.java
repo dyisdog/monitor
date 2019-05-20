@@ -1,10 +1,11 @@
 package com.support.monitor.agent.collect;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
-import com.support.monitor.agent.core.bytecode.ByteCodeHandler;
 import com.support.monitor.agent.core.config.AgentConfig;
+import com.support.monitor.agent.core.handler.ApplicationHandler;
 import com.support.monitor.agent.core.module.ApplicationContextModuleFactory;
 import com.support.monitor.agent.core.plugin.PluginDefine;
 import com.support.monitor.agent.core.plugin.PluginLoader;
@@ -25,7 +26,7 @@ public class AgentBootStarter {
     private final ClassLoader parentClassLoader;
 
     private final PluginLoader pluginLoader;
-    private final ByteCodeHandler byteCodeHandler;
+    private final ApplicationHandler applicationHandler;
     private Instrumentation instrumentation;
     private Injector injector;
     private AgentConfig agentConfig;
@@ -35,10 +36,16 @@ public class AgentBootStarter {
                             Instrumentation instrumentation) {
         this.parentClassLoader = parentClassLoader;
 
-        this.injector = Guice.createInjector(Stage.PRODUCTION, applicationContextModuleFactory.newModule());
+        this.injector = Guice.createInjector(Stage.PRODUCTION, applicationContextModuleFactory.newModule(), new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(Instrumentation.class).toInstance(instrumentation);
+            }
+        });
+
         this.instrumentation = instrumentation;
         this.pluginLoader = this.injector.getInstance(PluginLoader.class);
-        this.byteCodeHandler = this.injector.getInstance(ByteCodeHandler.class);
+        this.applicationHandler = this.injector.getInstance(ApplicationHandler.class);
 
         this.agentConfig = this.injector.getInstance(AgentConfig.class);
         agentConfig.load(agentArgs);
@@ -49,7 +56,7 @@ public class AgentBootStarter {
      */
     private void initAware() {
         this.pluginLoader.initAware(this.agentConfig, this.injector, this.instrumentation);
-        this.byteCodeHandler.initAware(this.agentConfig, this.injector, this.instrumentation);
+        this.applicationHandler.initAware(this.agentConfig, this.injector, this.instrumentation);
     }
 
     /**
@@ -63,7 +70,7 @@ public class AgentBootStarter {
         this.initAware();
 
         List<PluginDefine> pluginDefines = this.pluginLoader.loadPlugin();
-        this.byteCodeHandler.handle(pluginDefines);
+        this.applicationHandler.handle(pluginDefines);
 
         return true;
     }

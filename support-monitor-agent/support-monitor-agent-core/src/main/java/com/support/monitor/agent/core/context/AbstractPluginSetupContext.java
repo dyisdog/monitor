@@ -1,6 +1,7 @@
 package com.support.monitor.agent.core.context;
 
 import com.google.common.collect.Lists;
+import com.support.monitor.agent.core.interceptor.PluginInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,16 +16,23 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public abstract class AbstractPluginSetupContext implements PluginSetupContext {
 
-    private Map<String, PluginContext> pluginContexts = new ConcurrentHashMap<>();
+    private Map<String, PluginInterceptor> pluginContexts = new ConcurrentHashMap<>();
 
     public AbstractPluginSetupContext() {
         this.init();
     }
 
-    public void binder(PluginContext pluginContext) {
+    public void binder(PluginInterceptor pluginInterceptor) {
 
-        if (!Objects.isNull(pluginContext) && !pluginContexts.containsKey(pluginContext.tag())) {
-            pluginContexts.put(pluginContext.tag(), pluginContext);
+        String key = pluginInterceptor.name();
+
+        if (StringUtils.isBlank(key)) {
+            log.info("binder key is null {}", pluginInterceptor);
+            return;
+        }
+
+        if (!Objects.isNull(pluginInterceptor) && !pluginContexts.containsKey(pluginInterceptor.name())) {
+            pluginContexts.put(pluginInterceptor.name(), pluginInterceptor);
         }
     }
 
@@ -35,7 +43,7 @@ public abstract class AbstractPluginSetupContext implements PluginSetupContext {
     }
 
     @Override
-    public List<PluginContext> getPluginContexts() {
+    public List<PluginInterceptor> interceptors() {
         return Lists.newArrayList(this.pluginContexts.values());
     }
 
