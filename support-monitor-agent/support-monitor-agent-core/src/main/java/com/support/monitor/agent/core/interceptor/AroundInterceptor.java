@@ -2,6 +2,11 @@ package com.support.monitor.agent.core.interceptor;
 
 import java.lang.reflect.Method;
 
+/**
+ * 执行拦截器
+ *
+ * @author 江浩
+ */
 public interface AroundInterceptor {
 
 

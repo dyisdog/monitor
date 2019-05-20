@@ -11,7 +11,7 @@ import net.bytebuddy.matcher.ElementMatchers;
 /**
  * demo 第一个测试插件拦截类容
  */
-public class DemoPluginMethodT1Context implements PluginContext {
+public class DemoPluginMethodT2Context implements PluginContext {
 
     @Override
     public ElementMatcher<? super TypeDescription> classMatcher() {
@@ -20,7 +20,7 @@ public class DemoPluginMethodT1Context implements PluginContext {
 
     @Override
     public ElementMatcher<? super MethodDescription> methodMatcher() {
-        return ElementMatchers.named("test1");
+        return ElementMatchers.named("test2");
     }
 
     @Override

@@ -51,4 +51,9 @@ public class DefaultAgentConfig implements AgentConfig {
             return defaultValue;
         }
     }
+
+    @Override
+    public String getPluginLoader() {
+        return this.getString("agent.plugin.loader.name", "spi");
+    }
 }

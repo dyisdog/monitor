@@ -21,7 +21,7 @@ import java.util.Objects;
  * @author 江浩
  */
 @Slf4j
-public class ByteBuddyHandler implements ByteCodeHandler {
+public class DefaultByteCodeHandler implements ByteCodeHandler {
 
     private AgentBuilder agentBuilder;
 
@@ -49,18 +49,21 @@ public class ByteBuddyHandler implements ByteCodeHandler {
         pluginDefines.forEach(pluginDefine -> {
             PluginSetupContext setupContext = pluginDefine.getPluginSetupContext();
             List<PluginContext> pluginContexts = setupContext.getPluginContexts();
-            log.info("plugin [{}] setting context: {}", setupContext.getPluginName(), Objects.isNull(pluginContexts) ? 0 : pluginContexts.size());
-            this.handle(this.instrumentation, pluginContexts, 0);
+            StringBuilder sb = new StringBuilder();
+            this.handle(this.instrumentation, pluginContexts, 0, sb);
+            log.info("plugin [{}] setting context: {} \t\t\t{}", setupContext.getPluginName(), Objects.isNull(pluginContexts) ? 0 : pluginContexts.size(), sb.toString());
         });
     }
 
-    private void handle(Instrumentation instrumentation, List<PluginContext> pluginContexts, int index) {
+    private void handle(Instrumentation instrumentation, List<PluginContext> pluginContexts, int index, StringBuilder sb) {
         if (index >= pluginContexts.size()) {
             return;
         }
         PluginContext pluginContext = pluginContexts.get(index);
 
-        log.info("\n\t\t\thanding context :{}\n\t\t\t{}\n\t\t\t{}", pluginContext.tag(), pluginContext.classMatcher(), pluginContext.methodMatcher());
+        sb.append("\n\t\t\thanding context[").append(index + 1).append("]:").append(pluginContext.tag())
+                .append("\n\t\t\t:").append(pluginContext.classMatcher())
+                .append("\n\t\t\t:").append(pluginContext.methodMatcher());
 
         //method
         //static
@@ -80,7 +83,7 @@ public class ByteBuddyHandler implements ByteCodeHandler {
                 .installOn(instrumentation);
 
         //next plugin context setting
-        this.handle(instrumentation, pluginContexts, ++index);
+        this.handle(instrumentation, pluginContexts, ++index, sb);
     }
 
 }

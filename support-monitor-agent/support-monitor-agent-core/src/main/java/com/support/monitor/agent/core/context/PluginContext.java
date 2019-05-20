@@ -47,4 +47,16 @@ public interface PluginContext {
      * @author 江浩
      */
     AroundInterceptor aroundInterceptor();
+
+    /**
+     * traceContext
+     * <p>
+     * trace处理方式
+     * </p>
+     *
+     * @return
+     */
+    default TraceContext traceContext() {
+        return null;
+    }
 }

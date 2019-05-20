@@ -8,14 +8,10 @@ import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
 public class SpringMvcPluginContext implements PluginContext {
-    @Override
-    public String tag() {
-        return null;
-    }
 
     @Override
     public ElementMatcher<? super TypeDescription> classMatcher() {
-        return ElementMatchers.nameMatches("org.spring.mvc.*");
+        return ElementMatchers.nameMatches("org.springframework.mvc.*");
     }
 
     @Override

@@ -44,4 +44,12 @@ public interface AgentConfig {
      */
     String getString(String key, String defaultValue);
 
+
+    /**
+     * 获取插件加载器名称
+     *
+     * @return
+     */
+    String getPluginLoader();
+
 }

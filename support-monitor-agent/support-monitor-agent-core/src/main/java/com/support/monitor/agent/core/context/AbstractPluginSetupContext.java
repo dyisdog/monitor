@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author 江浩
+ */
 @Slf4j
 public abstract class AbstractPluginSetupContext implements PluginSetupContext {
 
