@@ -51,15 +51,4 @@ public class DefaultAgentConfig implements AgentConfig {
             return defaultValue;
         }
     }
-
-    @Override
-    public String getPluginLoadType() {
-        return this.getString("agent.plugin.load.type", "spi");
-    }
-
-    @Override
-    public String getByteCodeType() {
-        return this.getString("agent.bytecode.load.type", "byteBuddy");
-    }
-
 }

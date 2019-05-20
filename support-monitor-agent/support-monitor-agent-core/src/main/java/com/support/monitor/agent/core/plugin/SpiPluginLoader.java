@@ -1,7 +1,6 @@
 package com.support.monitor.agent.core.plugin;
 
 import com.google.inject.Singleton;
-import com.support.monitor.agent.core.config.AgentConfig;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -14,13 +13,6 @@ import java.util.List;
 @Slf4j
 @Singleton
 public class SpiPluginLoader implements PluginLoader {
-
-    private AgentConfig agentConfig;
-
-    @Override
-    public void bindConfig(AgentConfig agentConfig) {
-        this.agentConfig = agentConfig;
-    }
 
     @Override
     public List<PluginDefine> loadPlugin() {
