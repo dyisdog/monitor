@@ -16,7 +16,7 @@ import net.bytebuddy.matcher.ElementMatcher;
 @Data
 @Builder
 @ToString
-public class Delegation {
+public class EnhanceContext {
 
     private String tag;
 

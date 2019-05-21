@@ -20,6 +20,6 @@ public interface PluginSetupContext {
      */
     String name();
 
-    List<Delegation> delegations();
+    List<EnhanceContext> delegations();
 
 }

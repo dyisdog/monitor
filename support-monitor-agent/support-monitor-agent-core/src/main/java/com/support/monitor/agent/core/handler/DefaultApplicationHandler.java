@@ -2,15 +2,14 @@ package com.support.monitor.agent.core.handler;
 
 import com.google.inject.Inject;
 import com.support.monitor.agent.core.config.AgentConfig;
-import com.support.monitor.agent.core.context.Delegation;
+import com.support.monitor.agent.core.context.EnhanceContext;
 import com.support.monitor.agent.core.context.PluginSetupContext;
-import com.support.monitor.agent.core.interceptor.delegation.MethodDelegationFactory;
+import com.support.monitor.agent.core.interceptor.enhance.EnhanceFactory;
 import com.support.monitor.agent.core.plugin.PluginDefine;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.matcher.ElementMatcher;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -30,19 +29,19 @@ public class DefaultApplicationHandler implements ApplicationHandler {
 
     private Instrumentation instrumentation;
 
-    private MethodDelegationFactory methodDelegationFactory;
+    private EnhanceFactory enhanceFactory;
 
     @Inject
     public DefaultApplicationHandler(
             AgentBuilder agentBuilder,
             AgentConfig config,
             Instrumentation instrumentation,
-            MethodDelegationFactory methodDelegationFactory) {
+            EnhanceFactory enhanceFactory) {
 
         this.agentBuilder = agentBuilder;
         this.config = config;
         this.instrumentation = instrumentation;
-        this.methodDelegationFactory = methodDelegationFactory;
+        this.enhanceFactory = enhanceFactory;
     }
 
     @Override
@@ -54,38 +53,52 @@ public class DefaultApplicationHandler implements ApplicationHandler {
 
         pluginDefines.forEach(pluginDefine -> {
             PluginSetupContext setupContext = pluginDefine.getPluginSetupContext();
-            List<Delegation> delegations = setupContext.delegations();
+            List<EnhanceContext> enhanceContexts = setupContext.delegations();
             StringBuilder sb = new StringBuilder();
             // thread stack error ?
-            this.handle(this.instrumentation, delegations, 0, sb);
-            log.info("plugin [{}] setting context: {} \t\t\t{}", setupContext.name(), Objects.isNull(delegations) ? 0 : delegations.size(), sb.toString());
+            this.handle(this.instrumentation, enhanceContexts, 0, sb);
+            log.info("plugin [{}] setting context: {} \t\t\t{}", setupContext.name(), Objects.isNull(enhanceContexts) ? 0 : enhanceContexts.size(), sb.toString());
         });
     }
 
-    private void handle(Instrumentation instrumentation, List<Delegation> delegations, int index, StringBuilder sb) {
-        if (Objects.isNull(delegations) || index >= delegations.size()) {
+    private void handle(Instrumentation instrumentation, List<EnhanceContext> enhanceContexts, int index, StringBuilder sb) {
+        if (Objects.isNull(enhanceContexts) || index >= enhanceContexts.size()) {
             return;
         }
-        Delegation delegation = delegations.get(index);
+        EnhanceContext enhanceContext = enhanceContexts.get(index);
 
-        ElementMatcher<? super TypeDescription> classInterceptor = delegation.getClassDescription();
-        ElementMatcher<? super MethodDescription> methodInterceptor = delegation.getMethodDescription();
-        sb.append("\n\t\t\thanding context[").append(index + 1).append("]:").append(delegation.getTag())
+        ElementMatcher<? super TypeDescription> classInterceptor = enhanceContext.getClassDescription();
+        ElementMatcher<? super MethodDescription> methodInterceptor = enhanceContext.getMethodDescription();
+        sb.append("\n\t\t\thanding context[").append(index + 1).append("]:").append(enhanceContext.getTag())
                 .append("\n\t\t\t:").append(classInterceptor)
                 .append("\n\t\t\t:").append(methodInterceptor);
-        //method
-        //static
-        //方法拦截委托
-        MethodDelegation methodDelegation = methodDelegationFactory.defaultMethodDelegation(delegation.getInterceptorClass());
 
+        //增强操作
         this.agentBuilder
                 .type(classInterceptor)
                 .transform((builder, typeDescription, classLoader, module) ->
-                        builder.method(methodInterceptor).intercept(methodDelegation))
+                        enhanceFactory.enhance(builder, enhanceContext))
                 .installOn(instrumentation);
 
+
+//        MethodDelegation methodDelegation = enhanceFactory.methodsWithOverrideArgsDelegation(enhanceContext.getInterceptorClass());
+//
+//        this.agentBuilder
+//                .type(classInterceptor)
+//                .transform(new AgentBuilder.Transformer() {
+//                    @Override
+//                    public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription, ClassLoader classLoader, JavaModule module) {
+//
+//                        System.out.println(builder + "============>>");
+//                        return enhanceFactory.enhance(builder, enhanceContext);
+//                        //return builder.method(methodInterceptor).intercept(methodDelegation);
+//                    }
+//                })
+//                .installOn(instrumentation);
+
+
         //next plugin context setting
-        this.handle(instrumentation, delegations, ++index, sb);
+        this.handle(instrumentation, enhanceContexts, ++index, sb);
     }
 
 }

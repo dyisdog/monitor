@@ -17,7 +17,7 @@ import java.util.UUID;
 public abstract class AbstractPluginSetupContext implements PluginSetupContext {
 
 
-    private final List<Delegation> delegations = Lists.newArrayList();
+    private final List<EnhanceContext> enhanceContexts = Lists.newArrayList();
 
     public AbstractPluginSetupContext() {
         this.init();
@@ -41,7 +41,7 @@ public abstract class AbstractPluginSetupContext implements PluginSetupContext {
     public AbstractPluginSetupContext binder(String tag, ElementMatcher<? super TypeDescription> classDescription,
                                              ElementMatcher<? super MethodDescription> methodDescription,
                                              Class<? extends AroundInterceptor> interceptorClass) {
-        delegations.add(Delegation.builder()
+        enhanceContexts.add(EnhanceContext.builder()
                 .tag(tag)
                 .classDescription(classDescription)
                 .methodDescription(methodDescription)
@@ -53,8 +53,8 @@ public abstract class AbstractPluginSetupContext implements PluginSetupContext {
 
 
     @Override
-    public List<Delegation> delegations() {
-        return delegations;
+    public List<EnhanceContext> delegations() {
+        return enhanceContexts;
     }
 
     /**

@@ -12,8 +12,8 @@ import com.support.monitor.agent.core.context.trace.TraceContext;
 import com.support.monitor.agent.core.handler.ApplicationHandler;
 import com.support.monitor.agent.core.handler.DefaultApplicationHandler;
 import com.support.monitor.agent.core.interceptor.InterceptorFactory;
-import com.support.monitor.agent.core.interceptor.delegation.MethodDelegationFactory;
-import com.support.monitor.agent.core.module.provider.DelegationFactoryProvider;
+import com.support.monitor.agent.core.interceptor.enhance.EnhanceFactory;
+import com.support.monitor.agent.core.module.provider.EnhanceFactoryProvider;
 import com.support.monitor.agent.core.module.provider.InterceptorProvider;
 import com.support.monitor.agent.core.module.provider.TraceContextProvider;
 import com.support.monitor.agent.core.plugin.DefaultPluginLoader;
@@ -73,7 +73,7 @@ public class InitModule extends AbstractModule {
         bind(TraceContext.class).toProvider(TraceContextProvider.class).in(Scopes.SINGLETON);
         //异步 TODO
 //        bind(AsyncTraceContext.class).toProvider(AsyncTraceContextProvider.class).in(Scopes.SINGLETON);
-        bind(MethodDelegationFactory.class).toProvider(DelegationFactoryProvider.class).in(Scopes.SINGLETON);
+        bind(EnhanceFactory.class).toProvider(EnhanceFactoryProvider.class).in(Scopes.SINGLETON);
         bind(InterceptorFactory.class).toProvider(InterceptorProvider.class).in(Scopes.SINGLETON);
     }
 }
