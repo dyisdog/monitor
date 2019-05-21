@@ -1,14 +1,14 @@
 package com.support.monitor.agent.core.context;
 
 import com.google.common.collect.Lists;
-import com.support.monitor.agent.core.interceptor.PluginInterceptor;
+import com.support.monitor.agent.core.interceptor.AroundInterceptor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.matcher.ElementMatcher;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.UUID;
 
 /**
  * @author 江浩
@@ -16,35 +16,45 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public abstract class AbstractPluginSetupContext implements PluginSetupContext {
 
-    private Map<String, PluginInterceptor> pluginContexts = new ConcurrentHashMap<>();
+
+    private final List<Delegation> delegations = Lists.newArrayList();
 
     public AbstractPluginSetupContext() {
         this.init();
     }
 
-    public void binder(PluginInterceptor pluginInterceptor) {
-
-        String key = pluginInterceptor.name();
-
-        if (StringUtils.isBlank(key)) {
-            log.info("binder key is null {}", pluginInterceptor);
-            return;
-        }
-
-        if (!Objects.isNull(pluginInterceptor) && !pluginContexts.containsKey(pluginInterceptor.name())) {
-            pluginContexts.put(pluginInterceptor.name(), pluginInterceptor);
-        }
+    /**
+     * 插件执行绑定
+     *
+     * @param classDescription  :
+     * @param methodDescription :
+     * @param interceptorClass  :
+     * @return : com.support.monitor.agent.core.context.AbstractPluginSetupContext
+     * @author 江浩
+     */
+    public AbstractPluginSetupContext binder(ElementMatcher<? super TypeDescription> classDescription,
+                                             ElementMatcher<? super MethodDescription> methodDescription,
+                                             Class<? extends AroundInterceptor> interceptorClass) {
+        return binder(UUID.randomUUID().toString(), classDescription, methodDescription, interceptorClass);
     }
 
-    public void unBinder(String pluginContextTag) {
-        if (StringUtils.isNotBlank(pluginContextTag)) {
-            pluginContexts.remove(pluginContextTag);
-        }
+    public AbstractPluginSetupContext binder(String tag, ElementMatcher<? super TypeDescription> classDescription,
+                                             ElementMatcher<? super MethodDescription> methodDescription,
+                                             Class<? extends AroundInterceptor> interceptorClass) {
+        delegations.add(Delegation.builder()
+                .tag(tag)
+                .classDescription(classDescription)
+                .methodDescription(methodDescription)
+                .interceptorClass(interceptorClass)
+                .build());
+
+        return this;
     }
+
 
     @Override
-    public List<PluginInterceptor> interceptors() {
-        return Lists.newArrayList(this.pluginContexts.values());
+    public List<Delegation> delegations() {
+        return delegations;
     }
 
     /**

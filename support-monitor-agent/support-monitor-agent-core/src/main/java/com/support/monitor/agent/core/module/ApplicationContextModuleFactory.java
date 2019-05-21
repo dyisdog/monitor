@@ -29,13 +29,7 @@ public class ApplicationContextModuleFactory implements ModuleFactory {
     public Module initModule() {
         //default modules
         final Module init = new InitModule();
-        final Module byteCode = new ByteCodeModule();
-        final Module config = new ConfigModule();
-        final Module plugin = new PluginModule();
-        final TraceModule trace = new TraceModule();
-
-        add(init, byteCode, config, plugin, trace);
-
+        add(init);
         return Modules.combine(refModules);
     }
 

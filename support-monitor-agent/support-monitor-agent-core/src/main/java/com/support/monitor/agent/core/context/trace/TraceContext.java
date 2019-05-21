@@ -14,4 +14,6 @@ public interface TraceContext {
      * @author 江浩
      */
     Trace currentTraceObject();
+
+    Trace newTraceObject();
 }

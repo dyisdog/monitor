@@ -32,8 +32,7 @@ public interface AroundInterceptor {
      * @return : java.lang.Object
      * @author 江浩
      */
-    default Object afterMethod(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object ret) {
-        return ret;
+    default void afterMethod(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object ret) {
     }
 
     /**

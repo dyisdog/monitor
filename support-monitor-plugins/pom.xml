@@ -13,9 +13,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>support-monitor-plugins-spring</module>
         <module>support-monitor-plugins-demo</module>
-        <module>support-monitor-plugins-servlet</module>
     </modules>
 
 </project>
