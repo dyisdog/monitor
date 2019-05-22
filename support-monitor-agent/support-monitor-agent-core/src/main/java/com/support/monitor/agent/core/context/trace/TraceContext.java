@@ -1,5 +1,7 @@
 package com.support.monitor.agent.core.context.trace;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * TraceContext
  *
@@ -16,4 +18,10 @@ public interface TraceContext {
     Trace currentTraceObject();
 
     Trace newTraceObject();
+
+    Trace newTraceObject(TraceId traceId);
+
+    AtomicReference<Trace> getReference();
+
+    Trace nextAsyncTrace(TraceId traceId);
 }

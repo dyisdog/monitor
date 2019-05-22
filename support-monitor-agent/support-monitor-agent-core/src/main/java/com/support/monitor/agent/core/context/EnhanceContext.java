@@ -1,11 +1,11 @@
 package com.support.monitor.agent.core.context;
 
-import com.support.monitor.agent.core.interceptor.AroundInterceptor;
-import lombok.Builder;
+import com.support.monitor.agent.core.interceptor.ConstructorInterceptPoint;
+import com.support.monitor.agent.core.interceptor.MethodsInterceptPoint;
+import com.support.monitor.agent.core.interceptor.StaticMethodsInterceptPoint;
 import lombok.Data;
-import lombok.ToString;
+import lombok.EqualsAndHashCode;
 import net.bytebuddy.description.method.MethodDescription;
-import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
 /**
@@ -14,16 +14,23 @@ import net.bytebuddy.matcher.ElementMatcher;
  * @author 江浩
  */
 @Data
-@Builder
-@ToString
-public class EnhanceContext {
+@EqualsAndHashCode
+public class EnhanceContext<P> {
 
-    private String tag;
+    ElementMatcher<? super MethodDescription> methodDescription;
 
-    private ElementMatcher<? super TypeDescription> classDescription;
+    P interceptPoint;
 
-    private ElementMatcher<? super MethodDescription> methodDescription;
+    public boolean isMethodsInterceptPoint() {
+        return interceptPoint instanceof MethodsInterceptPoint;
+    }
 
-    private Class<? extends AroundInterceptor> interceptorClass;
+    public boolean isConstructorInterceptPoint() {
+        return interceptPoint instanceof ConstructorInterceptPoint;
+    }
+
+    public boolean isStaticMethodsInterceptPoint() {
+        return interceptPoint instanceof StaticMethodsInterceptPoint;
+    }
 
 }

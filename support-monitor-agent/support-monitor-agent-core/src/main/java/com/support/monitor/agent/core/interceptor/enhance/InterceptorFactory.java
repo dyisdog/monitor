@@ -1,4 +1,5 @@
-package com.support.monitor.agent.core.interceptor;
+package com.support.monitor.agent.core.interceptor.enhance;
+
 
 public interface InterceptorFactory {
 
@@ -10,5 +11,7 @@ public interface InterceptorFactory {
      * @return : com.support.monitor.agent.core.interceptor.AroundInterceptor
      * @author 江浩
      */
-    AroundInterceptor newInterceptor(Class<? extends AroundInterceptor> aroundInterceptorClass);
+    MethodsAroundInterceptor newMethodsInterceptor(Class<? extends MethodsAroundInterceptor> aroundInterceptorClass);
+
+    ConstructorInterceptor newConstructorInterceptor(Class<? extends ConstructorInterceptor> constructorInterceptorClass);
 }

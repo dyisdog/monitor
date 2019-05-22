@@ -7,15 +7,14 @@ import com.google.inject.name.Names;
 import com.support.monitor.agent.core.AgentBootStarter;
 import com.support.monitor.agent.core.config.AgentConfig;
 import com.support.monitor.agent.core.config.DefaultAgentConfig;
-import com.support.monitor.agent.core.context.trace.Trace;
-import com.support.monitor.agent.core.context.trace.TraceContext;
+import com.support.monitor.agent.core.context.trace.*;
+import com.support.monitor.agent.core.context.trace.def.DefaultIdGenerator;
+import com.support.monitor.agent.core.context.trace.def.DefaultTraceIdFactory;
 import com.support.monitor.agent.core.handler.ApplicationHandler;
 import com.support.monitor.agent.core.handler.DefaultApplicationHandler;
-import com.support.monitor.agent.core.interceptor.InterceptorFactory;
 import com.support.monitor.agent.core.interceptor.enhance.EnhanceFactory;
-import com.support.monitor.agent.core.module.provider.EnhanceFactoryProvider;
-import com.support.monitor.agent.core.module.provider.InterceptorProvider;
-import com.support.monitor.agent.core.module.provider.TraceContextProvider;
+import com.support.monitor.agent.core.interceptor.enhance.InterceptorFactory;
+import com.support.monitor.agent.core.module.provider.*;
 import com.support.monitor.agent.core.plugin.DefaultPluginLoader;
 import com.support.monitor.agent.core.plugin.PluginLoader;
 import com.support.monitor.agent.core.plugin.adaptor.PluginLoaderAdaptor;
@@ -71,8 +70,13 @@ public class InitModule extends AbstractModule {
 
     private void providerBind() {
         bind(TraceContext.class).toProvider(TraceContextProvider.class).in(Scopes.SINGLETON);
-        //异步 TODO
-//        bind(AsyncTraceContext.class).toProvider(AsyncTraceContextProvider.class).in(Scopes.SINGLETON);
+        bind(AsyncTraceContext.class).toProvider(AsyncTraceContextProvider.class).in(Scopes.SINGLETON);
+
+        bind(IdGenerator.class).to(DefaultIdGenerator.class).in(Scopes.SINGLETON);
+        bind(SpanFactory.class).toProvider(SpanFactoryProvider.class).in(Scopes.SINGLETON);
+        bind(TraceIdFactory.class).to(DefaultTraceIdFactory.class).in(Scopes.SINGLETON);
+        bind(TraceFactory.class).toProvider(TraceFactoryProvider.class).in(Scopes.SINGLETON);
+
         bind(EnhanceFactory.class).toProvider(EnhanceFactoryProvider.class).in(Scopes.SINGLETON);
         bind(InterceptorFactory.class).toProvider(InterceptorProvider.class).in(Scopes.SINGLETON);
     }

@@ -1,8 +1,7 @@
 package com.support.monitor.plugins.demo.test;
 
-import com.support.monitor.agent.core.interceptor.DefaultInterceptorFactory;
-import com.support.monitor.plugins.demo.interceptor.DemoPluginMethod1Interceptor;
-import com.support.monitor.plugins.demo.interceptor.DemoPluginMethod2Interceptor;
+import com.support.monitor.agent.core.interceptor.enhance.DefaultInterceptorFactory;
+import com.support.monitor.plugins.demo.sync.DemoPluginMethod1Interceptor;
 
 public class InterceptorTest {
 
@@ -26,9 +25,7 @@ public class InterceptorTest {
 //        }
 
         DefaultInterceptorFactory defaultInterceptorFactory = new DefaultInterceptorFactory(null);
-
-        defaultInterceptorFactory.newInterceptor(DemoPluginMethod1Interceptor.class);
-        defaultInterceptorFactory.newInterceptor(DemoPluginMethod2Interceptor.class);
+        defaultInterceptorFactory.newMethodsInterceptor(DemoPluginMethod1Interceptor.class);
 
     }
 }
