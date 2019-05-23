@@ -17,8 +17,11 @@ public interface PluginLoader extends InitContextAware {
      * @return : java.util.List<P>
      * @author 江浩
      */
-    default List<PluginDefine> loadPlugin() {
-        return null;
-    }
+//    default List<PluginDefine> loadPlugin() {
+//        return null;
+//    }
+
+
+    List<PluginDefine> loadPlugin();
 
 }

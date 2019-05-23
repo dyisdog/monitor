@@ -1,8 +1,9 @@
 package com.support.monitor.agent.core.context.trace.def;
 
-import com.support.monitor.agent.core.context.trace.*;
-
-import java.util.concurrent.atomic.AtomicReference;
+import com.support.monitor.agent.core.context.trace.Trace;
+import com.support.monitor.agent.core.context.trace.TraceContext;
+import com.support.monitor.agent.core.context.trace.TraceFactory;
+import com.support.monitor.agent.core.context.trace.TraceId;
 
 /**
  * TraceContext 默认实现
@@ -13,16 +14,23 @@ public class DefaultTraceContext implements TraceContext {
 
     private TraceFactory traceFactory;
 
-    private AsyncTraceContext asyncTraceContext;
-
-    public DefaultTraceContext(TraceFactory traceFactory, AsyncTraceContext asyncTraceContext) {
+    public DefaultTraceContext(TraceFactory traceFactory) {
         this.traceFactory = traceFactory;
-        this.asyncTraceContext = asyncTraceContext;
     }
 
     @Override
-    public Trace currentTraceObject() {
-        return traceFactory.currentTraceObject();
+    public Trace currentRawTraceObject() {
+        return traceFactory.currentRawTraceObject();
+    }
+
+    @Override
+    public Trace continueTraceObject(TraceId traceId) {
+        return traceFactory.continueAsyncTraceObject(traceId);
+    }
+
+    @Override
+    public Trace continueTraceObject(Trace trace) {
+        return traceFactory.continueTraceObject(trace);
     }
 
     @Override
@@ -31,19 +39,12 @@ public class DefaultTraceContext implements TraceContext {
     }
 
     @Override
-    public Trace newTraceObject(TraceId traceId) {
-        return traceFactory.newTraceObject(traceId);
+    public Trace newAsyncTraceObject() {
+        return traceFactory.newAsyncTraceObject();
     }
 
     @Override
-    public AtomicReference<Trace> getReference() {
-        return traceFactory.getReference();
+    public Trace continueAsyncTraceObject(TraceId traceId) {
+        return traceFactory.continueTraceObject(traceId);
     }
-
-    @Override
-    public Trace nextAsyncTrace(TraceId traceId) {
-        return asyncTraceContext.newAsyncTraceObject(traceId);
-    }
-
-
 }

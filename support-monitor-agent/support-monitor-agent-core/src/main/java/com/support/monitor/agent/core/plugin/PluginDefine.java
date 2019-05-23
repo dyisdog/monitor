@@ -5,6 +5,7 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 插件定义
@@ -12,6 +13,10 @@ import java.util.List;
  * @author 江浩
  */
 public interface PluginDefine {
+
+    default String name() {
+        return "plugin: " + UUID.randomUUID().toString();
+    }
 
     /**
      * 增强拦截类

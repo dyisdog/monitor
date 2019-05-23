@@ -25,13 +25,8 @@ public class AgentCollect {
      * @param instrumentation
      */
     public static void premain(String agentArgs, Instrumentation instrumentation) {
-
-        ClassLoader defaultClassLoader = defaultClassLoader();
-        log.info("agent args: {}", agentArgs);
-        log.info("classLoader: {}", defaultClassLoader);
         ApplicationContextModuleFactory applicationContextModuleFactory = new ApplicationContextModuleFactory();
         applicationContextModuleFactory.load(agentArgs, instrumentation);
-
     }
 
 }

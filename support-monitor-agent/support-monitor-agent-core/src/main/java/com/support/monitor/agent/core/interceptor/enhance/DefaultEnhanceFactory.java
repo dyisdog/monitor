@@ -1,7 +1,7 @@
 package com.support.monitor.agent.core.interceptor.enhance;
 
 import com.support.monitor.agent.core.context.EnhanceContext;
-import com.support.monitor.agent.core.context.trace.AsyncTraceContext;
+import com.support.monitor.agent.core.context.trace.TraceContext;
 import com.support.monitor.agent.core.interceptor.ConstructorInterceptPoint;
 import com.support.monitor.agent.core.interceptor.MethodsInterceptPoint;
 import com.support.monitor.agent.core.interceptor.StaticMethodsInterceptPoint;
@@ -86,7 +86,8 @@ public class DefaultEnhanceFactory implements EnhanceFactory {
      * @param builder
      */
     private DynamicType.Builder.MethodDefinition.ReceiverTypeDefinition<?> enhanceSource(DynamicType.Builder<?> builder) {
-        return builder.defineField(ENHANCE_CLASS_FIELD_NAME, AsyncTraceContext.class, ACC_PRIVATE | ACC_VOLATILE)
+
+        return builder.defineField(ENHANCE_CLASS_FIELD_NAME, TraceContext.class, ACC_PRIVATE | ACC_VOLATILE)
                 .implement(EnhancedDefine.class)
                 .intercept(FieldAccessor.ofField(ENHANCE_CLASS_FIELD_NAME));
     }

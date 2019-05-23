@@ -1,6 +1,7 @@
 package com.support.monitor.agent.core.module;
 
 import com.google.inject.*;
+import com.google.inject.name.Names;
 import com.google.inject.util.Modules;
 import com.support.monitor.agent.core.AgentBootStarter;
 
@@ -41,6 +42,7 @@ public class ApplicationContextModuleFactory implements ModuleFactory {
             @Override
             protected void configure() {
                 bind(Instrumentation.class).toInstance(instrumentation);
+                bind(String.class).annotatedWith(Names.named("args")).toInstance(args);
             }
         });
 
@@ -49,7 +51,7 @@ public class ApplicationContextModuleFactory implements ModuleFactory {
 
         this.injector = Guice.createInjector(Stage.PRODUCTION, initModule());
         AgentBootStarter agentBootStarter = this.injector.getInstance(AgentBootStarter.class);
-        agentBootStarter.start(args);
+        agentBootStarter.start();
     }
 
 }

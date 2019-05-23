@@ -52,4 +52,11 @@ public interface AgentConfig {
      */
     String getPluginLoader();
 
+    /**
+     * 获取debug信息
+     *
+     * @return
+     */
+    String getDebugPath();
+
 }

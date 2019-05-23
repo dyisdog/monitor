@@ -1,11 +1,12 @@
 package com.support.monitor.agent.core.handler;
 
 import com.google.inject.Inject;
-import com.support.monitor.agent.core.InstrumentDebuggingClass;
 import com.support.monitor.agent.core.config.AgentConfig;
 import com.support.monitor.agent.core.context.EnhanceContext;
+import com.support.monitor.agent.core.debug.EnhanceDebugFactory;
 import com.support.monitor.agent.core.interceptor.enhance.EnhanceFactory;
 import com.support.monitor.agent.core.plugin.PluginDefine;
+import com.support.monitor.agent.core.plugin.PluginLoader;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.description.type.TypeDescription;
@@ -13,7 +14,6 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
-import org.apache.commons.collections.CollectionUtils;
 
 import java.lang.instrument.Instrumentation;
 import java.util.List;
@@ -34,39 +34,63 @@ public class DefaultApplicationHandler implements ApplicationHandler {
 
     private EnhanceFactory enhanceFactory;
 
+    private EnhanceDebugFactory enhanceDebugFactory;
+
+    private PluginLoader pluginLoader;
+
     @Inject
     public DefaultApplicationHandler(
             AgentBuilder agentBuilder,
             AgentConfig config,
             Instrumentation instrumentation,
-            EnhanceFactory enhanceFactory) {
+            EnhanceFactory enhanceFactory,
+            EnhanceDebugFactory enhanceDebugFactory,
+            PluginLoader pluginLoader) {
 
         this.agentBuilder = agentBuilder;
         this.config = config;
         this.instrumentation = instrumentation;
         this.enhanceFactory = enhanceFactory;
+        this.enhanceDebugFactory = enhanceDebugFactory;
+        this.pluginLoader = pluginLoader;
     }
 
     @Override
-    public void handle(List<PluginDefine> pluginDefines) {
-        if (CollectionUtils.isEmpty(pluginDefines)) {
-            log.info("plugin defines empty");
-            return;
-        }
-        pluginDefines.forEach(pluginDefine -> {
-            List<EnhanceContext> enhanceContexts = pluginDefine.enhanceContexts();
-            ElementMatcher<? super TypeDescription> classDescription = pluginDefine.classDescription();
-            log.info("加载: {}", classDescription.toString());
-
-            this.agentBuilder.type(ElementMatchers.not(isInterface()).and(classDescription))
-                    .transform((builder, typeDescription, classLoader, module) ->
-                            enhanceFactory.enhance(builder, enhanceContexts))
-                    .with(new Listener())
-                    .installOn(this.instrumentation);
-        });
+    public void handle() {
+        this.handle(pluginLoader.loadPlugin(), 0);
     }
 
-    private static class Listener implements AgentBuilder.Listener {
+    private void handle(List<PluginDefine> loadPlugins, int index) {
+        if (index >= loadPlugins.size()) {
+            return;
+        }
+        PluginDefine pluginDefine = loadPlugins.get(index);
+        log.info("加载插件: {}", pluginDefine.name());
+
+        List<EnhanceContext> enhanceContexts = pluginDefine.enhanceContexts();
+        ElementMatcher<? super TypeDescription> classDescription = pluginDefine.classDescription();
+        this.agentBuilder.type(ElementMatchers.not(isInterface()).and(classDescription))
+                .transform((builder, typeDescription, classLoader, module) ->
+                        enhanceFactory.enhance(builder, enhanceContexts))
+                .with(new AgentEnhanceLister(this.enhanceDebugFactory))
+                .installOn(this.instrumentation);
+
+        this.handle(loadPlugins, ++index);
+    }
+
+    /**
+     * 监听
+     *
+     * @author 江浩
+     */
+    private static class AgentEnhanceLister implements AgentBuilder.Listener {
+
+        private EnhanceDebugFactory enhanceDebugFactory;
+
+        public AgentEnhanceLister(EnhanceDebugFactory enhanceDebugFactory) {
+            this.enhanceDebugFactory = enhanceDebugFactory;
+        }
+
         @Override
         public void onDiscovery(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded) {
 
@@ -75,9 +99,7 @@ public class DefaultApplicationHandler implements ApplicationHandler {
         @Override
         public void onTransformation(TypeDescription typeDescription, ClassLoader classLoader, JavaModule module,
                                      boolean loaded, DynamicType dynamicType) {
-            log.debug("On Transformation class {}.", typeDescription.getName());
-
-            InstrumentDebuggingClass.INSTANCE.log(typeDescription, dynamicType);
+            enhanceDebugFactory.fileWrite(typeDescription, dynamicType);
         }
 
         @Override

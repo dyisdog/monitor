@@ -19,8 +19,8 @@ public class DefaultAgentConfig implements AgentConfig {
 
     private Config config;
 
-    public DefaultAgentConfig() {
-        this.load();
+    public DefaultAgentConfig(String args) {
+        this.load(args);
     }
 
     @Override
@@ -55,5 +55,10 @@ public class DefaultAgentConfig implements AgentConfig {
     @Override
     public String getPluginLoader() {
         return this.getString("agent.plugin.loader.name", "spi");
+    }
+
+    @Override
+    public String getDebugPath() {
+        return this.getString("agent.plugin.debug.path", "");
     }
 }

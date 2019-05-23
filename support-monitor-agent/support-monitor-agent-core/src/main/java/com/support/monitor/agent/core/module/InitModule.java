@@ -6,16 +6,15 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.support.monitor.agent.core.AgentBootStarter;
 import com.support.monitor.agent.core.config.AgentConfig;
-import com.support.monitor.agent.core.config.DefaultAgentConfig;
 import com.support.monitor.agent.core.context.trace.*;
 import com.support.monitor.agent.core.context.trace.def.DefaultIdGenerator;
 import com.support.monitor.agent.core.context.trace.def.DefaultTraceIdFactory;
+import com.support.monitor.agent.core.debug.EnhanceDebugFactory;
 import com.support.monitor.agent.core.handler.ApplicationHandler;
 import com.support.monitor.agent.core.handler.DefaultApplicationHandler;
 import com.support.monitor.agent.core.interceptor.enhance.EnhanceFactory;
 import com.support.monitor.agent.core.interceptor.enhance.InterceptorFactory;
 import com.support.monitor.agent.core.module.provider.*;
-import com.support.monitor.agent.core.plugin.DefaultPluginLoader;
 import com.support.monitor.agent.core.plugin.PluginLoader;
 import com.support.monitor.agent.core.plugin.adaptor.PluginLoaderAdaptor;
 import com.support.monitor.agent.core.plugin.adaptor.SpiPluginLoadAdaptor;
@@ -50,7 +49,8 @@ public class InitModule extends AbstractModule {
 
     private void initBind() {
         bind(AgentBootStarter.class).in(Scopes.SINGLETON);
-        bind(AgentConfig.class).to(DefaultAgentConfig.class).in(Scopes.SINGLETON);
+
+        bind(AgentConfig.class).toProvider(AgentConfigProvider.class).in(Scopes.SINGLETON);
         bind(AgentBuilder.class).to(AgentBuilder.Default.class).in(Scopes.SINGLETON);
         bind(ApplicationHandler.class).to(DefaultApplicationHandler.class).in(Scopes.SINGLETON);
     }
@@ -64,13 +64,12 @@ public class InitModule extends AbstractModule {
     }
 
     private void pluginBind() {
-        bind(PluginLoader.class).to(DefaultPluginLoader.class).in(Scopes.SINGLETON);
+        bind(PluginLoader.class).toProvider(PluginLoaderProvider.class).in(Scopes.SINGLETON);
         bind(PluginLoaderAdaptor.class).annotatedWith(Names.named(SPI_LOADER_ADAPTOR)).to(SpiPluginLoadAdaptor.class).in(Scopes.SINGLETON);
     }
 
     private void providerBind() {
         bind(TraceContext.class).toProvider(TraceContextProvider.class).in(Scopes.SINGLETON);
-        bind(AsyncTraceContext.class).toProvider(AsyncTraceContextProvider.class).in(Scopes.SINGLETON);
 
         bind(IdGenerator.class).to(DefaultIdGenerator.class).in(Scopes.SINGLETON);
         bind(SpanFactory.class).toProvider(SpanFactoryProvider.class).in(Scopes.SINGLETON);
@@ -78,6 +77,10 @@ public class InitModule extends AbstractModule {
         bind(TraceFactory.class).toProvider(TraceFactoryProvider.class).in(Scopes.SINGLETON);
 
         bind(EnhanceFactory.class).toProvider(EnhanceFactoryProvider.class).in(Scopes.SINGLETON);
+        bind(EnhanceDebugFactory.class).toProvider(EnhanceDebugFactoryProvider.class).in(Scopes.SINGLETON);
+
         bind(InterceptorFactory.class).toProvider(InterceptorProvider.class).in(Scopes.SINGLETON);
+
+
     }
 }

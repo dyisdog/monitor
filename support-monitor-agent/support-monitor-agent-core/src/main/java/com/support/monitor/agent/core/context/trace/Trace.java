@@ -5,7 +5,7 @@ package com.support.monitor.agent.core.context.trace;
  *
  * @author
  */
-public interface Trace {
+public interface Trace extends StackOperation {
 
     /**
      * 每个一个追踪信息渗透根据 {@link TraceId}
@@ -13,13 +13,6 @@ public interface Trace {
      * @return
      */
     TraceId getTraceId();
-
-    /**
-     * 获取SPAN信息
-     *
-     * @return
-     */
-    Span getSpan();
 
     /**
      * 是否是异步执行创建
@@ -30,5 +23,13 @@ public interface Trace {
     default boolean isAsync() {
         return true;
     }
+
+    /**
+     * TODO
+     *
+     * @return : com.support.monitor.agent.core.context.trace.SpanEventRecorder
+     * @author 江浩
+     */
+    SpanEventRecorder currentSpanEventRecorder();
 
 }

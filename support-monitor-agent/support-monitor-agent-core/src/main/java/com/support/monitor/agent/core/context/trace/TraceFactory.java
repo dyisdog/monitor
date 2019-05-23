@@ -10,43 +10,26 @@ import java.util.concurrent.atomic.AtomicReference;
 public interface TraceFactory {
 
     /**
-     * 获取当前线程的Trace
+     * 返回当前线程绑定Trace 可能为空
      *
      * @return : com.support.monitor.agent.core.context.trace.Trace
      * @author 江浩
      */
-    Trace currentTraceObject();
+    Trace currentRawTraceObject();
 
-    /**
-     * 删除线程绑定的trace
-     *
-     * @return : com.support.monitor.agent.core.context.trace.Trace
-     * @author 江浩
-     */
     Trace removeTraceObject();
 
-    /**
-     * 创建Trace
-     *
-     * @return : com.support.monitor.agent.core.context.trace.Trace
-     * @author 江浩
-     */
+
+    Trace continueTraceObject(TraceId traceId);
+
+    Trace continueTraceObject(Trace trace);
+
+    Trace continueAsyncTraceObject(TraceId traceId);
+
     Trace newTraceObject();
 
-    /**
-     * 根据TraceId 创建
-     *
-     * @param traceId :
-     * @return : com.support.monitor.agent.core.context.trace.Trace
-     * @author 江浩
-     */
-    Trace newTraceObject(TraceId traceId);
+    Trace newAsyncTraceObject();
 
-    /**
-     * 获取映射绑定
-     *
-     * @return
-     */
     AtomicReference<Trace> getReference();
 
 }

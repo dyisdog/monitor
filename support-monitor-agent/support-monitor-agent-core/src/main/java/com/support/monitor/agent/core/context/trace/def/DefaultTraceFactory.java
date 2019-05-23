@@ -3,7 +3,6 @@ package com.support.monitor.agent.core.context.trace.def;
 import com.support.monitor.agent.core.context.trace.*;
 import com.support.monitor.commons.binder.Binder;
 
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -31,8 +30,9 @@ public class DefaultTraceFactory implements TraceFactory {
         this.idGenerator = idGenerator;
     }
 
+
     @Override
-    public Trace currentTraceObject() {
+    public Trace currentRawTraceObject() {
         final AtomicReference<Trace> reference = getReference();
         return reference.get();
     }
@@ -40,45 +40,58 @@ public class DefaultTraceFactory implements TraceFactory {
     @Override
     public Trace removeTraceObject() {
         final AtomicReference<Trace> reference = getReference();
-        return reference.updateAndGet(trace -> null);
+        final Trace trace = reference.getAndSet(null);
+        return trace;
     }
 
+
     @Override
-    public Trace newTraceObject() {
+    public Trace continueTraceObject(TraceId traceId) {
         final AtomicReference<Trace> reference = getReference();
-        final Trace trace = this.newTrace();
-        bind(reference, trace);
+        final Span span = spanFactory.newSpan(traceId);
+//        final SpanRecorder spanRecorder = recorderFactory.newSpanRecorder(span, traceId.isRoot(), samplingEnable);
+//        final WrappedSpanEventRecorder wrappedSpanEventRecorder = recorderFactory.newWrappedSpanEventRecorder(traceRoot);
+//        final ActiveTraceHandle handle = registerActiveTrace(traceRoot);
+        //callStack, storage, asyncContextFactory, samplingEnable, spanRecorder, wrappedSpanEventRecorder, handle
+        final DefaultTrace trace = new DefaultTrace(span);
+        reference.set(trace);
         return trace;
     }
 
     @Override
-    public Trace newTraceObject(TraceId traceId) {
-        if (Objects.isNull(traceId)) {
-            traceId = getTraceId();
-        }
-        Span span = spanFactory.newSpan(traceId);
-        DefaultTrace defaultTrace = new DefaultTrace(span);
-        bind(getReference(), defaultTrace);
-        return defaultTrace;
+    public Trace continueTraceObject(Trace trace) {
+        final AtomicReference<Trace> reference = getReference();
+        reference.set(trace);
+        return trace;
+    }
+
+    @Override
+    public Trace continueAsyncTraceObject(TraceId traceId) {
+//        final AtomicReference<Trace> reference = getReference();
+//        final Trace trace = reference.getAndSet(null);
+//        return trace;
+        return this.continueTraceObject(traceId);
+    }
+
+    @Override
+    public Trace newTraceObject() {
+        String id = idGenerator.transactionId();
+        TraceId traceId = traceIdFactory.newTraceId(id);
+        return this.continueTraceObject(traceId);
+    }
+
+    @Override
+    public Trace newAsyncTraceObject() {
+//        final AtomicReference<Trace> reference = getReference();
+//        final Trace trace = this.baseTraceFactory.continueAsyncTraceObject(traceId);
+//        reference.set(trace);
+//        return trace;
+
+        return this.newTraceObject();
     }
 
     @Override
     public AtomicReference<Trace> getReference() {
         return threadLocalBinder.get();
     }
-
-    private void bind(AtomicReference<Trace> reference, Trace trace) {
-        reference.set(trace);
-    }
-
-    private Trace newTrace() {
-        TraceId traceId = getTraceId();
-        return newTraceObject(traceId);
-    }
-
-    private TraceId getTraceId() {
-        String transactionId = idGenerator.transactionId();
-        return traceIdFactory.newTraceId(transactionId);
-    }
-
 }

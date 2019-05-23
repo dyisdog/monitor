@@ -9,6 +9,9 @@ import com.support.monitor.agent.core.interceptor.StaticMethodsInterceptPoint;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author 江浩
+ */
 public abstract class AbstractPluginDefine implements PluginDefine {
 
     private List<EnhanceContext> enhanceContexts = new ArrayList<>();

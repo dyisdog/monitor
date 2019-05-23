@@ -1,7 +1,5 @@
 package com.support.monitor.agent.core.context.trace;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 /**
  * TraceContext
  *
@@ -9,19 +7,29 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public interface TraceContext {
 
+
     /**
-     * 当前线程相关Trace
+     * return a trace whose sampling rate should be further verified
      *
-     * @return : com.support.monitor.agent.core.context.Trace
-     * @author 江浩
+     * @return
      */
-    Trace currentTraceObject();
+    Trace currentRawTraceObject();
+
+    Trace continueTraceObject(TraceId traceId);
+
+    Trace continueTraceObject(Trace trace);
 
     Trace newTraceObject();
 
-    Trace newTraceObject(TraceId traceId);
+    /**
+     * internal experimental api
+     */
+    Trace newAsyncTraceObject();
 
-    AtomicReference<Trace> getReference();
+    /**
+     * internal experimental api
+     */
+    Trace continueAsyncTraceObject(TraceId traceId);
 
-    Trace nextAsyncTrace(TraceId traceId);
+
 }
