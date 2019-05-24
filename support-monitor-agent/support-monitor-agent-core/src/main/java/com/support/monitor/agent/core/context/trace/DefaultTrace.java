@@ -30,6 +30,16 @@ public class DefaultTrace implements Trace {
     }
 
     @Override
+    public void traceBegin() {
+        this.spanEventRecorder.markStartTime();
+    }
+
+    @Override
+    public void traceEnd() {
+        this.spanEventRecorder.markEndTime();
+    }
+
+    @Override
     public String toString() {
         return "\t traceId:\t" + span.getTraceId().id()
                 + "\t spanParentId:\t" + span.getParentId()

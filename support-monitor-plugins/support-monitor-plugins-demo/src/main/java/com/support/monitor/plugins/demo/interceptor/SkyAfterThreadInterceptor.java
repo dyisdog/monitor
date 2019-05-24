@@ -31,6 +31,11 @@ public class SkyAfterThreadInterceptor extends AbstractAsyncMethodsAroundInterce
     }
 
     @Override
+    protected void doBeforeMethod(Trace trace, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
+
+    }
+
+    @Override
     protected void doInBeforeMethod(Trace trace, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
 
     }
@@ -42,7 +47,13 @@ public class SkyAfterThreadInterceptor extends AbstractAsyncMethodsAroundInterce
     }
 
     @Override
-    public void handleMethodException(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Throwable t) {
-        t.printStackTrace();
+    protected void doAfterMethod(Trace trace, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object ret) {
+
     }
+
+    @Override
+    protected void doExceptionMethod(Trace trace, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Throwable t) {
+
+    }
+
 }

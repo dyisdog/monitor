@@ -17,4 +17,9 @@ public interface Trace {
      */
     SpanEventRecorder currentSpanEventRecorder();
 
+    void traceBegin();
+
+    void traceEnd();
+
+
 }

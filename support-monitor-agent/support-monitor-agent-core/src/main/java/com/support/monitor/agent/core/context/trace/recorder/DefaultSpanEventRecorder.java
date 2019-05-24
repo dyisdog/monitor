@@ -29,4 +29,14 @@ public class DefaultSpanEventRecorder implements SpanEventRecorder {
         return this.span;
     }
 
+    @Override
+    public void markStartTime() {
+        this.span.setStartTime(System.currentTimeMillis());
+    }
+
+    @Override
+    public void markEndTime() {
+        this.span.setEndTime(System.currentTimeMillis());
+    }
+
 }

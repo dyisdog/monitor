@@ -37,7 +37,7 @@ public class MethodsInterceptWithOverrideArgsCallable {
             result = callable.call(allArguments);
             interceptor.afterMethod(enhancedDefine, method, allArguments, method.getParameterTypes(), result);
         } catch (Exception e) {
-            interceptor.handleMethodException(enhancedDefine, method, allArguments, method.getParameterTypes(), e);
+            interceptor.exceptionMethod(enhancedDefine, method, allArguments, method.getParameterTypes(), e);
         }
         return result;
     }

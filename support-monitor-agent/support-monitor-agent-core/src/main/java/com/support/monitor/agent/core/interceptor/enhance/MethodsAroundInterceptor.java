@@ -46,8 +46,8 @@ public interface MethodsAroundInterceptor extends Interceptor {
      * @return : void
      * @author 江浩
      */
-    default void handleMethodException(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes,
-                                       Throwable t) {
+    default void exceptionMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes,
+                                 Throwable t) {
 
     }
 }

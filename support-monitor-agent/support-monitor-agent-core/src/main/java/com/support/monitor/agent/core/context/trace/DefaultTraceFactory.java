@@ -9,6 +9,7 @@ import com.support.monitor.agent.core.context.trace.span.Span;
 import com.support.monitor.agent.core.context.trace.span.SpanFactory;
 import com.support.monitor.commons.binder.Binder;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -59,6 +60,9 @@ public class DefaultTraceFactory implements TraceFactory {
     @Override
     public Trace newTraceObject(TraceId traceId) {
         final AtomicReference<Trace> reference = getReference();
+        if (Objects.isNull(traceId)) {
+            return this.newTraceObject();
+        }
         final Span span = spanFactory.newSpan(traceId);
         final SpanEventRecorder spanEventRecorder = recorderFactory.newSpanEventRecorder(span);
         final DefaultTrace trace = new DefaultTrace(span, spanEventRecorder);

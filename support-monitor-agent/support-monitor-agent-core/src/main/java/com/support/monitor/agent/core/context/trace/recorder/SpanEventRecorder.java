@@ -32,4 +32,14 @@ public interface SpanEventRecorder {
      * @return
      */
     Span getSpan();
+
+    /**
+     * 标记开始时间
+     */
+    void markStartTime();
+
+    /**
+     * 标记结束时间
+     */
+    void markEndTime();
 }

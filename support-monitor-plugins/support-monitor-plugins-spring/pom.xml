@@ -11,9 +11,13 @@
 
     <artifactId>support-monitor-plugins-spring</artifactId>
     <packaging>pom</packaging>
+    <modules>
+        <module>support-monitor-plugins-spring-annotation</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
 
 </project>

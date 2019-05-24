@@ -20,10 +20,12 @@
             <artifactId>support-monitor-agent-core</artifactId>
         </dependency>
 
-        <!--plugins-->
         <dependency>
             <groupId>com.support.monitor</groupId>
-            <artifactId>support-monitor-plugins-demo</artifactId>
+            <artifactId>support-monitor-plugins-bom</artifactId>
+            <version>${project.version}</version>
+            <scope>runtime</scope>
+            <type>pom</type>
         </dependency>
 
         <dependency>

@@ -15,6 +15,14 @@
     <modules>
         <module>support-monitor-plugins-demo</module>
         <module>support-monitor-plugins-spring</module>
+        <module>support-monitor-plugins-bom</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.support.monitor</groupId>
+            <artifactId>support-monitor-agent-core</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

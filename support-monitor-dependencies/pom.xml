@@ -36,13 +36,6 @@
                 <version>${agent.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.support.monitor</groupId>
-                <artifactId>support-monitor-plugins-demo</artifactId>
-                <version>${agent.version}</version>
-            </dependency>
-
-
             <!--探针收集器-->
             <dependency>
                 <groupId>com.support.monitor</groupId>
