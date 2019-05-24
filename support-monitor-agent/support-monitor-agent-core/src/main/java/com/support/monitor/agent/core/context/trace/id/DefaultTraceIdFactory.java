@@ -1,7 +1,4 @@
-package com.support.monitor.agent.core.context.trace.def;
-
-import com.support.monitor.agent.core.context.trace.TraceId;
-import com.support.monitor.agent.core.context.trace.TraceIdFactory;
+package com.support.monitor.agent.core.context.trace.id;
 
 /**
  * default

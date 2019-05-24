@@ -1,5 +1,6 @@
-package com.support.monitor.agent.core.context.trace;
+package com.support.monitor.agent.core.context.trace.span;
 
+import com.support.monitor.agent.core.context.trace.id.TraceId;
 import com.support.monitor.commons.binder.utils.Assert;
 import lombok.Data;
 

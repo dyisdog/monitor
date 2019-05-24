@@ -1,9 +1,6 @@
-package com.support.monitor.agent.core.context.trace.def;
+package com.support.monitor.agent.core.context.trace;
 
-import com.support.monitor.agent.core.context.trace.Trace;
-import com.support.monitor.agent.core.context.trace.TraceContext;
-import com.support.monitor.agent.core.context.trace.TraceFactory;
-import com.support.monitor.agent.core.context.trace.TraceId;
+import com.support.monitor.agent.core.context.trace.id.TraceId;
 
 /**
  * TraceContext 默认实现

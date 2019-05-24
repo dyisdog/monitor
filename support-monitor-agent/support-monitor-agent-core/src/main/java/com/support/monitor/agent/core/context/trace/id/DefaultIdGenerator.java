@@ -1,6 +1,4 @@
-package com.support.monitor.agent.core.context.trace.def;
-
-import com.support.monitor.agent.core.context.trace.IdGenerator;
+package com.support.monitor.agent.core.context.trace.id;
 
 import java.util.UUID;
 

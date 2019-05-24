@@ -1,8 +1,7 @@
-package com.support.monitor.agent.core.context.trace.def;
+package com.support.monitor.agent.core.context.trace;
 
-import com.support.monitor.agent.core.context.trace.Span;
-import com.support.monitor.agent.core.context.trace.Trace;
 import com.support.monitor.agent.core.context.trace.recorder.SpanEventRecorder;
+import com.support.monitor.agent.core.context.trace.span.Span;
 
 /**
  * default

@@ -1,4 +1,6 @@
-package com.support.monitor.agent.core.context.trace;
+package com.support.monitor.agent.core.context.trace.span;
+
+import com.support.monitor.agent.core.context.trace.id.TraceId;
 
 public interface SpanFactory {
 

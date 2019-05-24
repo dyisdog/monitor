@@ -1,6 +1,5 @@
-package com.support.monitor.agent.core.context.trace.def;
+package com.support.monitor.agent.core.context.trace.id;
 
-import com.support.monitor.agent.core.context.trace.TraceId;
 import lombok.Getter;
 
 /**

@@ -1,9 +1,7 @@
-package com.support.monitor.agent.core.context.trace.def;
+package com.support.monitor.agent.core.context.trace.span;
 
-import com.support.monitor.agent.core.context.trace.IdGenerator;
-import com.support.monitor.agent.core.context.trace.Span;
-import com.support.monitor.agent.core.context.trace.SpanFactory;
-import com.support.monitor.agent.core.context.trace.TraceId;
+import com.support.monitor.agent.core.context.trace.id.IdGenerator;
+import com.support.monitor.agent.core.context.trace.id.TraceId;
 
 /**
  * span default handle factory

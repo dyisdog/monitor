@@ -1,6 +1,6 @@
 package com.support.monitor.agent.core.context.trace.recorder;
 
-import com.support.monitor.agent.core.context.trace.Span;
+import com.support.monitor.agent.core.context.trace.span.Span;
 
 /**
  * 记录者构建工厂

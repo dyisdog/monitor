@@ -2,9 +2,13 @@ package com.support.monitor.agent.core.module.provider;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.support.monitor.agent.core.context.trace.*;
-import com.support.monitor.agent.core.context.trace.def.DefaultTraceFactory;
+import com.support.monitor.agent.core.context.trace.DefaultTraceFactory;
+import com.support.monitor.agent.core.context.trace.Trace;
+import com.support.monitor.agent.core.context.trace.TraceFactory;
+import com.support.monitor.agent.core.context.trace.id.IdGenerator;
+import com.support.monitor.agent.core.context.trace.id.TraceIdFactory;
 import com.support.monitor.agent.core.context.trace.recorder.RecorderFactory;
+import com.support.monitor.agent.core.context.trace.span.SpanFactory;
 import com.support.monitor.commons.binder.Binder;
 
 /**

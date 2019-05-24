@@ -1,5 +1,7 @@
 package com.support.monitor.agent.core.context.trace;
 
+import com.support.monitor.agent.core.context.trace.id.TraceId;
+
 import java.util.concurrent.atomic.AtomicReference;
 
 /**

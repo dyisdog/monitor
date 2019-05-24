@@ -1,7 +1,7 @@
 package com.support.monitor.agent.core.context.trace.recorder;
 
-import com.support.monitor.agent.core.context.trace.Span;
-import com.support.monitor.agent.core.context.trace.TraceId;
+import com.support.monitor.agent.core.context.trace.id.TraceId;
+import com.support.monitor.agent.core.context.trace.span.Span;
 
 /**
  * @author 江浩

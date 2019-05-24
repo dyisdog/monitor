@@ -1,4 +1,4 @@
-package com.support.monitor.agent.core.context.trace;
+package com.support.monitor.agent.core.context.trace.id;
 
 /**
  * ID生成器
