@@ -23,6 +23,8 @@ public class Span {
 
     private long threadId;
 
+    private boolean isAsync;
+
     public Span(String id, TraceId traceId) {
         Assert.requireNonNull(id, "id must not be null");
         Assert.requireNonNull(traceId, "traceId must not be null");

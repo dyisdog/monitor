@@ -24,13 +24,13 @@ public class DefaultTraceContext implements TraceContext {
     }
 
     @Override
-    public Trace continueTraceObject(TraceId traceId) {
-        return traceFactory.continueAsyncTraceObject(traceId);
+    public Trace newTraceObject(TraceId traceId) {
+        return traceFactory.newAsyncTraceObject(traceId);
     }
 
     @Override
-    public Trace continueTraceObject(Trace trace) {
-        return traceFactory.continueTraceObject(trace);
+    public Trace newTraceObject(Trace trace) {
+        return traceFactory.newTraceObject(trace);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class DefaultTraceContext implements TraceContext {
     }
 
     @Override
-    public Trace continueAsyncTraceObject(TraceId traceId) {
-        return traceFactory.continueTraceObject(traceId);
+    public Trace newAsyncTraceObject(TraceId traceId) {
+        return traceFactory.newAsyncTraceObject(traceId);
     }
 }

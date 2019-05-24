@@ -1,31 +1,16 @@
 package com.support.monitor.agent.core.context.trace;
 
+import com.support.monitor.agent.core.context.trace.recorder.SpanEventRecorder;
+
 /**
  * 追踪信息
  *
  * @author
  */
-public interface Trace extends StackOperation {
+public interface Trace {
 
     /**
-     * 每个一个追踪信息渗透根据 {@link TraceId}
-     *
-     * @return
-     */
-    TraceId getTraceId();
-
-    /**
-     * 是否是异步执行创建
-     *
-     * @return : boolean
-     * @author 江浩
-     */
-    default boolean isAsync() {
-        return true;
-    }
-
-    /**
-     * TODO
+     * 当前trace的span 记录者
      *
      * @return : com.support.monitor.agent.core.context.trace.SpanEventRecorder
      * @author 江浩

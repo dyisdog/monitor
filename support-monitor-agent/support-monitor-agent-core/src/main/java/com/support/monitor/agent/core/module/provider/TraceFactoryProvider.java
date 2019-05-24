@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.support.monitor.agent.core.context.trace.*;
 import com.support.monitor.agent.core.context.trace.def.DefaultTraceFactory;
+import com.support.monitor.agent.core.context.trace.recorder.RecorderFactory;
 import com.support.monitor.commons.binder.Binder;
 
 /**
@@ -19,15 +20,20 @@ public class TraceFactoryProvider implements Provider<TraceFactory> {
 
     private SpanFactory spanFactory;
 
+    private RecorderFactory recorderFactory;
+
+
     @Inject
     public TraceFactoryProvider(Binder<Trace> binder,
                                 TraceIdFactory traceIdFactory,
                                 IdGenerator idGenerator,
-                                SpanFactory spanFactory) {
+                                SpanFactory spanFactory,
+                                RecorderFactory recorderFactory) {
         this.binder = binder;
         this.traceIdFactory = traceIdFactory;
         this.idGenerator = idGenerator;
         this.spanFactory = spanFactory;
+        this.recorderFactory = recorderFactory;
     }
 
     @Override
@@ -37,7 +43,8 @@ public class TraceFactoryProvider implements Provider<TraceFactory> {
                 this.binder,
                 this.traceIdFactory,
                 this.spanFactory,
-                this.idGenerator
+                this.idGenerator,
+                this.recorderFactory
         );
     }
 }

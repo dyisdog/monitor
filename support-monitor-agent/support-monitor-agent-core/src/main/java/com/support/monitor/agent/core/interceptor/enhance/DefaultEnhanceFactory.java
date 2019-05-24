@@ -1,7 +1,7 @@
 package com.support.monitor.agent.core.interceptor.enhance;
 
 import com.support.monitor.agent.core.context.EnhanceContext;
-import com.support.monitor.agent.core.context.trace.TraceContext;
+import com.support.monitor.agent.core.context.trace.recorder.SpanEventRecorder;
 import com.support.monitor.agent.core.interceptor.ConstructorInterceptPoint;
 import com.support.monitor.agent.core.interceptor.MethodsInterceptPoint;
 import com.support.monitor.agent.core.interceptor.StaticMethodsInterceptPoint;
@@ -17,6 +17,7 @@ import net.bytebuddy.implementation.bind.annotation.Morph;
 import net.bytebuddy.matcher.ElementMatchers;
 
 import java.util.List;
+import java.util.Objects;
 
 import static net.bytebuddy.jar.asm.Opcodes.ACC_PRIVATE;
 import static net.bytebuddy.jar.asm.Opcodes.ACC_VOLATILE;
@@ -41,8 +42,14 @@ public class DefaultEnhanceFactory implements EnhanceFactory {
 
 
     @Override
-    public DynamicType.Builder<?> enhance(DynamicType.Builder<?> builder, List<EnhanceContext> enhanceContexts) {
-        builder = enhanceSource(builder);
+    public DynamicType.Builder<?> enhance(DynamicType.Builder<?> builder, EnhanceImpled enhanceImpled, List<EnhanceContext> enhanceContexts) {
+
+        if (!Objects.isNull(enhanceImpled) && !enhanceImpled.isObjectExtended()) {
+            enhanceImpled.extendObjectCompleted();
+        }
+        builder = this.enhanceSource(builder);
+
+
         for (EnhanceContext enhanceContext : enhanceContexts) {
             //chain handler
             if (enhanceContext.isMethodsInterceptPoint()) {
@@ -85,9 +92,10 @@ public class DefaultEnhanceFactory implements EnhanceFactory {
      *
      * @param builder
      */
-    private DynamicType.Builder.MethodDefinition.ReceiverTypeDefinition<?> enhanceSource(DynamicType.Builder<?> builder) {
+    @Override
+    public DynamicType.Builder.MethodDefinition.ReceiverTypeDefinition<?> enhanceSource(DynamicType.Builder<?> builder) {
 
-        return builder.defineField(ENHANCE_CLASS_FIELD_NAME, TraceContext.class, ACC_PRIVATE | ACC_VOLATILE)
+        return builder.defineField(ENHANCE_CLASS_FIELD_NAME, SpanEventRecorder.class, ACC_PRIVATE | ACC_VOLATILE)
                 .implement(EnhancedDefine.class)
                 .intercept(FieldAccessor.ofField(ENHANCE_CLASS_FIELD_NAME));
     }

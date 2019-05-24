@@ -2,9 +2,11 @@ package com.support.monitor.agent.core.interceptor.enhance;
 
 import com.support.monitor.agent.core.context.trace.Trace;
 import com.support.monitor.agent.core.context.trace.TraceContext;
+import com.support.monitor.agent.core.context.trace.recorder.SpanEventRecorder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 /**
  * @author 江浩
@@ -20,7 +22,23 @@ public abstract class AbstractAsyncMethodsAroundInterceptor extends AbstractMeth
     @Override
     public void beforeMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
 
-        System.out.println("sync: " + enhancedDefine.getClass() + "  " + method.getName());
+        Trace trace = getTraceContext().currentRawTraceObject();
+        System.out.println("sync before: " + enhancedDefine.getClass() + "  " + method.getName() + trace);
+        if (Objects.isNull(trace)) {
+            return;
+        }
+        SpanEventRecorder spanEventRecorder = trace.currentSpanEventRecorder();
+        enhancedDefine.setEnhancedInstanceTraceContext(spanEventRecorder);
+    }
+
+
+    @Override
+    public void afterMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object ret) {
+        final Trace trace = getTraceContext().currentRawTraceObject();
+        if (trace == null) {
+            return;
+        }
+        System.out.println("sync after: " + enhancedDefine.getClass() + " " + method.getName() + " " + trace);
     }
 
     /**

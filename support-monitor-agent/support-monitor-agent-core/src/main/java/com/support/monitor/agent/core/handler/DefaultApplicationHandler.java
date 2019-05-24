@@ -5,6 +5,7 @@ import com.support.monitor.agent.core.config.AgentConfig;
 import com.support.monitor.agent.core.context.EnhanceContext;
 import com.support.monitor.agent.core.debug.EnhanceDebugFactory;
 import com.support.monitor.agent.core.interceptor.enhance.EnhanceFactory;
+import com.support.monitor.agent.core.interceptor.enhance.EnhanceImpled;
 import com.support.monitor.agent.core.plugin.PluginDefine;
 import com.support.monitor.agent.core.plugin.PluginLoader;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +58,9 @@ public class DefaultApplicationHandler implements ApplicationHandler {
 
     @Override
     public void handle() {
+
+        //TODO
+
         this.handle(pluginLoader.loadPlugin(), 0);
     }
 
@@ -68,10 +72,11 @@ public class DefaultApplicationHandler implements ApplicationHandler {
         log.info("加载插件: {}", pluginDefine.name());
 
         List<EnhanceContext> enhanceContexts = pluginDefine.enhanceContexts();
-        ElementMatcher<? super TypeDescription> classDescription = pluginDefine.classDescription();
-        this.agentBuilder.type(ElementMatchers.not(isInterface()).and(classDescription))
-                .transform((builder, typeDescription, classLoader, module) ->
-                        enhanceFactory.enhance(builder, enhanceContexts))
+        ElementMatcher<? super TypeDescription> classDescription = ElementMatchers.not(isInterface()).and(pluginDefine.classDescription());
+
+        EnhanceImpled enhanceImpled = new EnhanceImpled();
+        this.agentBuilder.type(classDescription)
+                .transform((builder, typeDescription, classLoader, module) -> enhanceFactory.enhance(builder, enhanceImpled, enhanceContexts))
                 .with(new AgentEnhanceLister(this.enhanceDebugFactory))
                 .installOn(this.instrumentation);
 

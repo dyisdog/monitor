@@ -11,7 +11,7 @@ import com.support.monitor.agent.core.context.trace.TraceIdFactory;
 public class DefaultTraceIdFactory implements TraceIdFactory {
     @Override
     public TraceId newTraceId(String transactionId) {
-        return this.newTraceId(transactionId, null);
+        return this.newTraceId(transactionId, transactionId);
     }
 
     @Override

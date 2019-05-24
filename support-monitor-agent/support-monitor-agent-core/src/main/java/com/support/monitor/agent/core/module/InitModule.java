@@ -9,6 +9,8 @@ import com.support.monitor.agent.core.config.AgentConfig;
 import com.support.monitor.agent.core.context.trace.*;
 import com.support.monitor.agent.core.context.trace.def.DefaultIdGenerator;
 import com.support.monitor.agent.core.context.trace.def.DefaultTraceIdFactory;
+import com.support.monitor.agent.core.context.trace.recorder.DefaultRecorderFactory;
+import com.support.monitor.agent.core.context.trace.recorder.RecorderFactory;
 import com.support.monitor.agent.core.debug.EnhanceDebugFactory;
 import com.support.monitor.agent.core.handler.ApplicationHandler;
 import com.support.monitor.agent.core.handler.DefaultApplicationHandler;
@@ -73,6 +75,7 @@ public class InitModule extends AbstractModule {
 
         bind(IdGenerator.class).to(DefaultIdGenerator.class).in(Scopes.SINGLETON);
         bind(SpanFactory.class).toProvider(SpanFactoryProvider.class).in(Scopes.SINGLETON);
+
         bind(TraceIdFactory.class).to(DefaultTraceIdFactory.class).in(Scopes.SINGLETON);
         bind(TraceFactory.class).toProvider(TraceFactoryProvider.class).in(Scopes.SINGLETON);
 
@@ -81,6 +84,7 @@ public class InitModule extends AbstractModule {
 
         bind(InterceptorFactory.class).toProvider(InterceptorProvider.class).in(Scopes.SINGLETON);
 
+        bind(RecorderFactory.class).to(DefaultRecorderFactory.class).in(Scopes.SINGLETON);
 
     }
 }

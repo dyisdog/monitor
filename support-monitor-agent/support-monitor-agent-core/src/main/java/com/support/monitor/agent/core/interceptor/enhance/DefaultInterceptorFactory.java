@@ -33,6 +33,7 @@ public class DefaultInterceptorFactory implements InterceptorFactory {
 
     @Override
     public ConstructorInterceptor newConstructorInterceptor(Class<? extends ConstructorInterceptor> constructorInterceptorClass) {
+
         try {
             Constructor<? extends ConstructorInterceptor> constructor = constructorInterceptorClass.getDeclaredConstructor(TraceContext.class);
             return constructor.newInstance(this.traceContext);

@@ -17,17 +17,50 @@ public interface TraceFactory {
      */
     Trace currentRawTraceObject();
 
-    Trace removeTraceObject();
-
-
-    Trace continueTraceObject(TraceId traceId);
-
-    Trace continueTraceObject(Trace trace);
-
-    Trace continueAsyncTraceObject(TraceId traceId);
-
+    /**
+     * 创建
+     *
+     * @return : com.support.monitor.agent.core.context.trace.Trace
+     * @author 江浩
+     */
     Trace newTraceObject();
 
+    /**
+     * 删除
+     *
+     * @return
+     */
+    Trace removeTraceObject();
+
+    /**
+     * 创建
+     *
+     * @param traceId
+     * @return
+     */
+    Trace newTraceObject(TraceId traceId);
+
+    /**
+     * 创建
+     *
+     * @param trace
+     * @return
+     */
+    Trace newTraceObject(Trace trace);
+
+    /**
+     * 创建异步
+     *
+     * @param traceId
+     * @return
+     */
+    Trace newAsyncTraceObject(TraceId traceId);
+
+    /**
+     * 创建异步
+     *
+     * @return
+     */
     Trace newAsyncTraceObject();
 
     AtomicReference<Trace> getReference();

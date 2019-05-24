@@ -1,1 +1,3 @@
-com.support.monitor.plugins.demo.DemoPlugin
+com.support.monitor.plugins.demo.ControllerEnhancePlugin
+com.support.monitor.plugins.demo.SkyThreadEnhancePlugin
+com.support.monitor.plugins.demo.ServiceEnhancePlugin
