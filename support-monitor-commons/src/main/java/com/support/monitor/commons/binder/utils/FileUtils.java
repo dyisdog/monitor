@@ -1,15 +1,12 @@
-package com.support.monitor.agent.core.utils;
+package com.support.monitor.commons.binder.utils;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-@Slf4j
 public class FileUtils {
-
 
     private FileUtils() {
     }
@@ -41,7 +38,6 @@ public class FileUtils {
         try {
             return file.getCanonicalPath();
         } catch (IOException e) {
-            log.warn(file.getPath() + " getCanonicalPath() error. Error:" + e.getMessage(), e);
             return file.getAbsolutePath();
         }
     }

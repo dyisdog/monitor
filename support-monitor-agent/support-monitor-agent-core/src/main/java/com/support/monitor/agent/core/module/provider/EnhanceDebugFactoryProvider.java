@@ -6,6 +6,12 @@ import com.support.monitor.agent.core.config.AgentConfig;
 import com.support.monitor.agent.core.debug.DefaultEnhanceDebugFactory;
 import com.support.monitor.agent.core.debug.EnhanceDebugFactory;
 
+/**
+ * 调试信息
+ * TODO 添加agent输出日志
+ *
+ * @author 江浩
+ */
 public class EnhanceDebugFactoryProvider implements Provider<EnhanceDebugFactory> {
 
 

@@ -1,5 +1,8 @@
 package com.support.monitor.commons.binder.utils;
 
+/**
+ * @author
+ */
 public final class Assert {
     private Assert() {
     }

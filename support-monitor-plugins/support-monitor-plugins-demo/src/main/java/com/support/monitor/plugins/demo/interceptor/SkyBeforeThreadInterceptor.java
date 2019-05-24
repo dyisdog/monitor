@@ -28,6 +28,5 @@ public class SkyBeforeThreadInterceptor implements ConstructorInterceptor {
         //设置当前trace 的span事件进去
         SpanEventRecorder spanEventRecorder = trace.currentSpanEventRecorder();
         enhancedDefine.setEnhancedInstanceTraceContext(spanEventRecorder);
-        System.out.println("async: " + enhancedDefine.getClass());
     }
 }

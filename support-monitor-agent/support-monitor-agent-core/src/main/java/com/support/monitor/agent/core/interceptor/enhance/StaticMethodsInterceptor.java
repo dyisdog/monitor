@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
  *
  * @author 江浩
  */
-public interface StaticMethodsInterceptor {
+public interface StaticMethodsInterceptor extends Interceptor {
 
     //MethodInterceptResult result
     void beforeMethod(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes);

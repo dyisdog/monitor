@@ -1,12 +1,7 @@
 package com.support.monitor.plugins.demo;
 
-import com.support.monitor.agent.core.interceptor.MethodsInterceptPoint;
-import com.support.monitor.agent.core.interceptor.enhance.MethodsAroundInterceptor;
 import com.support.monitor.agent.core.plugin.AbstractPluginDefine;
 import com.support.monitor.plugins.demo.interceptor.ServiceInterceptor;
-import net.bytebuddy.description.method.MethodDescription;
-import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
 /**
@@ -15,21 +10,9 @@ import net.bytebuddy.matcher.ElementMatchers;
 public class ServiceEnhancePlugin extends AbstractPluginDefine {
     @Override
     public void init() {
-        methodPoint(new MethodsInterceptPoint() {
-            @Override
-            public ElementMatcher<MethodDescription> getMethodsMatcher() {
-                return ElementMatchers.nameContainsIgnoreCase("test");
-            }
+        pointClass(ElementMatchers.nameStartsWithIgnoreCase("com.example.demo.service"));
 
-            @Override
-            public Class<? extends MethodsAroundInterceptor> getMethodsInterceptor() {
-                return ServiceInterceptor.class;
-            }
-        });
+        pointMethod(ElementMatchers.nameContainsIgnoreCase("test"), ServiceInterceptor.class);
     }
 
-    @Override
-    public ElementMatcher<? super TypeDescription> classDescription() {
-        return ElementMatchers.nameStartsWithIgnoreCase("com.example.demo.service");
-    }
 }

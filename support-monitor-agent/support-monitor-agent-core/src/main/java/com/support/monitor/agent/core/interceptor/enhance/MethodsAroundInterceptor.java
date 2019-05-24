@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
  *
  * @author 江浩
  */
-public interface MethodsAroundInterceptor {
+public interface MethodsAroundInterceptor extends Interceptor {
 
 
     /**

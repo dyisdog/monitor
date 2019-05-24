@@ -16,14 +16,15 @@
  *
  */
 
-package com.support.monitor.agent.core.interceptor;
+package com.support.monitor.agent.core.interceptor.point;
 
 
 import com.support.monitor.agent.core.interceptor.enhance.ConstructorInterceptor;
+import com.support.monitor.agent.core.interceptor.enhance.Interceptor;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
-public interface ConstructorInterceptPoint extends InterceptPoint {
+public interface ConstructorInterceptPoint extends Interceptor {
 
     ElementMatcher<MethodDescription> getConstructorMatcher();
 

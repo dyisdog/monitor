@@ -1,9 +1,6 @@
 package com.support.monitor.agent.core.interceptor.enhance;
 
 import com.support.monitor.agent.core.context.EnhanceContext;
-import com.support.monitor.agent.core.interceptor.ConstructorInterceptPoint;
-import com.support.monitor.agent.core.interceptor.MethodsInterceptPoint;
-import com.support.monitor.agent.core.interceptor.StaticMethodsInterceptPoint;
 import net.bytebuddy.dynamic.DynamicType;
 
 import java.util.List;
@@ -14,24 +11,14 @@ import java.util.List;
  * @author
  */
 public interface EnhanceFactory {
-
     /**
      * 增强实现
      *
      * @param builder
-     * @param enhanceImpled
      * @param enhanceContext :
      * @return : net.bytebuddy.dynamic.DynamicType.Builder<?>
      * @author 江浩
      */
-    DynamicType.Builder<?> enhance(DynamicType.Builder<?> builder, final EnhanceImpled enhanceImpled, List<EnhanceContext> enhanceContext);
-
-    DynamicType.Builder.MethodDefinition.ReceiverTypeDefinition<?> enhanceSource(DynamicType.Builder<?> builder);
-
-    DynamicType.Builder<?> enhanceConstructor(DynamicType.Builder<?> builder, ConstructorInterceptPoint interceptPoint);
-
-    DynamicType.Builder<?> enhanceStaticMethods(DynamicType.Builder<?> builder, StaticMethodsInterceptPoint interceptPoint);
-
-    DynamicType.Builder<?> enhanceMethods(DynamicType.Builder<?> builder, MethodsInterceptPoint methodsInterceptPoint);
+    DynamicType.Builder<?> enhance(DynamicType.Builder<?> builder, List<EnhanceContext> enhanceContext);
 
 }

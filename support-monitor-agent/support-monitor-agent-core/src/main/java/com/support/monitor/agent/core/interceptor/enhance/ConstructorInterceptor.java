@@ -6,7 +6,7 @@ package com.support.monitor.agent.core.interceptor.enhance;
  *
  * @author 江浩
  */
-public interface ConstructorInterceptor {
+public interface ConstructorInterceptor extends Interceptor {
 
     void onConstruct(EnhancedDefine enhancedDefine, Object[] allArguments);
 }

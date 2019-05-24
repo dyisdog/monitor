@@ -1,7 +1,5 @@
 package com.support.monitor.agent.core.plugin;
 
-import com.support.monitor.agent.core.context.InitContextAware;
-
 import java.util.List;
 
 /**
@@ -9,7 +7,7 @@ import java.util.List;
  *
  * @author 江浩
  */
-public interface PluginLoader extends InitContextAware {
+public interface PluginLoader {
 
     /**
      * 加载插件信息

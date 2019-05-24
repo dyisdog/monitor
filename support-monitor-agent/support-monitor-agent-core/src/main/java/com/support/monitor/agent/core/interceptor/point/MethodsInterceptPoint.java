@@ -17,15 +17,18 @@
  */
 
 
-package com.support.monitor.agent.core.interceptor;
+package com.support.monitor.agent.core.interceptor.point;
 
+import com.support.monitor.agent.core.interceptor.enhance.Interceptor;
+import com.support.monitor.agent.core.interceptor.enhance.MethodsAroundInterceptor;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
 
-public interface StaticMethodsInterceptPoint extends InterceptPoint {
+public interface MethodsInterceptPoint extends Interceptor {
 
     ElementMatcher<MethodDescription> getMethodsMatcher();
 
-    String getMethodsInterceptor();
+    Class<? extends MethodsAroundInterceptor> getMethodsInterceptor();
+
 }
