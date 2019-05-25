@@ -1,9 +1,9 @@
 package com.support.monitor.agent.core.plugin;
 
 import com.support.monitor.agent.core.context.EnhanceContext;
-import com.support.monitor.agent.core.interceptor.enhance.ConstructorInterceptor;
-import com.support.monitor.agent.core.interceptor.enhance.MethodsAroundInterceptor;
-import com.support.monitor.agent.core.interceptor.enhance.StaticMethodsInterceptor;
+import com.support.monitor.agent.core.interceptor.ConstructorInterceptor;
+import com.support.monitor.agent.core.interceptor.MethodAroundInterceptor;
+import com.support.monitor.agent.core.interceptor.StaticMethodAroundInterceptor;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -70,11 +70,11 @@ public abstract class AbstractPluginDefine implements PluginDefine {
      * @return : com.support.monitor.agent.core.plugin.AbstractPluginDefine
      * @author 江浩
      */
-    public <R extends MethodsAroundInterceptor> void pointMethod(ElementMatcher<? super MethodDescription> methodDescription, Class<R> interceptorClass) {
+    public <R extends MethodAroundInterceptor> void pointMethod(ElementMatcher<? super MethodDescription> methodDescription, Class<R> interceptorClass) {
         pointSetting(methodDescription, interceptorClass.getName());
     }
 
-    public <R extends StaticMethodsInterceptor> void pointStaticMethod(ElementMatcher<? super MethodDescription> methodDescription, Class<R> interceptorClass) {
+    public <R extends StaticMethodAroundInterceptor> void pointStaticMethod(ElementMatcher<? super MethodDescription> methodDescription, Class<R> interceptorClass) {
         pointSetting(methodDescription, interceptorClass.getName());
     }
 

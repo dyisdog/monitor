@@ -3,41 +3,25 @@ package com.support.monitor.plugins.spring.annotation.interceptor;
 import com.support.monitor.agent.core.context.trace.Trace;
 import com.support.monitor.agent.core.context.trace.TraceContext;
 import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
+import com.support.monitor.agent.core.interceptor.supper.AbstractMethodAroundInterceptor;
 
 import java.lang.reflect.Method;
-import java.util.Objects;
 
-public class SpringBeanMethodInterceptor extends AbstractMethodInterceptor {
+public class SpringBeanMethodInterceptor extends AbstractMethodAroundInterceptor {
 
 
     public SpringBeanMethodInterceptor(TraceContext traceContext) {
         super(traceContext);
     }
 
-
     @Override
-    public void beforeMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
-        Trace trace = traceContext.currentRawTraceObject();
-        if (Objects.isNull(trace)) {
-            return;
-        }
-        trace.traceBegin();
+    protected void doBefore(Trace trace, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
+
     }
 
     @Override
-    public void afterMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object ret) {
-        Trace trace = traceContext.currentRawTraceObject();
-        if (Objects.isNull(trace)) {
-            return;
-        }
-        trace.traceEnd();
+    protected void doAfter(Trace trace, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
 
-        print(enhancedDefine, method, ret, trace);
-    }
-
-
-    @Override
-    public void exceptionMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Throwable t) {
-
+        super.print(enhancedDefine, method, result, trace);
     }
 }

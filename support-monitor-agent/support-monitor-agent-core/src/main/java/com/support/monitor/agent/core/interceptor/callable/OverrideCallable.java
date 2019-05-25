@@ -6,5 +6,12 @@ package com.support.monitor.agent.core.interceptor.callable;
  * @author 江浩
  */
 public interface OverrideCallable {
-    Object call(Object[] args);
+    /**
+     * invoker
+     *
+     * @param args :
+     * @return : java.lang.Object
+     * @author 江浩
+     */
+    Object invoker(Object[] args);
 }

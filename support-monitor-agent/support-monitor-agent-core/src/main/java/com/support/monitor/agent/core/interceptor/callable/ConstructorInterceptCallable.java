@@ -1,19 +1,22 @@
 package com.support.monitor.agent.core.interceptor.callable;
 
-import com.support.monitor.agent.core.interceptor.enhance.ConstructorInterceptor;
+import com.support.monitor.agent.core.interceptor.ConstructorInterceptor;
 import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.implementation.bind.annotation.AllArguments;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.This;
 
+/**
+ * @author 江浩
+ */
 @Slf4j
 public class ConstructorInterceptCallable {
 
-    private ConstructorInterceptor interceptor;
+    private ConstructorInterceptor constructorInterceptor;
 
-    public ConstructorInterceptCallable(ConstructorInterceptor interceptor) {
-        this.interceptor = interceptor;
+    public ConstructorInterceptCallable(ConstructorInterceptor constructorInterceptor) {
+        this.constructorInterceptor = constructorInterceptor;
     }
 
     @RuntimeType
@@ -21,7 +24,7 @@ public class ConstructorInterceptCallable {
                           @AllArguments Object[] allArguments) {
         try {
             EnhancedDefine targetObject = (EnhancedDefine) obj;
-            interceptor.onConstruct(targetObject, allArguments);
+            constructorInterceptor.onConstruct(targetObject, allArguments);
         } catch (Throwable t) {
             log.error("ConstructorInter failure.", t);
         }

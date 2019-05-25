@@ -1,7 +1,7 @@
 package com.support.monitor.agent.core.interceptor.enhance.rule;
 
 import com.support.monitor.agent.core.context.EnhanceContext;
-import com.support.monitor.agent.core.interceptor.enhance.InterceptorFactory;
+import com.support.monitor.agent.core.interceptor.InterceptorFactory;
 import net.bytebuddy.dynamic.DynamicType;
 
 /**

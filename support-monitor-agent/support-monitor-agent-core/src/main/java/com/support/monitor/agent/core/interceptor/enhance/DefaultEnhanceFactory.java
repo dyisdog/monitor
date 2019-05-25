@@ -1,6 +1,7 @@
 package com.support.monitor.agent.core.interceptor.enhance;
 
 import com.support.monitor.agent.core.context.EnhanceContext;
+import com.support.monitor.agent.core.interceptor.InterceptorFactory;
 import com.support.monitor.agent.core.interceptor.enhance.rule.DefaultEnhanceRuleChain;
 import com.support.monitor.agent.core.interceptor.enhance.rule.EnhanceRule;
 import lombok.extern.slf4j.Slf4j;

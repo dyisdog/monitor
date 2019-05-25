@@ -2,6 +2,7 @@ package com.support.monitor.agent.core.interceptor.enhance;
 
 import com.support.monitor.agent.core.context.trace.TraceContext;
 import com.support.monitor.agent.core.exception.ConstructorException;
+import com.support.monitor.agent.core.interceptor.InterceptorFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ClassUtils;
 

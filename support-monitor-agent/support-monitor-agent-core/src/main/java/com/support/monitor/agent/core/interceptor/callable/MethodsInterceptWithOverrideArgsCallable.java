@@ -1,7 +1,7 @@
 package com.support.monitor.agent.core.interceptor.callable;
 
+import com.support.monitor.agent.core.interceptor.MethodAroundInterceptor;
 import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
-import com.support.monitor.agent.core.interceptor.enhance.MethodsAroundInterceptor;
 import net.bytebuddy.implementation.bind.annotation.*;
 
 import java.lang.reflect.Method;
@@ -13,10 +13,10 @@ import java.lang.reflect.Method;
  */
 public class MethodsInterceptWithOverrideArgsCallable {
 
-    private MethodsAroundInterceptor interceptor;
+    private MethodAroundInterceptor methodAroundInterceptor;
 
-    public MethodsInterceptWithOverrideArgsCallable(MethodsAroundInterceptor interceptor) {
-        this.interceptor = interceptor;
+    public MethodsInterceptWithOverrideArgsCallable(MethodAroundInterceptor methodAroundInterceptor) {
+        this.methodAroundInterceptor = methodAroundInterceptor;
     }
 
     @RuntimeType
@@ -27,17 +27,17 @@ public class MethodsInterceptWithOverrideArgsCallable {
             @Morph OverrideCallable callable) throws Exception {
 
         if (!(object instanceof EnhancedDefine)) {
-            return callable.call(allArguments);
+            return callable.invoker(allArguments);
         }
         EnhancedDefine enhancedDefine = (EnhancedDefine) object;
 
         Object result = null;
         try {
-            interceptor.beforeMethod(enhancedDefine, method, allArguments, method.getParameterTypes());
-            result = callable.call(allArguments);
-            interceptor.afterMethod(enhancedDefine, method, allArguments, method.getParameterTypes(), result);
+            methodAroundInterceptor.before(enhancedDefine, method, allArguments, method.getParameterTypes());
+            result = callable.invoker(allArguments);
+            methodAroundInterceptor.after(enhancedDefine, method, allArguments, method.getParameterTypes(), result);
         } catch (Exception e) {
-            interceptor.exceptionMethod(enhancedDefine, method, allArguments, method.getParameterTypes(), e);
+            methodAroundInterceptor.exception(enhancedDefine, method, allArguments, method.getParameterTypes(), e);
         }
         return result;
     }

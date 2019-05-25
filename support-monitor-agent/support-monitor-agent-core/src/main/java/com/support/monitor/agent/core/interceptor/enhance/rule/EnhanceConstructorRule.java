@@ -1,8 +1,8 @@
 package com.support.monitor.agent.core.interceptor.enhance.rule;
 
 import com.support.monitor.agent.core.context.EnhanceContext;
+import com.support.monitor.agent.core.interceptor.ConstructorInterceptor;
 import com.support.monitor.agent.core.interceptor.callable.ConstructorInterceptCallable;
-import com.support.monitor.agent.core.interceptor.enhance.ConstructorInterceptor;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.SuperMethodCall;

@@ -1,13 +1,15 @@
-package com.support.monitor.agent.core.interceptor.enhance;
+package com.support.monitor.agent.core.interceptor;
+
+import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
 
 import java.lang.reflect.Method;
 
 /**
- * 执行拦截器
+ * 方法环绕拦截器
  *
  * @author 江浩
  */
-public interface MethodsAroundInterceptor extends Interceptor {
+public interface MethodAroundInterceptor {
 
 
     /**
@@ -18,7 +20,7 @@ public interface MethodsAroundInterceptor extends Interceptor {
      * @param allArguments
      * @param parameterTypes TODO MethodInterceptResult result
      */
-    void beforeMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes);
+    void before(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes);
 
     /**
      * 方法执行之后
@@ -27,11 +29,11 @@ public interface MethodsAroundInterceptor extends Interceptor {
      * @param method         :
      * @param allArguments   :
      * @param parameterTypes :
-     * @param ret            :
+     * @param result         :
      * @return : java.lang.Object
      * @author 江浩
      */
-    void afterMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object ret);
+    void after(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result);
 
     /**
      * 执行异常
@@ -44,6 +46,6 @@ public interface MethodsAroundInterceptor extends Interceptor {
      * @return : void
      * @author 江浩
      */
-    void exceptionMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes,
-                         Throwable t);
+    void exception(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes,
+                   Throwable t);
 }

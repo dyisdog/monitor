@@ -6,7 +6,7 @@ import com.google.inject.Provider;
 import com.google.inject.name.Named;
 import com.support.monitor.agent.core.interceptor.enhance.DefaultEnhanceFactory;
 import com.support.monitor.agent.core.interceptor.enhance.EnhanceFactory;
-import com.support.monitor.agent.core.interceptor.enhance.InterceptorFactory;
+import com.support.monitor.agent.core.interceptor.InterceptorFactory;
 import com.support.monitor.agent.core.interceptor.enhance.rule.EnhanceRule;
 
 import java.util.List;
