@@ -14,9 +14,11 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.lang.instrument.Instrumentation;
 import java.util.List;
+import java.util.Objects;
 
 import static net.bytebuddy.matcher.ElementMatchers.isInterface;
 
@@ -68,15 +70,30 @@ public class DefaultApplicationHandler implements ApplicationHandler {
             return;
         }
         PluginDefine pluginDefine = loadPlugins.get(index);
-        log.info("加载插件: {}", pluginDefine.name());
 
         List<EnhanceContext> enhanceContexts = pluginDefine.enhanceContexts();
-        ElementMatcher<? super TypeDescription> classDescription = ElementMatchers.not(isInterface()).and(pluginDefine.classDescription());
 
-        this.agentBuilder.type(classDescription)
-                .transform((builder, typeDescription, classLoader, module) -> enhanceFactory.enhance(builder, enhanceContexts))
-                .with(new AgentEnhanceLister(this.enhanceDebugFactory))
-                .installOn(this.instrumentation);
+        if (CollectionUtils.isEmpty(enhanceContexts)) {
+            return;
+        }
+
+        log.info("加载插件: idx:{} {} enhance len:{}", index, pluginDefine.name(), enhanceContexts.size());
+//        ElementMatcher<? super TypeDescription> classDescription = ElementMatchers.not(isInterface())
+//                .and(pluginDefine.classDescription());
+        ElementMatcher<? super TypeDescription> classDescription = pluginDefine.classDescription();
+        if (Objects.isNull(classDescription)) {
+            log.info("{} classDescription is null ignored...", pluginDefine.name());
+            return;
+        }
+
+        try {
+            this.agentBuilder.type(ElementMatchers.not(isInterface()).and(classDescription))
+                    .transform((builder, typeDescription, classLoader, module) -> enhanceFactory.enhance(builder, enhanceContexts))
+                    .with(new AgentEnhanceLister(this.enhanceDebugFactory))
+                    .installOn(this.instrumentation);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         this.handle(loadPlugins, ++index);
     }
@@ -102,7 +119,7 @@ public class DefaultApplicationHandler implements ApplicationHandler {
         @Override
         public void onTransformation(TypeDescription typeDescription, ClassLoader classLoader, JavaModule module,
                                      boolean loaded, DynamicType dynamicType) {
-            enhanceDebugFactory.fileWrite(typeDescription, dynamicType);
+            enhanceDebugFactory.autoWrite(typeDescription, dynamicType);
         }
 
         @Override

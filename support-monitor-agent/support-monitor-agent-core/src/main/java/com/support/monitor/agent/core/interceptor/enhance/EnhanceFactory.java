@@ -21,4 +21,6 @@ public interface EnhanceFactory {
      */
     DynamicType.Builder<?> enhance(DynamicType.Builder<?> builder, List<EnhanceContext> enhanceContext);
 
+    DynamicType.Builder<?> enhance(DynamicType.Builder<?> builder, EnhanceContext enhanceContext);
+
 }

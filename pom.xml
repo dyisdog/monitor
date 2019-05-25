@@ -17,6 +17,7 @@
         <module>support-monitor-agent</module>
         <module>support-monitor-transfer</module>
         <module>support-monitor-store</module>
+        <module>support-monitor-sdk</module>
     </modules>
 
     <properties>
@@ -66,6 +67,18 @@
 
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>kuaihe-nexus-1919-releases</id>
+            <url>http://nexus.1919.cn/repository/kuaihe-releases/</url>
+            <uniqueVersion>false</uniqueVersion>
+        </repository>
+        <snapshotRepository>
+            <id>kuaihe-nexus-1919-snapshots</id>
+            <url>http://nexus.1919.cn/repository/kuaihe-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 
 </project>

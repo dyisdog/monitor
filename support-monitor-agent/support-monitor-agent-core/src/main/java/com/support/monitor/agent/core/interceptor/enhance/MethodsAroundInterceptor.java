@@ -18,8 +18,7 @@ public interface MethodsAroundInterceptor extends Interceptor {
      * @param allArguments
      * @param parameterTypes TODO MethodInterceptResult result
      */
-    default void beforeMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
-    }
+    void beforeMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes);
 
     /**
      * 方法执行之后
@@ -32,8 +31,7 @@ public interface MethodsAroundInterceptor extends Interceptor {
      * @return : java.lang.Object
      * @author 江浩
      */
-    default void afterMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object ret) {
-    }
+    void afterMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object ret);
 
     /**
      * 执行异常
@@ -46,8 +44,6 @@ public interface MethodsAroundInterceptor extends Interceptor {
      * @return : void
      * @author 江浩
      */
-    default void exceptionMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes,
-                                 Throwable t) {
-
-    }
+    void exceptionMethod(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes,
+                         Throwable t);
 }

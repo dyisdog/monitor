@@ -22,24 +22,32 @@ public class DefaultEnhanceDebugFactory implements EnhanceDebugFactory {
     }
 
     @Override
-    public void fileWrite(TypeDescription typeDescription, DynamicType dynamicType) {
+    public void autoWrite(TypeDescription typeDescription, DynamicType dynamicType) {
         String debugPath = agentConfig.getDebugPath();
-
         //native debug
-        synchronized (this) {
-            if (!StringUtils.isBlank(debugPath)) {
-                File classRootPath = new File(debugPath);
-                if (classRootPath.exists()) {
-                    classRootPath.delete();
-                }
-                classRootPath.mkdir();
+        if (!StringUtils.isBlank(debugPath)) {
+            this.fileWrite(new File(debugPath), typeDescription, dynamicType);
+        } else {
+            this.infoPrint(typeDescription, dynamicType);
+        }
+    }
 
-                try {
-                    dynamicType.saveIn(classRootPath);
-                } catch (IOException e) {
-                    log.error("debug class: {} {}", debugPath, e);
-                }
+    @Override
+    public void fileWrite(File file, TypeDescription typeDescription, DynamicType dynamicType) {
+
+        synchronized (this) {
+            file.deleteOnExit();
+            file.mkdir();
+            try {
+                dynamicType.saveIn(file);
+            } catch (IOException e) {
+                log.error("debug class: {} {}", file, e);
             }
         }
+    }
+
+    @Override
+    public void infoPrint(TypeDescription typeDescription, DynamicType dynamicType) {
+        log.info("{}\t{}", typeDescription, dynamicType);
     }
 }

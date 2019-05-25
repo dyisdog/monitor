@@ -21,6 +21,7 @@ public abstract class AbstractEnhanceRule<R> implements EnhanceRule {
 
     private Class rClass;
 
+
     public AbstractEnhanceRule() {
         rClass = RefClassUtil.getSuperClassGenricType(this.getClass(), 0);
     }
@@ -35,6 +36,7 @@ public abstract class AbstractEnhanceRule<R> implements EnhanceRule {
             InterceptorFactory interceptorFactory = enhanceRuleCallback.getInterceptorFactory();
             EnhanceContext enhanceContext = enhanceRuleCallback.getEnhanceContext();
             Object object = interceptorFactory.newInterceptorObject(enhanceContext.getInterceptorClassName());
+
             if (rClass.isAssignableFrom(object.getClass()) || need()) {
                 DynamicType.Builder<?> newBuilder = this.enhanceDefine(builder, (R) object, enhanceContext);
                 if (!Objects.isNull(newBuilder)) {

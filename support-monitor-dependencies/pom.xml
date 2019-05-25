@@ -50,6 +50,12 @@
                 <version>${agent.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.support.monitor</groupId>
+                <artifactId>support-monitor-sdk</artifactId>
+                <version>${agent.version}</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy -->
             <dependency>
                 <groupId>net.bytebuddy</groupId>

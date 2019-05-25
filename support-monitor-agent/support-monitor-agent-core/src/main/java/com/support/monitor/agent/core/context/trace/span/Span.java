@@ -38,4 +38,9 @@ public class Span {
     public void markBeforeTime() {
         setStartTime(System.currentTimeMillis());
     }
+
+
+    public long executeTime() {
+        return endTime - startTime;
+    }
 }

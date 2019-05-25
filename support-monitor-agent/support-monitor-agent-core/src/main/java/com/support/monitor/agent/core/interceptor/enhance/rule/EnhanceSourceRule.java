@@ -25,7 +25,6 @@ public class EnhanceSourceRule extends AbstractEnhanceRule<Object> {
 
         //TODO 有优化的可能不
         TypeList.Generic generics = builder.make().getTypeDescription().getInterfaces();
-
         if (!Objects.isNull(generics) && !generics.isEmpty()) {
             for (int i = 0; i < generics.size(); i++) {
                 if (generics.get(i).getTypeName().equalsIgnoreCase(EnhancedDefine.class.getName())) {

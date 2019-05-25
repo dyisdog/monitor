@@ -13,9 +13,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>support-monitor-plugins-demo</module>
         <module>support-monitor-plugins-spring</module>
         <module>support-monitor-plugins-bom</module>
+        <module>support-monitor-plugins-custom</module>
     </modules>
 
     <dependencies>

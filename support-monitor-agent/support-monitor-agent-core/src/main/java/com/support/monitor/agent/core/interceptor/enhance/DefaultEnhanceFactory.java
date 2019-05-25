@@ -33,6 +33,11 @@ public class DefaultEnhanceFactory implements EnhanceFactory {
         return this.enhance(builder, enhanceContexts, 0);
     }
 
+    @Override
+    public DynamicType.Builder<?> enhance(DynamicType.Builder<?> builder, EnhanceContext enhanceContext) {
+        return new DefaultEnhanceRuleChain(this.enhanceRules).enhance(builder, new DefaultEnhanceRuleCallback(enhanceContext, this.interceptorFactory));
+    }
+
     /**
      * 增强处理
      *
@@ -48,7 +53,7 @@ public class DefaultEnhanceFactory implements EnhanceFactory {
             return builder;
         }
         EnhanceContext enhanceContext = enhanceContexts.get(index);
-        builder = new DefaultEnhanceRuleChain(this.enhanceRules).enhance(builder, new DefaultEnhanceRuleCallback(enhanceContext, this.interceptorFactory));
+        builder = this.enhance(builder, enhanceContext);
         return enhance(builder, enhanceContexts, ++index);
     }
 

@@ -19,5 +19,12 @@
             <artifactId>support-monitor-plugins-spring-annotation</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.support.monitor</groupId>
+            <artifactId>support-monitor-plugins-custom</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
     </dependencies>
 </project>

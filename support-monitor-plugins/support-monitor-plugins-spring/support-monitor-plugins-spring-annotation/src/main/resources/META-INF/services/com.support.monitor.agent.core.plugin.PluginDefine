@@ -1,1 +1,2 @@
-com.support.monitor.plugins.spring.annotation.SpringAnnotationPlugin
+com.support.monitor.plugins.spring.annotation.SpringWebMvcPlugin
+com.support.monitor.plugins.spring.annotation.SpringBeanPlugin
