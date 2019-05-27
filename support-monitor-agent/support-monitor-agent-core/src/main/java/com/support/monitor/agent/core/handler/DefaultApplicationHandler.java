@@ -59,10 +59,8 @@ public class DefaultApplicationHandler implements ApplicationHandler {
 
     @Override
     public void handle() {
-
-        //TODO
-
-        this.handle(pluginLoader.loadPlugin(), 0);
+        List<PluginDefine> pluginDefines = pluginLoader.loadPlugin();
+        this.handle(pluginDefines, 0);
     }
 
     private void handle(List<PluginDefine> loadPlugins, int index) {
@@ -70,29 +68,19 @@ public class DefaultApplicationHandler implements ApplicationHandler {
             return;
         }
         PluginDefine pluginDefine = loadPlugins.get(index);
-
         List<EnhanceContext> enhanceContexts = pluginDefine.enhanceContexts();
-
-        if (CollectionUtils.isEmpty(enhanceContexts)) {
-            return;
-        }
-
-        log.info("加载插件: idx:{} {} enhance len:{}", index, pluginDefine.name(), enhanceContexts.size());
-//        ElementMatcher<? super TypeDescription> classDescription = ElementMatchers.not(isInterface())
-//                .and(pluginDefine.classDescription());
         ElementMatcher<? super TypeDescription> classDescription = pluginDefine.classDescription();
-        if (Objects.isNull(classDescription)) {
-            log.info("{} classDescription is null ignored...", pluginDefine.name());
-            return;
-        }
 
-        try {
+        if (!CollectionUtils.isEmpty(enhanceContexts) && !Objects.isNull(classDescription)) {
+            log.info("加载插件: idx:{} {} enhance len:{}", index, pluginDefine.name(), enhanceContexts.size());
             this.agentBuilder.type(ElementMatchers.not(isInterface()).and(classDescription))
                     .transform((builder, typeDescription, classLoader, module) -> enhanceFactory.enhance(builder, enhanceContexts))
                     .with(new AgentEnhanceLister(this.enhanceDebugFactory))
                     .installOn(this.instrumentation);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            if (log.isDebugEnabled()) {
+                log.debug("{} classDescription is null ignored...", pluginDefine.name());
+            }
         }
 
         this.handle(loadPlugins, ++index);

@@ -50,7 +50,7 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
         if (Objects.isNull(trace)) {
             return;
         }
-        trace.traceBegin();
+        trace.traceEnd();
 
         this.doAfter(trace, enhancedDefine, method, allArguments, parameterTypes, result);
     }
