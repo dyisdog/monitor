@@ -24,8 +24,6 @@ public class Span {
 
     private long threadId;
 
-    private boolean isAsync;
-
     private SpanEvent spanEvent;
 
 

@@ -16,6 +16,7 @@
         <module>support-monitor-plugins-spring</module>
         <module>support-monitor-plugins-bom</module>
         <module>support-monitor-plugins-custom</module>
+        <module>support-monitor-plugins-http</module>
     </modules>
 
     <dependencies>

@@ -35,4 +35,12 @@ public interface TraceContext {
      */
     Trace newTraceObject();
 
+    /**
+     * 获取或者创建traceObject信息
+     *
+     * @return : com.support.monitor.agent.core.context.trace.Trace
+     * @author 江浩
+     */
+    Trace getOrNewTraceObject();
+
 }
