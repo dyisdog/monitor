@@ -1,7 +1,9 @@
 package com.support.monitor.agent.core.context.trace.id;
 
+import com.support.monitor.agent.core.context.trace.Depth;
+
 /**
- * 传递的ID
+ * 胸口疼 * 传递的ID
  *
  * @author 江浩
  */
@@ -15,18 +17,19 @@ public interface TraceId {
     String id();
 
     /**
-     * 上一个执行的spanId
-     *
-     * @return
-     */
-    String parentSpanId();
-
-    /**
      * 链路执行的开始时间
      *
      * @return : long
      * @author 江浩
      */
     long getStartTime();
+
+    /**
+     * traceId 传递深度
+     *
+     * @return : Depth
+     * @author 江浩
+     */
+    Depth getDepth();
 
 }

@@ -1,6 +1,6 @@
 package com.support.monitor.agent.core.context.trace.recorder;
 
-import com.support.monitor.agent.core.context.trace.span.Span;
+import com.support.monitor.agent.core.context.trace.id.TraceId;
 
 /**
  * 记录者构建工厂
@@ -18,6 +18,15 @@ public interface RecorderFactory {
      * @return : com.support.monitor.agent.core.context.trace.recorder.SpanEventRecorder
      * @author 江浩
      */
-    SpanEventRecorder newSpanEventRecorder(Span span);
+    SpanEventRecorder newSpanEventRecorder();
+
+    /**
+     * traceId记录器
+     *
+     * @param traceId :
+     * @return : TraceIdRecorder
+     * @author 江浩
+     */
+    TraceIdRecorder newTraceIdRecorder(TraceId traceId);
 
 }

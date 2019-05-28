@@ -21,6 +21,6 @@ public class TraceThreadExecuteInterceptor extends AbstractAsyncMethodAroundInte
 
     @Override
     protected void doAfter(Trace trace, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
-        this.print(enhancedDefine, method, result, trace);
+        this.print(trace);
     }
 }

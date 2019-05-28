@@ -6,9 +6,7 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 import com.support.monitor.agent.core.AgentBootStarter;
 import com.support.monitor.agent.core.config.AgentConfig;
-import com.support.monitor.agent.core.context.trace.Trace;
-import com.support.monitor.agent.core.context.trace.TraceContext;
-import com.support.monitor.agent.core.context.trace.TraceFactory;
+import com.support.monitor.agent.core.context.trace.*;
 import com.support.monitor.agent.core.context.trace.id.DefaultIdGenerator;
 import com.support.monitor.agent.core.context.trace.id.DefaultTraceIdFactory;
 import com.support.monitor.agent.core.context.trace.id.IdGenerator;
@@ -84,6 +82,7 @@ public class InitModule extends AbstractModule {
         bind(IdGenerator.class).to(DefaultIdGenerator.class).in(Scopes.SINGLETON);
         bind(SpanFactory.class).toProvider(SpanFactoryProvider.class).in(Scopes.SINGLETON);
 
+        bind(Depth.class).to(DefaultDepth.class).in(Scopes.SINGLETON);
         bind(TraceIdFactory.class).to(DefaultTraceIdFactory.class).in(Scopes.SINGLETON);
         bind(TraceFactory.class).toProvider(TraceFactoryProvider.class).in(Scopes.SINGLETON);
 

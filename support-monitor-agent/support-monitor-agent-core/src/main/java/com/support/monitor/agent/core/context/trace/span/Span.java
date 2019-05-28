@@ -12,11 +12,11 @@ import lombok.Data;
 @Data
 public class Span {
 
-    private TraceId traceId;
+    private String traceId;
 
     private String id;
 
-    private String parentId;
+    private long depth;
 
     private long startTime;
 
@@ -26,17 +26,26 @@ public class Span {
 
     private boolean isAsync;
 
-    public Span(String id, TraceId traceId) {
+    private SpanEvent spanEvent;
+
+
+    public Span(String id, TraceId traceId, SpanEvent spanEvent) {
         Assert.requireNonNull(id, "id must not be null");
         Assert.requireNonNull(traceId, "traceId must not be null");
         this.id = id;
-        this.traceId = traceId;
-        this.setParentId(traceId.parentSpanId());
+        this.traceId = traceId.id();
+        this.depth = traceId.getDepth().getDepth();
         this.setThreadId(Thread.currentThread().getId());
+        setSpanEvent(spanEvent);
     }
+
 
     public void markBeforeTime() {
         setStartTime(System.currentTimeMillis());
+    }
+
+    public void markAfterTime() {
+        setEndTime(System.currentTimeMillis());
     }
 
 

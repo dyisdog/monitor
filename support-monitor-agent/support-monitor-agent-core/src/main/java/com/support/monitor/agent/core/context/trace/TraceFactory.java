@@ -42,28 +42,6 @@ public interface TraceFactory {
      */
     Trace newTraceObject(TraceId traceId);
 
-    /**
-     * 创建
-     *
-     * @param trace
-     * @return
-     */
-    Trace newTraceObject(Trace trace);
-
-    /**
-     * 创建异步
-     *
-     * @param traceId
-     * @return
-     */
-    Trace newAsyncTraceObject(TraceId traceId);
-
-    /**
-     * 创建异步
-     *
-     * @return
-     */
-    Trace newAsyncTraceObject();
 
     AtomicReference<Trace> getReference();
 

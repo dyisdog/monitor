@@ -22,26 +22,14 @@ public class DefaultTraceContext implements TraceContext {
 
     @Override
     public Trace newTraceObject(TraceId traceId) {
-        return traceFactory.newAsyncTraceObject(traceId);
+        return traceFactory.newTraceObject(traceId);
     }
 
-    @Override
-    public Trace newTraceObject(Trace trace) {
-        return traceFactory.newTraceObject(trace);
-    }
 
     @Override
     public Trace newTraceObject() {
         return traceFactory.newTraceObject();
     }
 
-    @Override
-    public Trace newAsyncTraceObject() {
-        return traceFactory.newAsyncTraceObject();
-    }
 
-    @Override
-    public Trace newAsyncTraceObject(TraceId traceId) {
-        return traceFactory.newAsyncTraceObject(traceId);
-    }
 }

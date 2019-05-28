@@ -1,5 +1,7 @@
 package com.support.monitor.agent.core.context.trace.id;
 
+import com.support.monitor.agent.core.context.trace.DefaultDepth;
+
 /**
  * default
  *
@@ -13,6 +15,7 @@ public class DefaultTraceIdFactory implements TraceIdFactory {
 
     @Override
     public TraceId newTraceId(String transactionId, String parentSpanId) {
-        return new DefaultTraceId(transactionId, parentSpanId);
+        // setting Depth
+        return new DefaultTraceId(transactionId, parentSpanId, new DefaultDepth());
     }
 }

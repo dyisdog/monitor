@@ -2,6 +2,9 @@ package com.support.monitor.agent.core.interceptor.supper;
 
 import com.support.monitor.agent.core.context.trace.Trace;
 import com.support.monitor.agent.core.context.trace.TraceContext;
+import com.support.monitor.agent.core.context.trace.recorder.SpanEventRecorder;
+import com.support.monitor.agent.core.context.trace.span.Span;
+import com.support.monitor.agent.core.context.trace.span.SpanEvent;
 import com.support.monitor.agent.core.interceptor.MethodAroundInterceptor;
 import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
 import lombok.Getter;
@@ -27,7 +30,11 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
         if (Objects.isNull(trace)) {
             return;
         }
-        trace.traceBegin();
+        trace.traceBegin(SpanEvent.builder()
+                .eventTarget(enhancedDefine.getClass().getName())
+                .eventMethod(method.getName())
+                .build());
+
         this.doBefore(trace, enhancedDefine, method, allArguments, parameterTypes);
     }
 
@@ -74,11 +81,19 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
 
     }
 
-    protected void print(EnhancedDefine enhancedDefine, Method method, Object result, Trace trace) {
-        System.out.println(Thread.currentThread().getId() + "  " + enhancedDefine.getClass() + "  "
-                + method.getName() + " 执行结果:"
-                + result + "  traceId: "
-                + trace.currentSpanEventRecorder().getTraceId().id()
-                + "  time: " + (trace.currentSpanEventRecorder().getSpan().executeTime()));
+    protected void print(Trace trace) {
+
+        SpanEventRecorder spanEventRecorder = trace.currentSpanEventRecorder();
+        Span span = spanEventRecorder.getFirstSpanEvent();
+        SpanEvent spanEvent = span.getSpanEvent();
+
+        System.out.println("threadId: " + Thread.currentThread().getId()
+                + "\t className: " + spanEvent.getEventTarget()
+                + "\t methodName: " + spanEvent.getEventMethod()
+                + "\t depth: " + span.getDepth()
+                + "\t traceId: " + span.getTraceId()
+                + "\t spanId: " + span.getId()
+                + "\t time: " + span.executeTime()
+        );
     }
 }

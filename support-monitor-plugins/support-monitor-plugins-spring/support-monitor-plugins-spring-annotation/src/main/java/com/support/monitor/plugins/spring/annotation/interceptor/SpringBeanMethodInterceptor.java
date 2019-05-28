@@ -22,6 +22,6 @@ public class SpringBeanMethodInterceptor extends AbstractMethodAroundInterceptor
     @Override
     protected void doAfter(Trace trace, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
 
-        super.print(enhancedDefine, method, result, trace);
+        super.print(trace);
     }
 }

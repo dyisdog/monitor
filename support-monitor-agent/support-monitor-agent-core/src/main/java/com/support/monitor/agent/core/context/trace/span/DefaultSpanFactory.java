@@ -18,8 +18,8 @@ public class DefaultSpanFactory implements SpanFactory {
     }
 
     @Override
-    public Span newSpan(TraceId traceId) {
-        final Span span = new Span(idGenerator.uuid(), traceId);
+    public Span newSpan(TraceId traceId, SpanEvent spanEvent) {
+        final Span span = new Span(idGenerator.uuid(), traceId, spanEvent);
         span.markBeforeTime();
         return span;
     }

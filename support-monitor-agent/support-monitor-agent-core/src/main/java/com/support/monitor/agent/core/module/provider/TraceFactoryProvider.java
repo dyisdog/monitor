@@ -8,7 +8,6 @@ import com.support.monitor.agent.core.context.trace.TraceFactory;
 import com.support.monitor.agent.core.context.trace.id.IdGenerator;
 import com.support.monitor.agent.core.context.trace.id.TraceIdFactory;
 import com.support.monitor.agent.core.context.trace.recorder.RecorderFactory;
-import com.support.monitor.agent.core.context.trace.span.SpanFactory;
 import com.support.monitor.commons.binder.Binder;
 
 /**
@@ -22,7 +21,7 @@ public class TraceFactoryProvider implements Provider<TraceFactory> {
 
     private IdGenerator idGenerator;
 
-    private SpanFactory spanFactory;
+//    private SpanFactory spanFactory;
 
     private RecorderFactory recorderFactory;
 
@@ -31,12 +30,12 @@ public class TraceFactoryProvider implements Provider<TraceFactory> {
     public TraceFactoryProvider(Binder<Trace> binder,
                                 TraceIdFactory traceIdFactory,
                                 IdGenerator idGenerator,
-                                SpanFactory spanFactory,
+                                // SpanFactory spanFactory,
                                 RecorderFactory recorderFactory) {
         this.binder = binder;
         this.traceIdFactory = traceIdFactory;
         this.idGenerator = idGenerator;
-        this.spanFactory = spanFactory;
+//        this.spanFactory = spanFactory;
         this.recorderFactory = recorderFactory;
     }
 
@@ -46,7 +45,6 @@ public class TraceFactoryProvider implements Provider<TraceFactory> {
         return new DefaultTraceFactory(
                 this.binder,
                 this.traceIdFactory,
-                this.spanFactory,
                 this.idGenerator,
                 this.recorderFactory
         );

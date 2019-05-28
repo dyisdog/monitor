@@ -5,8 +5,7 @@ import com.support.monitor.agent.core.context.trace.id.TraceId;
 import com.support.monitor.agent.core.context.trace.id.TraceIdFactory;
 import com.support.monitor.agent.core.context.trace.recorder.RecorderFactory;
 import com.support.monitor.agent.core.context.trace.recorder.SpanEventRecorder;
-import com.support.monitor.agent.core.context.trace.span.Span;
-import com.support.monitor.agent.core.context.trace.span.SpanFactory;
+import com.support.monitor.agent.core.context.trace.recorder.TraceIdRecorder;
 import com.support.monitor.commons.binder.Binder;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -22,7 +21,6 @@ public class DefaultTraceFactory implements TraceFactory {
 
     private TraceIdFactory traceIdFactory;
 
-    private SpanFactory spanFactory;
 
     private IdGenerator idGenerator;
 
@@ -31,12 +29,10 @@ public class DefaultTraceFactory implements TraceFactory {
 
     public DefaultTraceFactory(Binder<Trace> threadLocalBinder,
                                TraceIdFactory traceIdFactory,
-                               SpanFactory spanFactory,
                                IdGenerator idGenerator,
                                RecorderFactory recorderFactory) {
         this.threadLocalBinder = threadLocalBinder;
         this.traceIdFactory = traceIdFactory;
-        this.spanFactory = spanFactory;
         this.idGenerator = idGenerator;
         this.recorderFactory = recorderFactory;
     }
@@ -51,8 +47,7 @@ public class DefaultTraceFactory implements TraceFactory {
     @Override
     public Trace removeTraceObject() {
         final AtomicReference<Trace> reference = getReference();
-        final Trace trace = reference.getAndSet(null);
-        return trace;
+        return reference.getAndSet(null);
     }
 
 
@@ -60,38 +55,26 @@ public class DefaultTraceFactory implements TraceFactory {
     public Trace newTraceObject(TraceId traceId) {
         final AtomicReference<Trace> reference = getReference();
 
+        //default recorder
+        final TraceIdRecorder traceIdRecorder = recorderFactory.newTraceIdRecorder(traceId);
+        final SpanEventRecorder spanEventRecorder = recorderFactory.newSpanEventRecorder();
 
-        //TODO
-        final Span span = spanFactory.newSpan(traceId);
-        final SpanEventRecorder spanEventRecorder = recorderFactory.newSpanEventRecorder(span);
-        final DefaultTrace trace = new DefaultTrace(span, spanEventRecorder);
+        //default trace
+        final DefaultTrace trace = new DefaultTrace(traceIdRecorder, spanEventRecorder);
         reference.set(trace);
         return trace;
     }
 
-    @Override
-    public Trace newTraceObject(Trace trace) {
-        final AtomicReference<Trace> reference = getReference();
-        reference.set(trace);
-        return trace;
-    }
-
-    @Override
-    public Trace newAsyncTraceObject(TraceId traceId) {
-        return this.newTraceObject(traceId);
-    }
 
     @Override
     public Trace newTraceObject() {
         String id = idGenerator.transactionId();
+        //trace depth
+        //setting default trace depth
         TraceId traceId = traceIdFactory.newTraceId(id);
         return this.newTraceObject(traceId);
     }
 
-    @Override
-    public Trace newAsyncTraceObject() {
-        return this.newTraceObject();
-    }
 
     @Override
     public AtomicReference<Trace> getReference() {

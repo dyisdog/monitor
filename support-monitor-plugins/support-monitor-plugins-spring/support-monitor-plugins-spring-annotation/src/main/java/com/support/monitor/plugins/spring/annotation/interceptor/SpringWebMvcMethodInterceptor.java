@@ -2,6 +2,7 @@ package com.support.monitor.plugins.spring.annotation.interceptor;
 
 import com.support.monitor.agent.core.context.trace.Trace;
 import com.support.monitor.agent.core.context.trace.TraceContext;
+import com.support.monitor.agent.core.context.trace.span.SpanEvent;
 import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
 import com.support.monitor.agent.core.interceptor.supper.AbstractMethodAroundInterceptor;
 
@@ -22,7 +23,10 @@ public class SpringWebMvcMethodInterceptor extends AbstractMethodAroundIntercept
         if (Objects.isNull(trace)) {
             return;
         }
-        trace.traceBegin();
+        trace.traceBegin(SpanEvent.builder()
+                .eventTarget(enhancedDefine.getClass().getName())
+                .eventMethod(method.getName())
+                .build());
         this.doBefore(trace, enhancedDefine, method, allArguments, parameterTypes);
     }
 
@@ -33,6 +37,6 @@ public class SpringWebMvcMethodInterceptor extends AbstractMethodAroundIntercept
 
     @Override
     protected void doAfter(Trace trace, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
-        print(enhancedDefine, method, result, trace);
+        print(trace);
     }
 }

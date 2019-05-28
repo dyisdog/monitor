@@ -1,7 +1,10 @@
 package com.support.monitor.agent.core.context.trace;
 
+import com.support.monitor.agent.core.context.trace.id.TraceId;
 import com.support.monitor.agent.core.context.trace.recorder.SpanEventRecorder;
+import com.support.monitor.agent.core.context.trace.recorder.TraceIdRecorder;
 import com.support.monitor.agent.core.context.trace.span.Span;
+import com.support.monitor.agent.core.context.trace.span.SpanEvent;
 
 /**
  * default
@@ -10,18 +13,19 @@ import com.support.monitor.agent.core.context.trace.span.Span;
  */
 public class DefaultTrace implements Trace {
 
-    private Span span;
+    private TraceIdRecorder traceIdRecorder;
 
-    /**
-     * span事件记录者
-     *
-     * @author 江浩
-     */
     private SpanEventRecorder spanEventRecorder;
 
-    public DefaultTrace(Span span, SpanEventRecorder spanEventRecorder) {
-        this.span = span;
+    public DefaultTrace(TraceIdRecorder traceIdRecorder, SpanEventRecorder spanEventRecorder) {
+        this.traceIdRecorder = traceIdRecorder;
         this.spanEventRecorder = spanEventRecorder;
+    }
+
+
+    @Override
+    public TraceIdRecorder currentTraceIdRecorder() {
+        return this.traceIdRecorder;
     }
 
     @Override
@@ -30,21 +34,17 @@ public class DefaultTrace implements Trace {
     }
 
     @Override
-    public void traceBegin() {
-        this.spanEventRecorder.markStartTime();
+    public void traceBegin(SpanEvent spanEvent) {
+        //recorder traceId
+        TraceId traceId = traceIdRecorder.getTraceId();
+        spanEventRecorder.startSpanEventBlock(spanEvent, traceId);
     }
 
     @Override
-    public void traceEnd() {
-        this.spanEventRecorder.markEndTime();
+    public Span traceEnd() {
+        //同一个线程中包含同一个traceId
+        return spanEventRecorder.endSpanEventBlock(traceIdRecorder.getTraceId());
     }
 
-    @Override
-    public String toString() {
-        return "\t traceId:\t" + span.getTraceId().id()
-                + "\t spanParentId:\t" + span.getParentId()
-                + "\t spanId:\t" + span.getId()
-                + "\t spanThreadId:\t" + span.getThreadId();
-    }
 
 }

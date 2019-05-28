@@ -2,44 +2,45 @@ package com.support.monitor.agent.core.context.trace.recorder;
 
 import com.support.monitor.agent.core.context.trace.id.TraceId;
 import com.support.monitor.agent.core.context.trace.span.Span;
+import com.support.monitor.agent.core.context.trace.span.SpanEvent;
 
 /**
- * span 事件发送
+ * trace span 时间记录器
+ * <p>
+ * 一个trace 一个span 记录器，该记录器会记录很多span信息
+ * </p>
  *
  * @author 江浩
  */
 public interface SpanEventRecorder {
 
     /**
-     * 从事件记录器中拿到traceId
+     * span event 开始记录
      *
-     * @return
-     */
-    TraceId getTraceId();
-
-
-    /**
-     * 是否异步事件
-     *
-     * @return : boolean
+     * @param spanEvent
+     * @param traceId   :
+     * @return : void
      * @author 江浩
      */
-    boolean isAsync();
+    void startSpanEventBlock(SpanEvent spanEvent, TraceId traceId);
 
     /**
-     * 获取span信息
+     * span event 结束记录
      *
-     * @return
+     * @param traceId :
+     * @return : void
+     * @author 江浩
      */
-    Span getSpan();
+    Span endSpanEventBlock(TraceId traceId);
+
 
     /**
-     * 标记开始时间
+     * 获取第一个spanEvent信息
+     *
+     * @return : com.support.monitor.agent.core.context.trace.span.Span
+     * @author 江浩
      */
-    void markStartTime();
+    Span getFirstSpanEvent();
 
-    /**
-     * 标记结束时间
-     */
-    void markEndTime();
+
 }

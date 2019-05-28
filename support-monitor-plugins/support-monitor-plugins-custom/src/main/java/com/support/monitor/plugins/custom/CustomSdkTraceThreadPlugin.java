@@ -23,6 +23,5 @@ public class CustomSdkTraceThreadPlugin extends AbstractPluginDefine {
         pointConstructor(any(), CustomSdkConstructorInterceptor.class);
         pointMethod(named("run"), TraceThreadExecuteInterceptor.class);
 
-
     }
 }

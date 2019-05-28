@@ -1,7 +1,7 @@
 package com.support.monitor.agent.core.interceptor.enhance.rule;
 
 import com.support.monitor.agent.core.context.EnhanceContext;
-import com.support.monitor.agent.core.context.trace.recorder.SpanEventRecorder;
+import com.support.monitor.agent.core.context.trace.recorder.TraceIdRecorder;
 import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
 import net.bytebuddy.description.type.TypeList;
 import net.bytebuddy.dynamic.DynamicType;
@@ -33,7 +33,8 @@ public class EnhanceSourceRule extends AbstractEnhanceRule<Object> {
             }
         }
 
-        return builder.defineField(ENHANCE_CLASS_FIELD_NAME, SpanEventRecorder.class, ACC_PRIVATE | ACC_VOLATILE)
+        //EnhanceDefine handler param of TraceIdRecorder
+        return builder.defineField(ENHANCE_CLASS_FIELD_NAME, TraceIdRecorder.class, ACC_PRIVATE | ACC_VOLATILE)
                 .implement(EnhancedDefine.class)
                 .intercept(FieldAccessor.ofField(ENHANCE_CLASS_FIELD_NAME));
 

@@ -2,13 +2,19 @@ package com.support.monitor.agent.core.context.trace.span;
 
 import com.support.monitor.agent.core.context.trace.id.TraceId;
 
+/**
+ * span 构建工厂
+ *
+ * @author 江浩
+ */
 public interface SpanFactory {
 
     /**
      * 创建span
      *
+     * @param spanEvent
      * @param traceId
      * @return
      */
-    Span newSpan(TraceId traceId);
+    Span newSpan(TraceId traceId, SpanEvent spanEvent);
 }

@@ -10,16 +10,29 @@ import com.support.monitor.agent.core.context.trace.id.TraceId;
 public interface TraceContext {
 
 
+    /**
+     * 当前trace object
+     *
+     * @return : com.support.monitor.agent.core.context.trace.Trace
+     * @author 江浩
+     */
     Trace currentRawTraceObject();
 
+    /**
+     * 根据traceId创建新的Trace
+     *
+     * @param traceId :
+     * @return : com.support.monitor.agent.core.context.trace.Trace
+     * @author 江浩
+     */
     Trace newTraceObject(TraceId traceId);
 
-    Trace newTraceObject(Trace trace);
-
+    /**
+     * 新建
+     *
+     * @return : com.support.monitor.agent.core.context.trace.Trace
+     * @author 江浩
+     */
     Trace newTraceObject();
-
-    Trace newAsyncTraceObject();
-
-    Trace newAsyncTraceObject(TraceId traceId);
 
 }
