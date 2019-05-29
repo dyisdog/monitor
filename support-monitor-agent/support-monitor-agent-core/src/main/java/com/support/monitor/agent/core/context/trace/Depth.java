@@ -13,6 +13,14 @@ public interface Depth {
      * @return : java.lang.Long
      * @author 江浩
      */
+    Long nextDepth();
+
+    /**
+     * 获取当前深度
+     *
+     * @return : java.lang.Long
+     * @author 江浩
+     */
     Long getDepth();
 
 }

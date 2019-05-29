@@ -11,6 +11,7 @@
 
     <artifactId>support-monitor-plugins-http</artifactId>
     <packaging>pom</packaging>
+
     <modules>
         <module>support-monitor-plugins-http-httpclient</module>
     </modules>

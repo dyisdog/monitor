@@ -32,7 +32,7 @@ public class Span {
         Assert.requireNonNull(traceId, "traceId must not be null");
         this.id = id;
         this.traceId = traceId.id();
-        this.depth = traceId.getDepth().getDepth();
+        this.depth = traceId.getDepth().nextDepth();
         this.setThreadId(Thread.currentThread().getId());
         setSpanEvent(spanEvent);
     }

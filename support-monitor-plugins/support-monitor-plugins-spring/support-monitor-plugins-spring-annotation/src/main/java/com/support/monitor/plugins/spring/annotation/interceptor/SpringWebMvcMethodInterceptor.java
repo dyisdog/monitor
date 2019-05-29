@@ -19,9 +19,8 @@ public class SpringWebMvcMethodInterceptor extends AbstractMethodAroundIntercept
 
     @Override
     public void before(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
-        /**
-         * 如果其他远程调用并没有传递trace信息过来，mvc作为入口？
-         */
+
+        //TODO 入口参数需要调整
         Trace trace = getTraceContext().getOrNewTraceObject();
         if (Objects.isNull(trace)) {
             return;
@@ -29,6 +28,7 @@ public class SpringWebMvcMethodInterceptor extends AbstractMethodAroundIntercept
         trace.traceBegin(SpanEvent.builder()
                 .eventTarget(enhancedDefine.getClass().getName())
                 .eventMethod(method.getName())
+                .args(allArguments)
                 .build());
         this.doBefore(trace, enhancedDefine, method, allArguments, parameterTypes);
     }

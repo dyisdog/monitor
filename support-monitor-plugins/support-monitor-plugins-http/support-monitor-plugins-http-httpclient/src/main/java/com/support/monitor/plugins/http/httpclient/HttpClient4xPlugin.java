@@ -1,8 +1,7 @@
 package com.support.monitor.plugins.http.httpclient;
 
 import com.support.monitor.agent.core.plugin.AbstractPluginDefine;
-import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.matcher.ElementMatcher;
+import com.support.monitor.plugins.http.httpclient.interceptor.HttpClientMethodInterceptor;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
 
@@ -13,13 +12,12 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
  */
 public class HttpClient4xPlugin extends AbstractPluginDefine {
 
-    private ElementMatcher<? super TypeDescription> classDescription =
-            named(MinimalHttpClient.class.getName());
-
     @Override
     public void init() {
-        pointName("httpClient4x");
-        pointClass(classDescription);
-
+        pointName("org.apache.HttpClient4x");
+        pointClass(named("org.apache.http.impl.client.MinimalHttpClient")
+                .or(named("org.apache.http.impl.client.InternalHttpClient"))
+                .or(named("org.apache.http.impl.client.AbstractHttpClient")));
+        pointMethod(named("execute"), HttpClientMethodInterceptor.class);
     }
 }

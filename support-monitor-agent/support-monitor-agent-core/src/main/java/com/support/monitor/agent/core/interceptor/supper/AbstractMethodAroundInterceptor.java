@@ -8,6 +8,7 @@ import com.support.monitor.agent.core.context.trace.span.SpanEvent;
 import com.support.monitor.agent.core.interceptor.MethodAroundInterceptor;
 import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
@@ -33,6 +34,7 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
         trace.traceBegin(SpanEvent.builder()
                 .eventTarget(enhancedDefine.getClass().getName())
                 .eventMethod(method.getName())
+                .args(allArguments)
                 .build());
 
         this.doBefore(trace, enhancedDefine, method, allArguments, parameterTypes);
@@ -88,12 +90,28 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
         SpanEvent spanEvent = span.getSpanEvent();
 
         System.out.println("threadId: " + Thread.currentThread().getId()
-                + "\t className: " + spanEvent.getEventTarget()
-                + "\t methodName: " + spanEvent.getEventMethod()
+                + "\t format: " + this.format(spanEvent.getEventTarget(), spanEvent.getEventMethod(), spanEvent.getArgs())
                 + "\t depth: " + span.getDepth()
                 + "\t traceId: " + span.getTraceId()
                 + "\t spanId: " + span.getId()
                 + "\t time: " + span.executeTime()
         );
     }
+
+    protected String format(String eventTarget, String eventMethod, Object[] args) {
+
+        StringBuilder sb = new StringBuilder();
+        try {
+            if (!Objects.isNull(args)) {
+                for (Object object : args) {
+                    sb.append(Objects.isNull(object) ? null : object.getClass().getName()).append(",");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return String.format("%s.%s(%s)", eventTarget, eventMethod, StringUtils.substringBeforeLast(sb.toString(), ","));
+    }
+
+
 }

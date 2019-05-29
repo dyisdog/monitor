@@ -12,7 +12,12 @@ public class DefaultDepth implements Depth {
     private AtomicLong depth = new AtomicLong(0);
 
     @Override
-    public Long getDepth() {
+    public Long nextDepth() {
         return depth.getAndIncrement();
+    }
+
+    @Override
+    public Long getDepth() {
+        return depth.get();
     }
 }

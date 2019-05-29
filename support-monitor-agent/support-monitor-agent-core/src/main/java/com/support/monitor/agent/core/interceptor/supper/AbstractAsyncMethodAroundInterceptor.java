@@ -24,6 +24,7 @@ public abstract class AbstractAsyncMethodAroundInterceptor extends AbstractMetho
         Trace trace = getTraceContext().newTraceObject(Objects.isNull(traceIdRecorder) ? null : traceIdRecorder.getTraceId());
 
         trace.traceBegin(SpanEvent.builder()
+                .args(allArguments)
                 .eventTarget(enhancedDefine.getClass().getName())
                 .eventMethod(method.getName())
                 .build());

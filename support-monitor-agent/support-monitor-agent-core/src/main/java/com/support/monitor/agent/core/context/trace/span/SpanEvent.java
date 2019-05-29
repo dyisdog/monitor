@@ -14,4 +14,6 @@ public class SpanEvent {
 
     private String eventMethod;
 
+    private Object[] args;
+
 }

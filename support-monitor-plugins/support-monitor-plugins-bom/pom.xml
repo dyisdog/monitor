@@ -26,6 +26,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.support.monitor</groupId>
+            <artifactId>support-monitor-plugins-http-httpclient</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
 
     </dependencies>
 </project>

@@ -60,10 +60,12 @@ public class DefaultApplicationHandler implements ApplicationHandler {
     @Override
     public void handle() {
         List<PluginDefine> pluginDefines = pluginLoader.loadPlugin();
+
         this.handle(pluginDefines, 0);
     }
 
     private void handle(List<PluginDefine> loadPlugins, int index) {
+
         if (index >= loadPlugins.size()) {
             return;
         }
@@ -78,9 +80,7 @@ public class DefaultApplicationHandler implements ApplicationHandler {
                     .with(new AgentEnhanceLister(this.enhanceDebugFactory))
                     .installOn(this.instrumentation);
         } else {
-            if (log.isDebugEnabled()) {
-                log.debug("{} classDescription is null ignored...", pluginDefine.name());
-            }
+            log.info("{} classDescription is null ignored...", pluginDefine.name());
         }
 
         this.handle(loadPlugins, ++index);
