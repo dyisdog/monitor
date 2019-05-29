@@ -16,7 +16,7 @@ public class Span {
 
     private String id;
 
-    private long depth;
+    private String preSpanId;
 
     private long startTime;
 
@@ -27,12 +27,12 @@ public class Span {
     private SpanEvent spanEvent;
 
 
-    public Span(String id, TraceId traceId, SpanEvent spanEvent) {
+    public Span(String id, TraceId traceId, String preSpanId, SpanEvent spanEvent) {
         Assert.requireNonNull(id, "id must not be null");
         Assert.requireNonNull(traceId, "traceId must not be null");
         this.id = id;
+        this.preSpanId = preSpanId;
         this.traceId = traceId.id();
-        this.depth = traceId.getDepth().nextDepth();
         this.setThreadId(Thread.currentThread().getId());
         setSpanEvent(spanEvent);
     }

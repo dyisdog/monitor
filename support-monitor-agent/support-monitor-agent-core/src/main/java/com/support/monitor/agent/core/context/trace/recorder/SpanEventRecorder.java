@@ -12,6 +12,7 @@ import com.support.monitor.agent.core.context.trace.span.SpanEvent;
  *
  * @author 江浩
  */
+
 public interface SpanEventRecorder {
 
     /**
@@ -22,7 +23,7 @@ public interface SpanEventRecorder {
      * @return : void
      * @author 江浩
      */
-    void startSpanEventBlock(SpanEvent spanEvent, TraceId traceId);
+    void spanEventBegin(SpanEvent spanEvent, TraceId traceId);
 
     /**
      * span event 结束记录
@@ -31,16 +32,17 @@ public interface SpanEventRecorder {
      * @return : void
      * @author 江浩
      */
-    Span endSpanEventBlock(TraceId traceId);
-
+    Span spanEventEnd(TraceId traceId);
 
     /**
-     * 获取第一个spanEvent信息
+     * 当前的span信息
      *
      * @return : com.support.monitor.agent.core.context.trace.span.Span
      * @author 江浩
      */
-    Span getFirstSpanEvent();
+    Span currentSpan();
+
+    void resetCurrentSpan(Span currentSpan);
 
 
 }

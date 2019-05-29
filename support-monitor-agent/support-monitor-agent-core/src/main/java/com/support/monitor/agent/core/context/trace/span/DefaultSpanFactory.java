@@ -3,6 +3,8 @@ package com.support.monitor.agent.core.context.trace.span;
 import com.support.monitor.agent.core.context.trace.id.IdGenerator;
 import com.support.monitor.agent.core.context.trace.id.TraceId;
 
+import java.util.Objects;
+
 /**
  * span default handle factory
  *
@@ -19,8 +21,14 @@ public class DefaultSpanFactory implements SpanFactory {
 
     @Override
     public Span newSpan(TraceId traceId, SpanEvent spanEvent) {
-        final Span span = new Span(idGenerator.uuid(), traceId, spanEvent);
+        return this.newSpan(traceId, spanEvent, null);
+    }
+
+    @Override
+    public Span newSpan(TraceId traceId, SpanEvent spanEvent, Span preSpan) {
+        final Span span = new Span(idGenerator.uuid(), traceId, Objects.isNull(preSpan) ? null : preSpan.getId(), spanEvent);
         span.markBeforeTime();
         return span;
+
     }
 }

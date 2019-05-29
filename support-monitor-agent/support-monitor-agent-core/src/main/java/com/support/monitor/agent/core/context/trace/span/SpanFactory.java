@@ -17,4 +17,15 @@ public interface SpanFactory {
      * @return
      */
     Span newSpan(TraceId traceId, SpanEvent spanEvent);
+
+    /**
+     * 根据
+     *
+     * @param traceId   :
+     * @param spanEvent :
+     * @param preSpan   :
+     * @return : com.support.monitor.agent.core.context.trace.span.Span
+     * @author 江浩
+     */
+    Span newSpan(TraceId traceId, SpanEvent spanEvent, Span preSpan);
 }

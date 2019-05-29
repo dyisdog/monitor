@@ -4,7 +4,7 @@ import com.support.monitor.agent.core.context.trace.ClientAttach;
 import com.support.monitor.agent.core.context.trace.Header;
 import com.support.monitor.agent.core.context.trace.Trace;
 import com.support.monitor.agent.core.context.trace.TraceContext;
-import com.support.monitor.agent.core.context.trace.recorder.TraceIdRecorder;
+import com.support.monitor.agent.core.context.trace.recorder.TraceRootRecorder;
 import com.support.monitor.commons.binder.utils.Assert;
 import lombok.Getter;
 
@@ -22,7 +22,7 @@ public abstract class AbstractRemoteMethodInterceptor<H> extends AbstractMethodA
     private ClientAttach<H> clientAttach;
 
     private void defaultAttach(Trace trace, H httpRequest) {
-        TraceIdRecorder traceIdRecorder = trace.currentTraceIdRecorder();
+        TraceRootRecorder traceIdRecorder = trace.currentTraceRootRecorder();
         this.clientAttach.setAttach(httpRequest, Header.TRACE_ID.getKey(), traceIdRecorder.getTraceId().id());
         this.clientAttach.setAttach(httpRequest, Header.TRACE_DEPTH.getKey(), traceIdRecorder.getTraceId().getDepth().getDepth().toString());
     }

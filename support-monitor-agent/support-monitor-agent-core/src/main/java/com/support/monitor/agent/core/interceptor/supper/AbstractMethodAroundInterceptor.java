@@ -59,7 +59,6 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
         if (Objects.isNull(trace)) {
             return;
         }
-        trace.traceEnd();
 
         this.doAfter(trace, enhancedDefine, method, allArguments, parameterTypes, result);
     }
@@ -84,17 +83,18 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
     }
 
     protected void print(Trace trace) {
-
         SpanEventRecorder spanEventRecorder = trace.currentSpanEventRecorder();
-        Span span = spanEventRecorder.getFirstSpanEvent();
-        SpanEvent spanEvent = span.getSpanEvent();
+        Span span = trace.traceEnd();
 
+        SpanEvent spanEvent = span.getSpanEvent();
         System.out.println("threadId: " + Thread.currentThread().getId()
                 + "\t format: " + this.format(spanEvent.getEventTarget(), spanEvent.getEventMethod(), spanEvent.getArgs())
-                + "\t depth: " + span.getDepth()
                 + "\t traceId: " + span.getTraceId()
+                + "\t preSpanId: " + span.getPreSpanId()
                 + "\t spanId: " + span.getId()
                 + "\t time: " + span.executeTime()
+                + "\t start: " + span.getStartTime()
+                + "\t end: " + span.getEndTime()
         );
     }
 

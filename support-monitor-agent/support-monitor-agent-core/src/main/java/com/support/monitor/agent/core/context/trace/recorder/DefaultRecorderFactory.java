@@ -22,7 +22,7 @@ public class DefaultRecorderFactory implements RecorderFactory {
     }
 
     @Override
-    public TraceIdRecorder newTraceIdRecorder(TraceId traceId) {
-        return new DefaultTraceIdRecorder(traceId);
+    public TraceRootRecorder newTraceRootRecorder(TraceId traceId, SpanEventRecorder spanEventRecorder) {
+        return new DefaultTraceRootRecorder(traceId, spanEventRecorder);
     }
 }

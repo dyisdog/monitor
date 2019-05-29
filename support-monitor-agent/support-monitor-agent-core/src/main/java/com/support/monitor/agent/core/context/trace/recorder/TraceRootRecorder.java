@@ -3,11 +3,11 @@ package com.support.monitor.agent.core.context.trace.recorder;
 import com.support.monitor.agent.core.context.trace.id.TraceId;
 
 /**
- * traceIdRecorder 该记录器，会记录当前trace 的ID信息，一个trace信息中只会存在一个traceId，traceId中的id信息不能变化
+ * traceRoot记录器，记录traceId 以及当前span
  *
  * @author 江浩
  */
-public interface TraceIdRecorder {
+public interface TraceRootRecorder {
 
     /**
      * 记录traceId
@@ -16,6 +16,9 @@ public interface TraceIdRecorder {
      * @author 江浩
      */
     TraceId getTraceId();
+
+    SpanEventRecorder currentSpanEventRecorder();
+
 
     /**
      * 获取traceId 创建时间

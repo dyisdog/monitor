@@ -1,6 +1,6 @@
 package com.support.monitor.agent.core.context.trace;
 
-import com.support.monitor.agent.core.context.trace.id.TraceId;
+import com.support.monitor.agent.core.context.trace.recorder.TraceRootRecorder;
 
 import java.util.Objects;
 
@@ -23,10 +23,9 @@ public class DefaultTraceContext implements TraceContext {
     }
 
     @Override
-    public Trace newTraceObject(TraceId traceId) {
-        return traceFactory.newTraceObject(traceId);
+    public Trace newTraceObject(TraceRootRecorder traceRootRecorder) {
+        return traceFactory.newTraceObject(traceRootRecorder);
     }
-
 
     @Override
     public Trace newTraceObject() {

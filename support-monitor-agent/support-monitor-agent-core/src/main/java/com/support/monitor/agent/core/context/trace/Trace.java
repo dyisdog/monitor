@@ -1,7 +1,7 @@
 package com.support.monitor.agent.core.context.trace;
 
 import com.support.monitor.agent.core.context.trace.recorder.SpanEventRecorder;
-import com.support.monitor.agent.core.context.trace.recorder.TraceIdRecorder;
+import com.support.monitor.agent.core.context.trace.recorder.TraceRootRecorder;
 import com.support.monitor.agent.core.context.trace.span.Span;
 import com.support.monitor.agent.core.context.trace.span.SpanEvent;
 
@@ -13,15 +13,15 @@ import com.support.monitor.agent.core.context.trace.span.SpanEvent;
 public interface Trace {
 
     /**
-     * 当前trace的span 记录者
+     * 当前线程 TraceId 记录者 链路追踪传递信息
      *
      * @return : com.support.monitor.agent.core.context.trace.SpanEventRecorder
      * @author 江浩
      */
-    TraceIdRecorder currentTraceIdRecorder();
+    TraceRootRecorder currentTraceRootRecorder();
 
     /**
-     * 记录当前的span event事件信息
+     * 当前线程对应的spanEvent 记录器
      *
      * @return : com.support.monitor.agent.core.context.trace.recorder.SpanEventRecorder
      * @author 江浩
@@ -30,12 +30,13 @@ public interface Trace {
 
     /**
      * 记录开始时间
+     * <p>生成一个span记录器</p>
      *
      * @param spanEvent
      * @return : void
      * @author 江浩
      */
-    void traceBegin(SpanEvent spanEvent);
+    SpanEventRecorder traceBegin(SpanEvent spanEvent);
 
     /**
      * 记录结束信息

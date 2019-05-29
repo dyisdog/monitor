@@ -5,7 +5,7 @@ import com.support.monitor.agent.core.context.trace.id.TraceId;
 import com.support.monitor.agent.core.context.trace.id.TraceIdFactory;
 import com.support.monitor.agent.core.context.trace.recorder.RecorderFactory;
 import com.support.monitor.agent.core.context.trace.recorder.SpanEventRecorder;
-import com.support.monitor.agent.core.context.trace.recorder.TraceIdRecorder;
+import com.support.monitor.agent.core.context.trace.recorder.TraceRootRecorder;
 import com.support.monitor.commons.binder.Binder;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -52,15 +52,28 @@ public class DefaultTraceFactory implements TraceFactory {
 
 
     @Override
+    public Trace newTraceObject(TraceRootRecorder traceRootRecorder) {
+        TraceId traceId = traceRootRecorder.getTraceId();
+        SpanEventRecorder spanEventRecorder = traceRootRecorder.currentSpanEventRecorder();
+        final AtomicReference<Trace> reference = getReference();
+        //每一个trace 对应一个span事件记录器
+        final SpanEventRecorder newSpanEventRecorder = recorderFactory.newSpanEventRecorder();
+        newSpanEventRecorder.resetCurrentSpan(spanEventRecorder.currentSpan());
+        final TraceRootRecorder newTraceRootRecorder = recorderFactory.newTraceRootRecorder(traceId, spanEventRecorder);
+        //default trace
+        final DefaultTrace trace = new DefaultTrace(newTraceRootRecorder, newSpanEventRecorder);
+        reference.set(trace);
+        return trace;
+    }
+
+    @Override
     public Trace newTraceObject(TraceId traceId) {
         final AtomicReference<Trace> reference = getReference();
-
-        //default recorder
-        final TraceIdRecorder traceIdRecorder = recorderFactory.newTraceIdRecorder(traceId);
+        //每一个trace 对应一个span事件记录器
         final SpanEventRecorder spanEventRecorder = recorderFactory.newSpanEventRecorder();
-
+        final TraceRootRecorder newTraceRootRecorder = recorderFactory.newTraceRootRecorder(traceId, spanEventRecorder);
         //default trace
-        final DefaultTrace trace = new DefaultTrace(traceIdRecorder, spanEventRecorder);
+        final DefaultTrace trace = new DefaultTrace(newTraceRootRecorder, spanEventRecorder);
         reference.set(trace);
         return trace;
     }
@@ -69,8 +82,6 @@ public class DefaultTraceFactory implements TraceFactory {
     @Override
     public Trace newTraceObject() {
         String id = idGenerator.transactionId();
-        //trace depth
-        //setting default trace depth
         TraceId traceId = traceIdFactory.newTraceId(id);
         return this.newTraceObject(traceId);
     }

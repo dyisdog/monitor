@@ -17,6 +17,7 @@
         <module>support-monitor-plugins-bom</module>
         <module>support-monitor-plugins-custom</module>
         <module>support-monitor-plugins-http</module>
+        <module>support-monitor-plugins-container</module>
     </modules>
 
     <dependencies>

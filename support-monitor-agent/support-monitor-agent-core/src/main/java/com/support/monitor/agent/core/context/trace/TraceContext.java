@@ -1,6 +1,6 @@
 package com.support.monitor.agent.core.context.trace;
 
-import com.support.monitor.agent.core.context.trace.id.TraceId;
+import com.support.monitor.agent.core.context.trace.recorder.TraceRootRecorder;
 
 /**
  * TraceContext
@@ -21,11 +21,11 @@ public interface TraceContext {
     /**
      * 根据traceId创建新的Trace
      *
-     * @param traceId :
+     * @param traceRootRecorder :
      * @return : com.support.monitor.agent.core.context.trace.Trace
      * @author 江浩
      */
-    Trace newTraceObject(TraceId traceId);
+    Trace newTraceObject(TraceRootRecorder traceRootRecorder);
 
     /**
      * 新建

@@ -2,7 +2,7 @@ package com.support.monitor.agent.core.interceptor.supper;
 
 import com.support.monitor.agent.core.context.trace.Trace;
 import com.support.monitor.agent.core.context.trace.TraceContext;
-import com.support.monitor.agent.core.context.trace.recorder.TraceIdRecorder;
+import com.support.monitor.agent.core.context.trace.recorder.TraceRootRecorder;
 import com.support.monitor.agent.core.interceptor.ConstructorInterceptor;
 import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
 import lombok.Getter;
@@ -30,8 +30,7 @@ public class AbstractConstructorInterceptor implements ConstructorInterceptor {
         if (Objects.isNull(trace)) {
             return;
         }
-        //设置当前trace 的span事件进去
-        TraceIdRecorder traceIdRecorder = trace.currentTraceIdRecorder();
+        TraceRootRecorder traceIdRecorder = trace.currentTraceRootRecorder();
         enhancedDefine.setEnhancedInstanceTraceIdRecorder(traceIdRecorder);
     }
 }

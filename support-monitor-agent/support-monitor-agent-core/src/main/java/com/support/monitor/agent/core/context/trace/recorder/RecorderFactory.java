@@ -23,10 +23,11 @@ public interface RecorderFactory {
     /**
      * traceId记录器
      *
-     * @param traceId :
+     * @param traceId           :
+     * @param spanEventRecorder
      * @return : TraceIdRecorder
      * @author 江浩
      */
-    TraceIdRecorder newTraceIdRecorder(TraceId traceId);
+    TraceRootRecorder newTraceRootRecorder(TraceId traceId, SpanEventRecorder spanEventRecorder);
 
 }

@@ -1,6 +1,6 @@
 package com.support.monitor.agent.core.interceptor.enhance;
 
-import com.support.monitor.agent.core.context.trace.recorder.TraceIdRecorder;
+import com.support.monitor.agent.core.context.trace.recorder.TraceRootRecorder;
 
 /**
  * 增强，相当于目标添加 该接口
@@ -16,13 +16,13 @@ public interface EnhancedDefine {
      * @return : void
      * @author 江浩
      */
-    void setEnhancedInstanceTraceIdRecorder(TraceIdRecorder traceIdRecorder);
+    void setEnhancedInstanceTraceIdRecorder(TraceRootRecorder traceIdRecorder);
 
     /**
      * 获取目标对象异步trace属性
      *
      * @return
      */
-    TraceIdRecorder getEnhancedInstanceTraceIdRecorder();
+    TraceRootRecorder getEnhancedInstanceTraceIdRecorder();
 
 }

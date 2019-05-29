@@ -4,9 +4,10 @@ import com.support.monitor.agent.core.context.trace.id.TraceId;
 import com.support.monitor.agent.core.context.trace.span.Span;
 import com.support.monitor.agent.core.context.trace.span.SpanEvent;
 import com.support.monitor.agent.core.context.trace.span.SpanFactory;
+import lombok.Getter;
 
+import java.util.ArrayDeque;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * <p>
@@ -16,25 +17,30 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author 江浩
  */
-public class DefaultSpanEventRecorder extends ConcurrentLinkedQueue<Span> implements SpanEventRecorder {
+@Getter
+public class DefaultSpanEventRecorder extends ArrayDeque<Span> implements SpanEventRecorder {
 
     private SpanFactory spanFactory;
-    //TODO sender ?
+
+    private volatile Span currentSpan;
 
     public DefaultSpanEventRecorder(SpanFactory spanFactory) {
         this.spanFactory = spanFactory;
     }
 
     @Override
-    public void startSpanEventBlock(SpanEvent spanEvent, TraceId traceId) {
-        Span span = spanFactory.newSpan(traceId, spanEvent);
+    public void spanEventBegin(SpanEvent spanEvent, TraceId traceId) {
+        Span span = spanFactory.newSpan(traceId, spanEvent, this.currentSpan);
         span.markBeforeTime();
-        add(span);
+        addLast(span);
+
+        this.currentSpan = span;
     }
 
     @Override
-    public Span endSpanEventBlock(TraceId traceId) {
-        Span span = peek();
+    public Span spanEventEnd(TraceId traceId) {
+        //应该使用poll删除传送
+        Span span = pollFirst();
         if (!Objects.isNull(span)) {
             span.markAfterTime();
         }
@@ -42,10 +48,13 @@ public class DefaultSpanEventRecorder extends ConcurrentLinkedQueue<Span> implem
     }
 
     @Override
-    public Span getFirstSpanEvent() {
-        Span span = poll();
-        //System.out.println(span.getSpanEvent().getEventTarget() + "  " + span.getSpanEvent().getEventMethod() + "  " + span.getDepth() + "  " + span.getTraceId());
-        return span;
+    public Span currentSpan() {
+        return this.currentSpan;
+    }
+
+    @Override
+    public void resetCurrentSpan(Span currentSpan) {
+        this.currentSpan = currentSpan;
     }
 
 

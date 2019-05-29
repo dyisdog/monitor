@@ -26,10 +26,14 @@ public interface TraceId {
 
     /**
      * traceId 传递深度
+     * <p>
+     * 该深度对于远程透传并没有太大意义？
+     * </p>
      *
      * @return : Depth
      * @author 江浩
      */
     Depth getDepth();
+
 
 }
