@@ -8,6 +8,7 @@ TODO 需要实现规范
     * [java-spring-jaeger](https://github.com/opentracing-contrib/java-spring-jaeger?files=1)
     * [jaeger代码思路](https://www.jianshu.com/p/2f5d5638b8b0)
     * [skywalking](https://github.com/apache/skywalking)
+    * [zipkin](https://github.com/apache/incubator-zipkin)
 ```
         [Span A]  ←←←(the root span)
             |
