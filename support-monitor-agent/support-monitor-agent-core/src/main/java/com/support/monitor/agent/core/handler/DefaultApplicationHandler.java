@@ -6,7 +6,7 @@ import com.support.monitor.agent.core.context.EnhanceContext;
 import com.support.monitor.agent.core.debug.EnhanceDebugFactory;
 import com.support.monitor.agent.core.interceptor.enhance.EnhanceFactory;
 import com.support.monitor.agent.core.plugin.PluginDefine;
-import com.support.monitor.agent.core.plugin.PluginLoader;
+import com.support.monitor.commons.binder.plugin.ExtensionLoader;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.description.type.TypeDescription;
@@ -38,7 +38,9 @@ public class DefaultApplicationHandler implements ApplicationHandler {
 
     private EnhanceDebugFactory enhanceDebugFactory;
 
-    private PluginLoader pluginLoader;
+    private ExtensionLoader<PluginDefine> extensionLoader = ExtensionLoader.getExtensionLoader(PluginDefine.class);
+
+//    private PluginLoader pluginLoader;
 
     @Inject
     public DefaultApplicationHandler(
@@ -46,21 +48,21 @@ public class DefaultApplicationHandler implements ApplicationHandler {
             AgentConfig config,
             Instrumentation instrumentation,
             EnhanceFactory enhanceFactory,
-            EnhanceDebugFactory enhanceDebugFactory,
-            PluginLoader pluginLoader) {
+            EnhanceDebugFactory enhanceDebugFactory
+            //        PluginLoader pluginLoader
+    ) {
 
         this.agentBuilder = agentBuilder;
         this.config = config;
         this.instrumentation = instrumentation;
         this.enhanceFactory = enhanceFactory;
         this.enhanceDebugFactory = enhanceDebugFactory;
-        this.pluginLoader = pluginLoader;
+        //this.pluginLoader = pluginLoader;
     }
 
     @Override
     public void handle() {
-        List<PluginDefine> pluginDefines = pluginLoader.loadPlugin();
-
+        List<PluginDefine> pluginDefines = extensionLoader.getSupportedVExtensions();
         this.handle(pluginDefines, 0);
     }
 

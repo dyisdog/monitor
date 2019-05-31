@@ -27,6 +27,7 @@ public class AgentCollect {
     public static void premain(String agentArgs, Instrumentation instrumentation) {
         ApplicationContextModuleFactory applicationContextModuleFactory = new ApplicationContextModuleFactory();
         applicationContextModuleFactory.load(agentArgs, instrumentation);
+
     }
 
 }

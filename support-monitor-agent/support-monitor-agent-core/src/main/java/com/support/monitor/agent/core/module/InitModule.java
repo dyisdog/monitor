@@ -21,9 +21,6 @@ import com.support.monitor.agent.core.interceptor.InterceptorFactory;
 import com.support.monitor.agent.core.interceptor.enhance.EnhanceFactory;
 import com.support.monitor.agent.core.interceptor.enhance.rule.*;
 import com.support.monitor.agent.core.module.provider.*;
-import com.support.monitor.agent.core.plugin.PluginLoader;
-import com.support.monitor.agent.core.plugin.adaptor.PluginLoaderAdaptor;
-import com.support.monitor.agent.core.plugin.adaptor.SpiPluginLoadAdaptor;
 import com.support.monitor.commons.binder.Binder;
 import com.support.monitor.commons.binder.ThreadLocalBinder;
 import net.bytebuddy.agent.builder.AgentBuilder;
@@ -72,8 +69,8 @@ public class InitModule extends AbstractModule {
     }
 
     private void pluginBind() {
-        bind(PluginLoader.class).toProvider(PluginLoaderProvider.class).in(Scopes.SINGLETON);
-        bind(PluginLoaderAdaptor.class).annotatedWith(Names.named(SPI_LOADER_ADAPTOR)).to(SpiPluginLoadAdaptor.class).in(Scopes.SINGLETON);
+        //bind(PluginLoader.class).toProvider(PluginLoaderProvider.class).in(Scopes.SINGLETON);
+        //bind(PluginLoaderAdaptor.class).annotatedWith(Names.named(SPI_LOADER_ADAPTOR)).to(SpiPluginLoadAdaptor.class).in(Scopes.SINGLETON);
     }
 
     private void providerBind() {
