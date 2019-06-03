@@ -6,6 +6,7 @@ import com.google.inject.Scopes;
 import com.google.inject.name.Names;
 import com.support.monitor.agent.core.AgentBootStarter;
 import com.support.monitor.agent.core.config.AgentConfig;
+import com.support.monitor.agent.core.context.Reporter;
 import com.support.monitor.agent.core.context.TraceContext;
 import com.support.monitor.agent.core.debug.EnhanceDebugFactory;
 import com.support.monitor.agent.core.handler.ApplicationHandler;
@@ -50,6 +51,8 @@ public class InitModule extends AbstractModule {
 //        bind(TraceContext.class).toProvider(TraceContextProvider.class).in(Scopes.SINGLETON);
         //tracer
         bind(SofaTracer.class).toProvider(SofaTracerProvider.class).in(Scopes.SINGLETON);
+
+        bind(Reporter.class).toProvider(ServerReporterProvider.class).in(Scopes.SINGLETON);
         bind(TraceContext.class).toProvider(TraceContextProvider.class).in(Scopes.SINGLETON);
 
         bind(EnhanceFactory.class).toProvider(EnhanceFactoryProvider.class).in(Scopes.SINGLETON);

@@ -26,26 +26,25 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
     @Override
     public void before(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
         try {
+
+            //TODO Context 公用了
             SofaTracerSpan sofaTracerSpan = traceContext.getCurrentSpan();
 
             if (Objects.isNull(sofaTracerSpan)) {
                 SofaTracer sofaTracer = getTraceContext().getSofaTracer();
                 sofaTracerSpan = (SofaTracerSpan) sofaTracer.buildSpan(this.getClass().getSimpleName())
                         .withTag(Tags.SPAN_KIND.getKey(), Tags.SPAN_KIND_SERVER).start();
-                getTraceContext().push(sofaTracerSpan);
-
             } else {
                 //构建新的span
-                SofaTracerSpan newSofaTracerSpan = (SofaTracerSpan) getTraceContext().getSofaTracer()
+                sofaTracerSpan = (SofaTracerSpan) getTraceContext().getSofaTracer()
                         .buildSpan(this.getClass().getSimpleName())
-                        .withTag(Tags.SPAN_KIND.getKey(), Tags.SPAN_KIND_CLIENT)
+                        .withTag(Tags.SPAN_KIND.getKey(), Tags.SPAN_KIND_SERVER)
                         .asChildOf(sofaTracerSpan)
                         .start();
-                getTraceContext().push(newSofaTracerSpan);
             }
-
-
+            getTraceContext().push(sofaTracerSpan);
             this.doBefore(sofaTracerSpan, enhancedDefine, method, allArguments, parameterTypes);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,7 +70,6 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
             System.out.println("没有span");
             return;
         }
-
         this.doAfter(sofaTracerSpan, enhancedDefine, method, allArguments, parameterTypes, result);
     }
 
@@ -98,15 +96,17 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
         //sofaTracerSpan.finish();
         //发送 finish目前还没集成
 
-        System.out.println("threadId: " + Thread.currentThread().getId()
-                + "\t className:  " + enhancedDefine.getClass().getSimpleName()
-                + "\t methodName: " + method.getName()
-                + "\t traceId: " + sofaTracerSpan.getSofaTracerSpanContext().getTraceId()
-                + "\t preSpanId: " + sofaTracerSpan.getSofaTracerSpanContext().getParentId()
-                + "\t spanId: " + sofaTracerSpan.getSofaTracerSpanContext().getSpanId()
-                + "\t startTime: " + sofaTracerSpan.getStartTime()
-                + "\t endTime：" + sofaTracerSpan.getEndTime()
-        );
+        sofaTracerSpan.finish();
+
+//        System.out.println("threadId: " + Thread.currentThread().getId()
+//                + "\t className:  " + enhancedDefine.getClass().getSimpleName()
+//                + "\t methodName: " + method.getName()
+//                + "\t traceId: " + sofaTracerSpan.getSofaTracerSpanContext().getTraceId()
+//                + "\t preSpanId: " + sofaTracerSpan.getSofaTracerSpanContext().getParentId()
+//                + "\t spanId: " + sofaTracerSpan.getSofaTracerSpanContext().getSpanId()
+//                + "\t startTime: " + sofaTracerSpan.getStartTime()
+//                + "\t endTime：" + sofaTracerSpan.getEndTime()
+//        );
     }
 
 
