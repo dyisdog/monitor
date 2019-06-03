@@ -4,9 +4,9 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
+import com.support.monitor.agent.core.interceptor.InterceptorFactory;
 import com.support.monitor.agent.core.interceptor.enhance.DefaultEnhanceFactory;
 import com.support.monitor.agent.core.interceptor.enhance.EnhanceFactory;
-import com.support.monitor.agent.core.interceptor.InterceptorFactory;
 import com.support.monitor.agent.core.interceptor.enhance.rule.EnhanceRule;
 
 import java.util.List;
@@ -28,13 +28,13 @@ public class EnhanceFactoryProvider implements Provider<EnhanceFactory> {
             InterceptorFactory interceptorFactory,
             @Named(EnhanceRule.Key.METHOD) EnhanceRule enhanceMethod,
             @Named(EnhanceRule.Key.CONSTRUCTOR) EnhanceRule enhanceConstructor,
-            @Named(EnhanceRule.Key.STATIC_METHOD) EnhanceRule enhanceStatic,
-            @Named(EnhanceRule.Key.SOURCE) EnhanceRule enhanceSource) {
+            @Named(EnhanceRule.Key.STATIC_METHOD) EnhanceRule enhanceStatic) {
         this.interceptorFactory = interceptorFactory;
         this.enhanceRules.add(enhanceConstructor);
         this.enhanceRules.add(enhanceMethod);
         this.enhanceRules.add(enhanceStatic);
-        this.enhanceRules.add(enhanceSource);
+        //this.enhanceRules.add(enhanceSource);
+        //@Named(EnhanceRule.Key.SOURCE) EnhanceRule enhanceSource
     }
 
     @Override

@@ -10,8 +10,9 @@ public class DefaultReporter implements Reporter {
 
     @Override
     public void report(SofaTracerSpan sofaTracerSpan) {
-        System.out.println(sofaTracerSpan);
         System.out.println("threadId: " + Thread.currentThread().getId()
+                + "\t className: " + sofaTracerSpan.getBaggageItem("className")
+                + "\t methodName: " + sofaTracerSpan.getBaggageItem("methodName")
                 + "\t traceId: " + sofaTracerSpan.getSofaTracerSpanContext().getTraceId()
                 + "\t preSpanId: " + sofaTracerSpan.getSofaTracerSpanContext().getParentId()
                 + "\t spanId: " + sofaTracerSpan.getSofaTracerSpanContext().getSpanId()

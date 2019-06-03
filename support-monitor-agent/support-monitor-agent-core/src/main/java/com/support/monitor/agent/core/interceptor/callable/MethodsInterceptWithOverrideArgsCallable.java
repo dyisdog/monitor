@@ -1,7 +1,6 @@
 package com.support.monitor.agent.core.interceptor.callable;
 
 import com.support.monitor.agent.core.interceptor.MethodAroundInterceptor;
-import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
 import net.bytebuddy.implementation.bind.annotation.*;
 
 import java.lang.reflect.Method;
@@ -26,18 +25,13 @@ public class MethodsInterceptWithOverrideArgsCallable {
             @AllArguments Object[] allArguments,
             @Morph OverrideCallable callable) throws Exception {
 
-        if (!(object instanceof EnhancedDefine)) {
-            return callable.invoker(allArguments);
-        }
-        EnhancedDefine enhancedDefine = (EnhancedDefine) object;
-
         Object result = null;
         try {
-            methodAroundInterceptor.before(enhancedDefine, method, allArguments, method.getParameterTypes());
+            methodAroundInterceptor.before(object, method, allArguments, method.getParameterTypes());
             result = callable.invoker(allArguments);
-            methodAroundInterceptor.after(enhancedDefine, method, allArguments, method.getParameterTypes(), result);
+            methodAroundInterceptor.after(object, method, allArguments, method.getParameterTypes(), result);
         } catch (Exception e) {
-            methodAroundInterceptor.exception(enhancedDefine, method, allArguments, method.getParameterTypes(), e);
+            methodAroundInterceptor.exception(object, method, allArguments, method.getParameterTypes(), e);
         }
         return result;
     }

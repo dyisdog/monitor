@@ -23,9 +23,8 @@ public class AbstractConstructorInterceptor implements ConstructorInterceptor {
 
     @Override
     public void onConstruct(EnhancedDefine enhancedDefine, Object[] allArguments) {
-
         if (!Objects.isNull(traceContext)) {
-            enhancedDefine.setEnhancedInstanceTraceContext(traceContext);
+            enhancedDefine.setEnhancedInstanceTraceContext(traceContext.getCurrentSpan());
         }
 
     }

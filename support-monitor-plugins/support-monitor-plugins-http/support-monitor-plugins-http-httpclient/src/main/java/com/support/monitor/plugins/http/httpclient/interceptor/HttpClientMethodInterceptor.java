@@ -2,7 +2,6 @@ package com.support.monitor.plugins.http.httpclient.interceptor;
 
 import com.alipay.common.tracer.core.span.SofaTracerSpan;
 import com.support.monitor.agent.core.context.TraceContext;
-import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
 import com.support.monitor.agent.core.interceptor.supper.AbstractRemoteMethodInterceptor;
 import org.apache.http.HttpRequest;
 
@@ -19,12 +18,12 @@ public class HttpClientMethodInterceptor extends AbstractRemoteMethodInterceptor
     }
 
     @Override
-    protected void doBefore(SofaTracerSpan sofaTracerSpan, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
+    protected void doBefore(SofaTracerSpan sofaTracerSpan, Object enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
 
     }
 
     @Override
-    protected void doAfter(SofaTracerSpan sofaTracerSpan, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
+    protected void doAfter(SofaTracerSpan sofaTracerSpan, Object enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
         this.print(sofaTracerSpan, enhancedDefine, method);
     }
 //    public HttpClientMethodInterceptor(TraceContext traceContext) {

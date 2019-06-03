@@ -4,7 +4,6 @@ import com.alipay.common.tracer.core.SofaTracer;
 import com.alipay.common.tracer.core.span.SofaTracerSpan;
 import com.support.monitor.agent.core.context.TraceContext;
 import com.support.monitor.agent.core.interceptor.MethodAroundInterceptor;
-import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
 import io.opentracing.tag.Tags;
 import lombok.Getter;
 
@@ -24,10 +23,9 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
     }
 
     @Override
-    public void before(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
+    public void before(Object target, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
         try {
 
-            //TODO Context 公用了
             SofaTracerSpan sofaTracerSpan = traceContext.getCurrentSpan();
 
             if (Objects.isNull(sofaTracerSpan)) {
@@ -42,8 +40,11 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
                         .asChildOf(sofaTracerSpan)
                         .start();
             }
+            sofaTracerSpan.setBaggageItem("className", target.getClass().getSimpleName());
+            sofaTracerSpan.setBaggageItem("methodName", method.getName());
+
             getTraceContext().push(sofaTracerSpan);
-            this.doBefore(sofaTracerSpan, enhancedDefine, method, allArguments, parameterTypes);
+            this.doBefore(sofaTracerSpan, target, method, allArguments, parameterTypes);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,30 +55,34 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
      * do before
      *
      * @param sofaTracerSpan :
-     * @param enhancedDefine :
+     * @param target         :
      * @param method         :
      * @param allArguments   :
      * @param parameterTypes :
      * @return : void
      * @author 江浩
      */
-    protected abstract void doBefore(SofaTracerSpan sofaTracerSpan, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes);
+    protected abstract void doBefore(SofaTracerSpan sofaTracerSpan, Object target, Method method, Object[] allArguments, Class<?>[] parameterTypes);
 
     @Override
-    public void after(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
+    public void after(Object target, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
         SofaTracerSpan sofaTracerSpan = traceContext.getCurrentSpan();
+
+        //TODO 理论上是flinsh 操作
+        traceContext.pop();
+
         if (Objects.isNull(sofaTracerSpan)) {
             System.out.println("没有span");
             return;
         }
-        this.doAfter(sofaTracerSpan, enhancedDefine, method, allArguments, parameterTypes, result);
+        this.doAfter(sofaTracerSpan, target, method, allArguments, parameterTypes, result);
     }
 
     /**
      * do after
      *
      * @param sofaTracerSpan :
-     * @param enhancedDefine :
+     * @param target         :
      * @param method         :
      * @param allArguments   :
      * @param parameterTypes :
@@ -85,14 +90,14 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
      * @return : void
      * @author 江浩
      */
-    protected abstract void doAfter(SofaTracerSpan sofaTracerSpan, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result);
+    protected abstract void doAfter(SofaTracerSpan sofaTracerSpan, Object target, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result);
 
     @Override
-    public void exception(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Throwable t) {
+    public void exception(Object target, Method method, Object[] allArguments, Class<?>[] parameterTypes, Throwable t) {
 
     }
 
-    protected void print(SofaTracerSpan sofaTracerSpan, EnhancedDefine enhancedDefine, Method method) {
+    protected void print(SofaTracerSpan sofaTracerSpan, Object target, Method method) {
         //sofaTracerSpan.finish();
         //发送 finish目前还没集成
 

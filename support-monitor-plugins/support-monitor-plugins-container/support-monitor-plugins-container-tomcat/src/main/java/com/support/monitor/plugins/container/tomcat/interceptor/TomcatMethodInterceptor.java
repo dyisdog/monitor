@@ -2,7 +2,6 @@ package com.support.monitor.plugins.container.tomcat.interceptor;
 
 import com.alipay.common.tracer.core.span.SofaTracerSpan;
 import com.support.monitor.agent.core.context.TraceContext;
-import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
 import com.support.monitor.agent.core.interceptor.supper.AbstractServletMethodAroundInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +20,7 @@ public class TomcatMethodInterceptor extends AbstractServletMethodAroundIntercep
     }
 
     @Override
-    public void before(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
+    public void before(Object enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) allArguments[0];
 
         System.out.println(httpServletRequest.getRequestURL());
@@ -32,12 +31,12 @@ public class TomcatMethodInterceptor extends AbstractServletMethodAroundIntercep
     }
 
     @Override
-    protected void doBefore(SofaTracerSpan sofaTracerSpan, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
+    protected void doBefore(SofaTracerSpan sofaTracerSpan, Object enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
 
     }
 
     @Override
-    protected void doAfter(SofaTracerSpan sofaTracerSpan, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
+    protected void doAfter(SofaTracerSpan sofaTracerSpan, Object enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
 
     }
 
