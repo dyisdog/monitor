@@ -66,15 +66,7 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
 
     @Override
     public void after(Object target, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
-        SofaTracerSpan sofaTracerSpan = traceContext.getCurrentSpan();
-
-        //TODO 理论上是flinsh 操作
-        traceContext.pop();
-
-        if (Objects.isNull(sofaTracerSpan)) {
-            System.out.println("没有span");
-            return;
-        }
+        SofaTracerSpan sofaTracerSpan = traceContext.stopCurrentTracerSpan();
         this.doAfter(sofaTracerSpan, target, method, allArguments, parameterTypes, result);
     }
 

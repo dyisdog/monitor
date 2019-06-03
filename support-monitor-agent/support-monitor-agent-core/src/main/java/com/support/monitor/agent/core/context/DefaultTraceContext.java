@@ -35,6 +35,15 @@ public class DefaultTraceContext extends SofaTracerThreadLocalTraceContext imple
         return this.sofaTracer;
     }
 
+    @Override
+    public SofaTracerSpan stopCurrentTracerSpan() {
+        SofaTracerSpan sofaTracerSpan = this.pop();
+        if (!Objects.isNull(sofaTracerSpan)) {
+            sofaTracerSpan.finish();
+        }
+        return sofaTracerSpan;
+    }
+
 
     @Override
     public void push(SofaTracerSpan span) {
