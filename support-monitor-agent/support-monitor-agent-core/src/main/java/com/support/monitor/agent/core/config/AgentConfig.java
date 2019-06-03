@@ -44,14 +44,6 @@ public interface AgentConfig {
      */
     String getString(String key, String defaultValue);
 
-
-    /**
-     * 获取插件加载器名称
-     *
-     * @return
-     */
-    String getPluginLoader();
-
     /**
      * 获取debug信息
      *
@@ -59,4 +51,13 @@ public interface AgentConfig {
      */
     String getDebugPath();
 
+    /**
+     * 实现
+     *
+     * @return : java.lang.String
+     * @author 江浩
+     */
+    default String getTracerType() {
+        return "default";
+    }
 }

@@ -16,7 +16,5 @@ public class EnhanceContext {
 
     private ElementMatcher<? super MethodDescription> methodDescription;
 
-    //private String pointClassName;
-
     private String interceptorClassName;
 }

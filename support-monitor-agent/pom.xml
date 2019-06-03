@@ -16,12 +16,17 @@
     <modules>
         <module>support-monitor-agent-core</module>
         <module>support-monitor-agent-collect</module>
-        <module>support-monitor-agent-trace</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.support.monitor</groupId>
+            <artifactId>support-monitor-commons</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

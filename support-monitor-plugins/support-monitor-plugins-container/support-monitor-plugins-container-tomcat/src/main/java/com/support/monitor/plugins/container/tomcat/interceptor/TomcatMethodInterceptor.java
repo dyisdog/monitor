@@ -1,7 +1,7 @@
 package com.support.monitor.plugins.container.tomcat.interceptor;
 
-import com.support.monitor.agent.core.context.trace.Trace;
-import com.support.monitor.agent.core.context.trace.TraceContext;
+import com.alipay.common.tracer.core.span.SofaTracerSpan;
+import com.support.monitor.agent.core.context.TraceContext;
 import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
 import com.support.monitor.agent.core.interceptor.supper.AbstractServletMethodAroundInterceptor;
 
@@ -32,12 +32,13 @@ public class TomcatMethodInterceptor extends AbstractServletMethodAroundIntercep
     }
 
     @Override
-    protected void doBefore(Trace trace, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
+    protected void doBefore(SofaTracerSpan sofaTracerSpan, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
 
     }
 
     @Override
-    protected void doAfter(Trace trace, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
+    protected void doAfter(SofaTracerSpan sofaTracerSpan, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
 
     }
+
 }

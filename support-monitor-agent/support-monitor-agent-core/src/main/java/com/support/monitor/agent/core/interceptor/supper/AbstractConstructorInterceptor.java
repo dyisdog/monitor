@@ -1,8 +1,6 @@
 package com.support.monitor.agent.core.interceptor.supper;
 
-import com.support.monitor.agent.core.context.trace.Trace;
-import com.support.monitor.agent.core.context.trace.TraceContext;
-import com.support.monitor.agent.core.context.trace.recorder.TraceRootRecorder;
+import com.support.monitor.agent.core.context.TraceContext;
 import com.support.monitor.agent.core.interceptor.ConstructorInterceptor;
 import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
 import lombok.Getter;
@@ -26,11 +24,9 @@ public class AbstractConstructorInterceptor implements ConstructorInterceptor {
     @Override
     public void onConstruct(EnhancedDefine enhancedDefine, Object[] allArguments) {
 
-        Trace trace = traceContext.currentRawTraceObject();
-        if (Objects.isNull(trace)) {
-            return;
+        if (!Objects.isNull(traceContext)) {
+            enhancedDefine.setEnhancedInstanceTraceContext(traceContext);
         }
-        TraceRootRecorder traceIdRecorder = trace.currentTraceRootRecorder();
-        enhancedDefine.setEnhancedInstanceTraceIdRecorder(traceIdRecorder);
+
     }
 }

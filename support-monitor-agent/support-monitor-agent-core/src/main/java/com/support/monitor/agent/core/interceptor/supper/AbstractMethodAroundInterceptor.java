@@ -1,14 +1,12 @@
 package com.support.monitor.agent.core.interceptor.supper;
 
-import com.support.monitor.agent.core.context.trace.Trace;
-import com.support.monitor.agent.core.context.trace.TraceContext;
-import com.support.monitor.agent.core.context.trace.recorder.SpanEventRecorder;
-import com.support.monitor.agent.core.context.trace.span.Span;
-import com.support.monitor.agent.core.context.trace.span.SpanEvent;
+import com.alipay.common.tracer.core.SofaTracer;
+import com.alipay.common.tracer.core.span.SofaTracerSpan;
+import com.support.monitor.agent.core.context.TraceContext;
 import com.support.monitor.agent.core.interceptor.MethodAroundInterceptor;
 import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
+import io.opentracing.tag.Tags;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
@@ -27,23 +25,36 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
 
     @Override
     public void before(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
-        Trace trace = traceContext.currentRawTraceObject();
-        if (Objects.isNull(trace)) {
-            return;
-        }
-        trace.traceBegin(SpanEvent.builder()
-                .eventTarget(enhancedDefine.getClass().getName())
-                .eventMethod(method.getName())
-                .args(allArguments)
-                .build());
+        try {
+            SofaTracerSpan sofaTracerSpan = traceContext.getCurrentSpan();
 
-        this.doBefore(trace, enhancedDefine, method, allArguments, parameterTypes);
+            if (Objects.isNull(sofaTracerSpan)) {
+                SofaTracer sofaTracer = getTraceContext().getSofaTracer();
+                sofaTracerSpan = (SofaTracerSpan) sofaTracer.buildSpan(this.getClass().getSimpleName())
+                        .withTag(Tags.SPAN_KIND.getKey(), Tags.SPAN_KIND_SERVER).start();
+                getTraceContext().push(sofaTracerSpan);
+
+            } else {
+                //构建新的span
+                SofaTracerSpan newSofaTracerSpan = (SofaTracerSpan) getTraceContext().getSofaTracer()
+                        .buildSpan(this.getClass().getSimpleName())
+                        .withTag(Tags.SPAN_KIND.getKey(), Tags.SPAN_KIND_CLIENT)
+                        .asChildOf(sofaTracerSpan)
+                        .start();
+                getTraceContext().push(newSofaTracerSpan);
+            }
+
+
+            this.doBefore(sofaTracerSpan, enhancedDefine, method, allArguments, parameterTypes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * do before
      *
-     * @param trace          :
+     * @param sofaTracerSpan :
      * @param enhancedDefine :
      * @param method         :
      * @param allArguments   :
@@ -51,22 +62,23 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
      * @return : void
      * @author 江浩
      */
-    protected abstract void doBefore(Trace trace, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes);
+    protected abstract void doBefore(SofaTracerSpan sofaTracerSpan, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes);
 
     @Override
     public void after(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
-        Trace trace = traceContext.currentRawTraceObject();
-        if (Objects.isNull(trace)) {
+        SofaTracerSpan sofaTracerSpan = traceContext.getCurrentSpan();
+        if (Objects.isNull(sofaTracerSpan)) {
+            System.out.println("没有span");
             return;
         }
 
-        this.doAfter(trace, enhancedDefine, method, allArguments, parameterTypes, result);
+        this.doAfter(sofaTracerSpan, enhancedDefine, method, allArguments, parameterTypes, result);
     }
 
     /**
      * do after
      *
-     * @param trace          :
+     * @param sofaTracerSpan :
      * @param enhancedDefine :
      * @param method         :
      * @param allArguments   :
@@ -75,42 +87,26 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
      * @return : void
      * @author 江浩
      */
-    protected abstract void doAfter(Trace trace, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result);
+    protected abstract void doAfter(SofaTracerSpan sofaTracerSpan, EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result);
 
     @Override
     public void exception(EnhancedDefine enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Throwable t) {
 
     }
 
-    protected void print(Trace trace) {
-        SpanEventRecorder spanEventRecorder = trace.currentSpanEventRecorder();
-        Span span = trace.traceEnd();
+    protected void print(SofaTracerSpan sofaTracerSpan, EnhancedDefine enhancedDefine, Method method) {
+        //sofaTracerSpan.finish();
+        //发送 finish目前还没集成
 
-        SpanEvent spanEvent = span.getSpanEvent();
         System.out.println("threadId: " + Thread.currentThread().getId()
-                + "\t format: " + this.format(spanEvent.getEventTarget(), spanEvent.getEventMethod(), spanEvent.getArgs())
-                + "\t traceId: " + span.getTraceId()
-                + "\t preSpanId: " + span.getPreSpanId()
-                + "\t spanId: " + span.getId()
-                + "\t time: " + span.executeTime()
-                + "\t start: " + span.getStartTime()
-                + "\t end: " + span.getEndTime()
+                + "\t className:  " + enhancedDefine.getClass().getSimpleName()
+                + "\t methodName: " + method.getName()
+                + "\t traceId: " + sofaTracerSpan.getSofaTracerSpanContext().getTraceId()
+                + "\t preSpanId: " + sofaTracerSpan.getSofaTracerSpanContext().getParentId()
+                + "\t spanId: " + sofaTracerSpan.getSofaTracerSpanContext().getSpanId()
+                + "\t startTime: " + sofaTracerSpan.getStartTime()
+                + "\t endTime：" + sofaTracerSpan.getEndTime()
         );
-    }
-
-    protected String format(String eventTarget, String eventMethod, Object[] args) {
-
-        StringBuilder sb = new StringBuilder();
-        try {
-            if (!Objects.isNull(args)) {
-                for (Object object : args) {
-                    sb.append(Objects.isNull(object) ? null : object.getClass().getName()).append(",");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return String.format("%s.%s(%s)", eventTarget, eventMethod, StringUtils.substringBeforeLast(sb.toString(), ","));
     }
 
 
