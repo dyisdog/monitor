@@ -89,22 +89,4 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
 
     }
 
-    protected void print(SofaTracerSpan sofaTracerSpan, Object target, Method method) {
-        //sofaTracerSpan.finish();
-        //发送 finish目前还没集成
-
-        sofaTracerSpan.finish();
-
-//        System.out.println("threadId: " + Thread.currentThread().getId()
-//                + "\t className:  " + enhancedDefine.getClass().getSimpleName()
-//                + "\t methodName: " + method.getName()
-//                + "\t traceId: " + sofaTracerSpan.getSofaTracerSpanContext().getTraceId()
-//                + "\t preSpanId: " + sofaTracerSpan.getSofaTracerSpanContext().getParentId()
-//                + "\t spanId: " + sofaTracerSpan.getSofaTracerSpanContext().getSpanId()
-//                + "\t startTime: " + sofaTracerSpan.getStartTime()
-//                + "\t endTime：" + sofaTracerSpan.getEndTime()
-//        );
-    }
-
-
 }

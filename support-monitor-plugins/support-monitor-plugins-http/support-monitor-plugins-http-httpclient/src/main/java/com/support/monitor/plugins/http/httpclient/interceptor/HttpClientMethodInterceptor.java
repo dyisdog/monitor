@@ -24,7 +24,6 @@ public class HttpClientMethodInterceptor extends AbstractRemoteMethodInterceptor
 
     @Override
     protected void doAfter(SofaTracerSpan sofaTracerSpan, Object enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
-        this.print(sofaTracerSpan, enhancedDefine, method);
     }
 //    public HttpClientMethodInterceptor(TraceContext traceContext) {
 //        super(traceContext);

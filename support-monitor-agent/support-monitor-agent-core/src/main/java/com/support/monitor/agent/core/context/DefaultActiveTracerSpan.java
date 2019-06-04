@@ -6,16 +6,21 @@ import com.google.common.collect.Lists;
 import java.util.LinkedList;
 import java.util.Objects;
 
+/**
+ * 线程默认活跃span 的实现
+ *
+ * @author 江浩
+ */
 public class DefaultActiveTracerSpan implements ActiveTracerSpan {
 
     private LinkedList<SofaTracerSpan> tracerSpans = Lists.newLinkedList();
 
+
     @Override
-    public void addLast(SofaTracerSpan sofaTracerSpan) {
-        if (Objects.isNull(sofaTracerSpan)) {
-            return;
+    public void addFirst(SofaTracerSpan sofaTracerSpan) {
+        if (!Objects.isNull(sofaTracerSpan)) {
+            tracerSpans.addFirst(sofaTracerSpan);
         }
-        tracerSpans.addLast(sofaTracerSpan);
     }
 
     @Override
@@ -24,12 +29,13 @@ public class DefaultActiveTracerSpan implements ActiveTracerSpan {
     }
 
     @Override
-    public SofaTracerSpan getLast() {
-        return tracerSpans.getLast();
+    public SofaTracerSpan peekFirst() {
+        return tracerSpans.getFirst();
     }
 
     @Override
-    public SofaTracerSpan stopLast() {
-        return tracerSpans.removeLast();
+    public SofaTracerSpan pollFirst() {
+        return tracerSpans.removeFirst();
     }
+
 }

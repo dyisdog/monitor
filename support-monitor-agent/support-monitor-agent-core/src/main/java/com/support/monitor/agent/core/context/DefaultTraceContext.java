@@ -56,7 +56,7 @@ public class DefaultTraceContext extends SofaTracerThreadLocalTraceContext imple
             activeTracerSpan = new DefaultActiveTracerSpan();
             activeTracerSpans.set(activeTracerSpan);
         }
-        activeTracerSpan.addLast(span);
+        activeTracerSpan.addFirst(span);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class DefaultTraceContext extends SofaTracerThreadLocalTraceContext imple
             return null;
         }
 
-        return activeTracerSpan.getLast();
+        return activeTracerSpan.peekFirst();
     }
 
     @Override
@@ -83,7 +83,7 @@ public class DefaultTraceContext extends SofaTracerThreadLocalTraceContext imple
             return null;
         }
 
-        SofaTracerSpan sofaTracerSpan = activeTracerSpan.stopLast();
+        SofaTracerSpan sofaTracerSpan = activeTracerSpan.pollFirst();
         if (activeTracerSpan.size() <= 0) {
             activeTracerSpans.remove();
         }
@@ -104,7 +104,6 @@ public class DefaultTraceContext extends SofaTracerThreadLocalTraceContext imple
 
     @Override
     public void clear() {
-//        ActiveTracerSpan activeTracerSpan = activeTracerSpans.get();
         activeTracerSpans.remove();
     }
 

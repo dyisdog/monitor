@@ -20,6 +20,5 @@ public class SpringBeanMethodInterceptor extends AbstractMethodAroundInterceptor
 
     @Override
     protected void doAfter(SofaTracerSpan sofaTracerSpan, Object enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
-        super.print(sofaTracerSpan, enhancedDefine, method);
     }
 }

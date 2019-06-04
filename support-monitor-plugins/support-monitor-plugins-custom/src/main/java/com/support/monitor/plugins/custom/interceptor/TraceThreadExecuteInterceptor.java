@@ -18,7 +18,6 @@ public class TraceThreadExecuteInterceptor extends AbstractAsyncMethodAroundInte
 
     @Override
     protected void doAfter(SofaTracerSpan sofaTracerSpan, Object enhancedDefine, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
-        this.print(sofaTracerSpan, enhancedDefine, method);
     }
 
 //    public TraceThreadExecuteInterceptor(TraceContext traceContext) {

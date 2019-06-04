@@ -23,7 +23,6 @@ public class AfterTraceThreadExecuteInterceptor extends AbstractAsyncMethodAroun
 
     @Override
     protected void doAfter(SofaTracerSpan sofaTracerSpan, Object target, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
-        this.print(sofaTracerSpan, target, method);
     }
 
 //    public AfterTraceThreadExecuteInterceptor(TraceContext traceContext) {

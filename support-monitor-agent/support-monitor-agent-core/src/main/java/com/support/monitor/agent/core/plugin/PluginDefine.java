@@ -13,6 +13,12 @@ import java.util.List;
  */
 public interface PluginDefine {
 
+    /**
+     * 名称
+     *
+     * @return : java.lang.String
+     * @author 江浩
+     */
     String name();
 
     /**

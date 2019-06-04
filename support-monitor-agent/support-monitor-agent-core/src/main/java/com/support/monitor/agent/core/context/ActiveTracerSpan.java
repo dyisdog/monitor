@@ -2,32 +2,46 @@ package com.support.monitor.agent.core.context;
 
 import com.alipay.common.tracer.core.span.SofaTracerSpan;
 
+/**
+ * 单个线程活跃span的操作信息
+ * <p>
+ * LIFO   先进后出 栈原则操作
+ * </p>
+ *
+ * @author 江浩
+ */
 public interface ActiveTracerSpan {
 
+
     /**
-     * 添加span信息
+     * 添加在栈头部
      *
-     * @param sofaTracerSpan :
-     * @return : void
+     * @param sofaTracerSpan
+     */
+    void addFirst(SofaTracerSpan sofaTracerSpan);
+
+
+    /**
+     * 当前线程执行长度
+     *
+     * @return : java.lang.Integer
      * @author 江浩
      */
-    void addLast(SofaTracerSpan sofaTracerSpan);
-
     Integer size();
 
     /**
-     * 获取最后一个，但是不会删除
+     * 最后一个提交的，LIFO 原则
      *
      * @return : com.alipay.common.tracer.core.span.SofaTracerSpan
      * @author 江浩
      */
-    SofaTracerSpan getLast();
+    SofaTracerSpan peekFirst();
 
     /**
-     * 停止最后一个信息
+     * 停止最后一个提交信息
      *
      * @return : com.alipay.common.tracer.core.span.SofaTracerSpan
      * @author 江浩
      */
-    SofaTracerSpan stopLast();
+    SofaTracerSpan pollFirst();
 }
