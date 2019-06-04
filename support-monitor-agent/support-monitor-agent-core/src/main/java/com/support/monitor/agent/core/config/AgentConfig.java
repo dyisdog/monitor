@@ -60,4 +60,14 @@ public interface AgentConfig {
     default String getTracerType() {
         return "default";
     }
+
+    /**
+     * 获取传输方式
+     *
+     * @return : java.lang.String
+     * @author 江浩
+     */
+    default String getTransfer() {
+        return "kafka";
+    }
 }

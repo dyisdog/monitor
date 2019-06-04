@@ -16,6 +16,7 @@
         <module>support-monitor-transfer-dubbo</module>
         <module>support-monitor-transfer-kafka</module>
         <module>support-monitor-transfer-netty</module>
+        <module>support-monitor-transfer-core</module>
     </modules>
 
 </project>

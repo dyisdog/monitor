@@ -56,4 +56,9 @@ public class DefaultAgentConfig implements AgentConfig {
     public String getDebugPath() {
         return this.getString("agent.plugin.debug.path", "");
     }
+
+    @Override
+    public String getTransfer() {
+        return this.getString("agent.plugin.transfer.type", "kafka");
+    }
 }
