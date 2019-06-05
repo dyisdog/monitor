@@ -4,6 +4,7 @@ import com.support.monitor.agent.core.context.EnhanceContext;
 import com.support.monitor.agent.core.interceptor.ConstructorInterceptor;
 import com.support.monitor.agent.core.interceptor.MethodAroundInterceptor;
 import com.support.monitor.agent.core.interceptor.StaticMethodAroundInterceptor;
+import lombok.Getter;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -18,75 +20,111 @@ import java.util.UUID;
  */
 public abstract class AbstractPluginDefine implements PluginDefine {
 
-    private List<EnhanceContext> enhanceContexts = new ArrayList<>();
 
-    private ElementMatcher<? super TypeDescription> classDescription;
-
-    private String name;
+    private PluginDefineBuilder defineBuilder;
 
     public AbstractPluginDefine() {
-        this.init();
+        this.defineBuilder = new PluginDefineBuilder();
+        this.init(this.defineBuilder);
     }
 
     /**
      * 初始方法
+     *
+     * @param defineBuilder
      */
-    public abstract void init();
+    public abstract void init(PluginDefineBuilder defineBuilder);
 
-    private void binder(EnhanceContext enhanceContext) {
-        if (!enhanceContexts.contains(enhanceContext)) {
-            enhanceContexts.add(enhanceContext);
-        }
-    }
 
     @Override
     public ElementMatcher<? super TypeDescription> classDescription() {
-        return this.classDescription;
+        return defineBuilder.getClassDescription();
     }
 
 
     @Override
     public List<EnhanceContext> enhanceContexts() {
-        return enhanceContexts;
+        return defineBuilder.getInterceptorBuilder().getEnhanceContexts();
     }
 
 
     @Override
     public String name() {
-        return StringUtils.isBlank(this.name) ? UUID.randomUUID().toString() : this.name;
+        final String name = defineBuilder.getName();
+        return StringUtils.isBlank(name) ? UUID.randomUUID().toString() : name;
     }
 
-    public void pointName(String name) {
-        this.name = name;
+
+    @Getter
+    public static class PluginDefineBuilder {
+
+        private ElementMatcher<? super TypeDescription> classDescription;
+
+        private String name;
+
+        private InterceptorBuilder interceptorBuilder;
+
+        public PluginDefineBuilder pointName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public InterceptorBuilder pointClass(ElementMatcher<? super TypeDescription> classDescription) {
+            this.classDescription = classDescription;
+            return interceptorBuilder = new InterceptorBuilder(this.name);
+        }
     }
 
-    public void pointClass(ElementMatcher<? super TypeDescription> classDescription) {
-        this.classDescription = classDescription;
+
+    @Getter
+    public static class InterceptorBuilder {
+
+        private List<EnhanceContext> enhanceContexts = new ArrayList<>();
+        private String pluginName;
+
+        private InterceptorBuilder() {
+        }
+
+        public InterceptorBuilder(String pluginName) {
+            this.pluginName = pluginName;
+        }
+
+        public <R extends MethodAroundInterceptor> InterceptorBuilder pointMethod(ElementMatcher<? super MethodDescription> methodDescription, Class<R> interceptorClass) {
+            pointSetting(methodDescription, interceptorClass.getName());
+            return this;
+        }
+
+        public <R extends StaticMethodAroundInterceptor> InterceptorBuilder pointStaticMethod(ElementMatcher<? super MethodDescription> methodDescription, Class<R> interceptorClass) {
+            pointSetting(methodDescription, interceptorClass.getName());
+            return this;
+        }
+
+        public <R extends ConstructorInterceptor> InterceptorBuilder pointConstructor(ElementMatcher<? super MethodDescription> methodDescription, Class<R> interceptorClass) {
+            pointSetting(methodDescription, interceptorClass.getName());
+            return this;
+        }
+
+        private void pointSetting(ElementMatcher<? super MethodDescription> methodDescription, String interceptorClassName) {
+
+            if (Objects.isNull(methodDescription) || StringUtils.isBlank(interceptorClassName)) {
+                return;
+            }
+
+            EnhanceContext enhanceContext = new EnhanceContext();
+            enhanceContext.setMethodDescription(methodDescription);
+            enhanceContext.setInterceptorClassName(interceptorClassName);
+            enhanceContext.setRefPluginName(this.pluginName);
+
+            binder(enhanceContext);
+        }
+
+        private void binder(EnhanceContext enhanceContext) {
+            if (!enhanceContexts.contains(enhanceContext)) {
+                enhanceContexts.add(enhanceContext);
+            }
+        }
+
     }
 
-    /**
-     * @param methodDescription :
-     * @param interceptorClass  :
-     * @return : com.support.monitor.agent.core.plugin.AbstractPluginDefine
-     * @author 江浩
-     */
-    public <R extends MethodAroundInterceptor> void pointMethod(ElementMatcher<? super MethodDescription> methodDescription, Class<R> interceptorClass) {
-        pointSetting(methodDescription, interceptorClass.getName());
-    }
-
-    public <R extends StaticMethodAroundInterceptor> void pointStaticMethod(ElementMatcher<? super MethodDescription> methodDescription, Class<R> interceptorClass) {
-        pointSetting(methodDescription, interceptorClass.getName());
-    }
-
-    public <R extends ConstructorInterceptor> void pointConstructor(ElementMatcher<? super MethodDescription> methodDescription, Class<R> interceptorClass) {
-        pointSetting(methodDescription, interceptorClass.getName());
-    }
-
-    private void pointSetting(ElementMatcher<? super MethodDescription> methodDescription, String name) {
-        EnhanceContext enhanceContext = new EnhanceContext();
-        enhanceContext.setMethodDescription(methodDescription);
-        enhanceContext.setInterceptorClassName(name);
-        binder(enhanceContext);
-    }
 
 }

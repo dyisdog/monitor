@@ -17,11 +17,11 @@ public class CustomSdkTraceThreadPlugin extends AbstractPluginDefine {
     private static final String SKY_RUNNABLE = "org.apache.skywalking.apm.toolkit.trace.RunnableWrapper";
 
     @Override
-    public void init() {
-        pointName("custom-sdk-async");
-        pointClass(named(SKY_RUNNABLE));
-        pointConstructor(any(), CustomSdkPluginConstructorInterceptor.class);
-        pointMethod(named("run"), CustomSdkPluginMethodInterceptor.class);
+    public void init(PluginDefineBuilder defineBuilder) {
+        defineBuilder.pointName("custom-sdk-async")
+                .pointClass(named(SKY_RUNNABLE))
+                .pointConstructor(any(), CustomSdkPluginConstructorInterceptor.class)
+                .pointMethod(named("run"), CustomSdkPluginMethodInterceptor.class);
 
     }
 }

@@ -17,4 +17,6 @@ public class EnhanceContext {
     private ElementMatcher<? super MethodDescription> methodDescription;
 
     private String interceptorClassName;
+
+    private String refPluginName;
 }

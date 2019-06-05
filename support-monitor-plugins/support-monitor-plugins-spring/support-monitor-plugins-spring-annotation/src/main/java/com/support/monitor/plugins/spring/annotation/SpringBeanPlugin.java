@@ -16,20 +16,20 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  */
 public class SpringBeanPlugin extends AbstractPluginDefine {
     @Override
-    public void init() {
+    public void init(PluginDefineBuilder defineBuilder) {
 
-        pointName("spring-bean");
-        //@Service
-        pointClass(isAnnotatedWith(named(Service.class.getName()))
-                //@Component
-                .or(isAnnotatedWith(named(Component.class.getName())))
-                //@Repository
-                .or(isAnnotatedWith(named(Repository.class.getName())))
-                .or(isAnnotatedWith(named(Bean.class.getName())))
-        );
-
-        pointMethod(any(),
-                SpringPluginMethodInterceptor.class);
+        defineBuilder
+                .pointName("spring-bean")
+                //@Service
+                .pointClass(isAnnotatedWith(named(Service.class.getName()))
+                        //@Component
+                        .or(isAnnotatedWith(named(Component.class.getName())))
+                        //@Repository
+                        .or(isAnnotatedWith(named(Repository.class.getName())))
+                        .or(isAnnotatedWith(named(Bean.class.getName())))
+                )
+                .pointMethod(any(),
+                        SpringPluginMethodInterceptor.class);
 
     }
 }

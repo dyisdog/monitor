@@ -2,6 +2,7 @@ package com.support.monitor.agent.core.handler;
 
 import com.google.inject.Inject;
 import com.support.monitor.agent.core.config.AgentConfig;
+import com.support.monitor.agent.core.context.EnhanceContext;
 import com.support.monitor.agent.core.debug.EnhanceDebugFactory;
 import com.support.monitor.agent.core.interceptor.enhance.EnhanceFactory;
 import com.support.monitor.agent.core.plugin.PluginDefine;
@@ -13,6 +14,7 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.instrument.Instrumentation;
@@ -77,9 +79,10 @@ public class DefaultApplicationHandler implements ApplicationHandler {
         if (StringUtils.isBlank(pluginName)) {
             log.info("plugin name is empty ignored: {}", pluginDefine);
         } else {
-            log.info("plugin name loading: {}", pluginDefine.name());
+            List<EnhanceContext> enhanceContexts = pluginDefine.enhanceContexts();
+            log.info("plugin name loading: {} len {}", pluginDefine.name(), CollectionUtils.isEmpty(enhanceContexts) ? 0 : enhanceContexts.size());
             this.agentBuilder.type(ElementMatchers.not(isInterface()).and(classDescription))
-                    .transform((builder, typeDescription, classLoader, module) -> enhanceFactory.enhance(builder, pluginDefine))
+                    .transform((builder, typeDescription, classLoader, module) -> enhanceFactory.enhance(builder, enhanceContexts))
                     .with(new AgentEnhanceLister(this.enhanceDebugFactory))
                     .installOn(this.instrumentation);
         }

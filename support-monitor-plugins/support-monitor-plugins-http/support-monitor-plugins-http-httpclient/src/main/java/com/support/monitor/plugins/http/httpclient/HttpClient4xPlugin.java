@@ -16,11 +16,11 @@ public class HttpClient4xPlugin extends AbstractPluginDefine {
 
 
     @Override
-    public void init() {
-        pointName(PLUGIN_NAME);
-        pointClass(named("org.apache.http.impl.client.MinimalHttpClient")
-                .or(named("org.apache.http.impl.client.InternalHttpClient"))
-                .or(named("org.apache.http.impl.client.AbstractHttpClient")));
-        pointMethod(named("execute"), HttpClientMethodInterceptor.class);
+    public void init(PluginDefineBuilder defineBuilder) {
+        defineBuilder.pointName(PLUGIN_NAME)
+                .pointClass(named("org.apache.http.impl.client.MinimalHttpClient")
+                        .or(named("org.apache.http.impl.client.InternalHttpClient"))
+                        .or(named("org.apache.http.impl.client.AbstractHttpClient")))
+                .pointMethod(named("execute"), HttpClientMethodInterceptor.class);
     }
 }

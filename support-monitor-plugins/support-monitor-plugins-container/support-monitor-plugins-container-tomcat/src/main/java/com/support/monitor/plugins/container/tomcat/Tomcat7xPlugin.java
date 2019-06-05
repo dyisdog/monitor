@@ -15,16 +15,15 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  */
 public class Tomcat7xPlugin extends AbstractPluginDefine {
     @Override
-    public void init() {
+    public void init(PluginDefineBuilder defineBuilder) {
 
-        pointName("tomcat7x");
+        defineBuilder.pointName("tomcat7x")
+                .pointClass(named("org.apache.catalina.core.StandardHostValve"))
 
-        pointClass(named("org.apache.catalina.core.StandardHostValve"));
-
-        pointMethod(named("invoke").and(takesArguments(2))
-                        .and(takesArgument(0, named("org.apache.catalina.connector.Request")))
-                        .and(takesArgument(1, named("org.apache.catalina.connector.Response")))
-                , AbstractMethodAroundInterceptor.class
-        );
+                .pointMethod(named("invoke").and(takesArguments(2))
+                                .and(takesArgument(0, named("org.apache.catalina.connector.Request")))
+                                .and(takesArgument(1, named("org.apache.catalina.connector.Response")))
+                        , AbstractMethodAroundInterceptor.class
+                );
     }
 }

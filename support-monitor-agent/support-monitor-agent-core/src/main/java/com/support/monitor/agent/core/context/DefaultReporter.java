@@ -47,6 +47,7 @@ public class DefaultReporter implements Reporter {
 
         SofaTracerSpanContext sofaTracerSpanContext = sofaTracerSpan.getSofaTracerSpanContext();
         TransmitObject transmitObject = new TransmitObject()
+                .setOperationName(sofaTracerSpan.getOperationName())
                 .setTraceId(sofaTracerSpanContext.getTraceId())
                 .setParentId(sofaTracerSpanContext.getParentId())
                 .setSpanId(sofaTracerSpanContext.getSpanId())

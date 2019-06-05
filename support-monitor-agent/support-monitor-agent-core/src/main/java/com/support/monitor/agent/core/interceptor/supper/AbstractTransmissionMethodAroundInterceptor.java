@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
-public class AbstractTransmissionMethodAroundInterceptor<H> extends AbstractMethodAroundInterceptor {
+public abstract class AbstractTransmissionMethodAroundInterceptor<H> extends AbstractMethodAroundInterceptor {
 
     public AbstractTransmissionMethodAroundInterceptor(TraceContext traceContext) {
         super(traceContext);
@@ -29,7 +29,7 @@ public class AbstractTransmissionMethodAroundInterceptor<H> extends AbstractMeth
             return;
         }
         SofaTracerSpanContext spanContext = sofaTracerSpan.getSofaTracerSpanContext();
-        remoteTransmission.transmission(remoteHandle, TRANSMISSION_KEY, Objects.isNull(spanContext) ? "" : spanContext.toString());
+        remoteTransmission.transmission(remoteHandle, TRANSMISSION_KEY, Objects.isNull(spanContext) ? "" : sofaTracerSpan.toString());
         super.before(interceptContext);
     }
 }

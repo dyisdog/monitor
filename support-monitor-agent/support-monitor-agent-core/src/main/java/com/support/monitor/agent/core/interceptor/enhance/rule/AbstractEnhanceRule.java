@@ -2,7 +2,6 @@ package com.support.monitor.agent.core.interceptor.enhance.rule;
 
 import com.support.monitor.agent.core.context.EnhanceContext;
 import com.support.monitor.agent.core.interceptor.InterceptorFactory;
-import com.support.monitor.agent.core.plugin.PluginDefine;
 import com.support.monitor.commons.binder.utils.RefClassUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.dynamic.DynamicType;
@@ -36,9 +35,8 @@ public abstract class AbstractEnhanceRule<R> implements EnhanceRule {
         try {
             InterceptorFactory interceptorFactory = enhanceRuleCallback.getInterceptorFactory();
             EnhanceContext enhanceContext = enhanceRuleCallback.getEnhanceContext();
-            PluginDefine pluginDefine = enhanceRuleCallback.getPluginDefine();
 
-            Object object = interceptorFactory.newInterceptorObject(enhanceContext.getInterceptorClassName(), pluginDefine);
+            Object object = interceptorFactory.newInterceptorObject(enhanceContext);
 
             if (rClass.isAssignableFrom(object.getClass()) || need()) {
                 DynamicType.Builder<?> newBuilder = this.enhanceDefine(builder, (R) object, enhanceContext);

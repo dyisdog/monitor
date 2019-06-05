@@ -8,4 +8,6 @@ public class SpringPluginMethodInterceptor extends AbstractMethodAroundIntercept
     public SpringPluginMethodInterceptor(TraceContext traceContext) {
         super(traceContext);
     }
+
+
 }

@@ -2,7 +2,6 @@ package com.support.monitor.agent.core.interceptor.enhance.rule;
 
 import com.support.monitor.agent.core.context.EnhanceContext;
 import com.support.monitor.agent.core.interceptor.InterceptorFactory;
-import com.support.monitor.agent.core.plugin.PluginDefine;
 import net.bytebuddy.dynamic.DynamicType;
 
 /**
@@ -32,7 +31,6 @@ public interface EnhanceRule {
 
         EnhanceContext getEnhanceContext();
 
-        PluginDefine getPluginDefine();
 
     }
 

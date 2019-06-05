@@ -24,6 +24,8 @@ import java.util.Map;
 @Accessors(chain = true)
 public class TransmitObject implements Serializable {
 
+    private String operationName;
+
     private String traceId;
 
     private String spanId;

@@ -4,10 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.alipay.common.tracer.core.span.SofaTracerSpan;
 import com.support.monitor.agent.core.context.TraceContext;
 import com.support.monitor.agent.core.interceptor.InterceptContext;
-import com.support.monitor.agent.core.interceptor.InterceptorAware;
+import com.support.monitor.agent.core.interceptor.InterceptorPluginAware;
 import com.support.monitor.agent.core.interceptor.MethodAroundInterceptor;
-import com.support.monitor.agent.core.plugin.PluginDefine;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 import static io.opentracing.tag.Tags.SPAN_KIND;
 import static io.opentracing.tag.Tags.SPAN_KIND_SERVER;
@@ -18,21 +18,22 @@ import static io.opentracing.tag.Tags.SPAN_KIND_SERVER;
  * @author 江浩
  */
 @Getter
-public abstract class AbstractMethodAroundInterceptor implements MethodAroundInterceptor, InterceptorAware {
+public abstract class AbstractMethodAroundInterceptor implements MethodAroundInterceptor, InterceptorPluginAware {
 
     public static final String TRANSMISSION_KEY = "TRANSMISSION_KEY";
 
     private TraceContext traceContext;
 
-    private PluginDefine pluginDefine;
+    private String pluginName;
 
     public AbstractMethodAroundInterceptor(TraceContext traceContext) {
         this.traceContext = traceContext;
     }
 
+
     @Override
-    public void interceptorWithPlugin(PluginDefine pluginDefine) {
-        this.pluginDefine = pluginDefine;
+    public void defineName(String pluginName) {
+        this.pluginName = pluginName;
     }
 
     @Override
@@ -45,16 +46,14 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
     public SofaTracerSpan nextSofaTracerSpan(SofaTracerSpan preSofaTracerSpan) {
         SofaTracerSpan thisSofaTracerSpan = (SofaTracerSpan) getTraceContext()
                 .getSofaTracer()
-                .buildSpan(pluginDefine.name())
+                .buildSpan(StringUtils.isBlank(pluginName) ? this.getClass().getName() : pluginName)
                 .withTag(SPAN_KIND.getKey(), SPAN_KIND_SERVER)
                 .asChildOf(preSofaTracerSpan)
                 .start();
-
         getTraceContext().push(thisSofaTracerSpan);
 
         return thisSofaTracerSpan;
     }
-
 
     @Override
     public void after(InterceptContext interceptContext, Object result, Throwable throwable) {

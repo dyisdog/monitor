@@ -16,32 +16,24 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 public class SpringWebMvcPlugin extends AbstractPluginDefine {
 
     @Override
-    public void init() {
-        pointName("spring-mvc");
-        pointClass(
-                isAnnotatedWith(named(Controller.class.getName()))
-                        .or(isAnnotatedWith(named(RestController.class.getName())))
-        );
-
-        pointMethod(
-                isAnnotatedWith(named(GetMapping.class.getName()))
-                , SpringPluginMethodInterceptor.class);
-
-        pointMethod(
-                isAnnotatedWith(named(PostMapping.class.getName()))
-                , SpringPluginMethodInterceptor.class);
-
-        pointMethod(
-                isAnnotatedWith(named(PutMapping.class.getName()))
-                , SpringPluginMethodInterceptor.class);
-
-        pointMethod(
-                isAnnotatedWith(named(DeleteMapping.class.getName()))
-                , SpringPluginMethodInterceptor.class);
-
-        pointMethod(
-                isAnnotatedWith(named(PatchMapping.class.getName()))
-                , SpringPluginMethodInterceptor.class);
+    public void init(PluginDefineBuilder defineBuilder) {
+        defineBuilder.pointName("spring-mvc")
+                .pointClass(isAnnotatedWith(named(Controller.class.getName()))
+                        .or(isAnnotatedWith(named(RestController.class.getName()))))
+                .pointMethod(isAnnotatedWith(named(GetMapping.class.getName()))
+                        , SpringPluginMethodInterceptor.class)
+                .pointMethod(
+                        isAnnotatedWith(named(PostMapping.class.getName()))
+                        , SpringPluginMethodInterceptor.class)
+                .pointMethod(
+                        isAnnotatedWith(named(PutMapping.class.getName()))
+                        , SpringPluginMethodInterceptor.class)
+                .pointMethod(
+                        isAnnotatedWith(named(DeleteMapping.class.getName()))
+                        , SpringPluginMethodInterceptor.class)
+                .pointMethod(
+                        isAnnotatedWith(named(PatchMapping.class.getName()))
+                        , SpringPluginMethodInterceptor.class);
     }
 
 

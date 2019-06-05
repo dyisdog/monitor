@@ -1,10 +1,10 @@
 package com.support.monitor.agent.core.interceptor.enhance;
 
+import com.support.monitor.agent.core.context.EnhanceContext;
 import com.support.monitor.agent.core.context.TraceContext;
 import com.support.monitor.agent.core.exception.ConstructorException;
-import com.support.monitor.agent.core.interceptor.InterceptorAware;
 import com.support.monitor.agent.core.interceptor.InterceptorFactory;
-import com.support.monitor.agent.core.plugin.PluginDefine;
+import com.support.monitor.agent.core.interceptor.InterceptorPluginAware;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ClassUtils;
 
@@ -27,53 +27,44 @@ public class DefaultInterceptorFactory implements InterceptorFactory {
     }
 
     @Override
-    public Object newInterceptorObject(String className, PluginDefine pluginDefine) {
+    public Object newInterceptorObject(EnhanceContext enhanceContext) {
 
+        final String interceptorClassName = enhanceContext.getInterceptorClassName();
+        final String pluginName = enhanceContext.getRefPluginName();
         try {
-            Class<?> aClass = ClassUtils.getClass(className);
+            Class<?> aClass = ClassUtils.getClass(interceptorClassName);
             Object object = null;
-
             try {
-                Constructor<?> constructor = aClass.getDeclaredConstructor(TraceContext.class, PluginDefine.class);
-                object = constructor.newInstance(this.traceContext, pluginDefine);
-            } catch (NoSuchMethodException e) {
-                try {
-                    Constructor<?> constructor = aClass.getDeclaredConstructor(TraceContext.class);
-                    object = constructor.newInstance(this.traceContext);
+                Constructor<?> constructor = aClass.getDeclaredConstructor(TraceContext.class);
+                object = constructor.newInstance(this.traceContext);
+                invokeMethod(pluginName, aClass, object);
 
-                    invokeMethod(pluginDefine, aClass, object);
-
-                } catch (NoSuchMethodException ignored) {
-                }
+            } catch (NoSuchMethodException ignored) {
             }
-
             if (Objects.isNull(object)) {
-                throw builder(className);
+                throw builder(interceptorClassName);
             }
 
             return object;
         } catch (Exception e) {
-            throw builder(className);
+            throw builder(interceptorClassName);
         }
     }
 
-    private void invokeMethod(PluginDefine pluginDefine, Class<?> aClass, Object object) {
+    private void invokeMethod(String pluginName, Class<?> aClass, Object object) {
 
-        if (InterceptorAware.class.isAssignableFrom(aClass)) {
+        if (InterceptorPluginAware.class.isAssignableFrom(aClass)) {
             try {
-                Method method = aClass.getMethod("interceptorWithPlugin", PluginDefine.class);
-                method.invoke(object, pluginDefine);
+                Method method = aClass.getMethod("defineName", String.class);
+                method.invoke(object, pluginName);
             } catch (Exception ignored) {
             }
         }
     }
 
-
     private ConstructorException builder(String className) {
         return new ConstructorException(String.format("AroundInterceptor Constructor format: %s",
-                className + "(com.support.monitor.agent.core.context.trace.TraceContext  arg0)") + "\n or \n" +
-                String.format("AroundInterceptor Constructor format: %s",
-                        className + "(com.support.monitor.agent.core.context.trace.TraceContext  arg0,com.support.monitor.agent.core.plugin.PluginDefine arg1)"));
+                className + "(com.support.monitor.agent.core.context.trace.TraceContext  arg0)"));
     }
 
 
