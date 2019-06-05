@@ -1,8 +1,8 @@
 package com.support.monitor.plugins.custom;
 
 import com.support.monitor.agent.core.plugin.AbstractPluginDefine;
-import com.support.monitor.plugins.custom.interceptor.CustomSdkConstructorInterceptor;
-import com.support.monitor.plugins.custom.interceptor.TraceThreadExecuteInterceptor;
+import com.support.monitor.plugins.custom.interceptor.CustomSdkPluginConstructorInterceptor;
+import com.support.monitor.plugins.custom.interceptor.CustomSdkPluginMethodInterceptor;
 
 import static net.bytebuddy.matcher.ElementMatchers.any;
 import static net.bytebuddy.matcher.ElementMatchers.named;
@@ -20,8 +20,8 @@ public class CustomSdkTraceThreadPlugin extends AbstractPluginDefine {
     public void init() {
         pointName("custom-sdk-async");
         pointClass(named(SKY_RUNNABLE));
-        pointConstructor(any(), CustomSdkConstructorInterceptor.class);
-        pointMethod(named("run"), TraceThreadExecuteInterceptor.class);
+        pointConstructor(any(), CustomSdkPluginConstructorInterceptor.class);
+        pointMethod(named("run"), CustomSdkPluginMethodInterceptor.class);
 
     }
 }

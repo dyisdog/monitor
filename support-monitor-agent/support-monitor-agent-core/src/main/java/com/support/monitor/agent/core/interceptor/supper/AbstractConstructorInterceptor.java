@@ -1,18 +1,15 @@
 package com.support.monitor.agent.core.interceptor.supper;
 
+import com.alipay.common.tracer.core.span.SofaTracerSpan;
 import com.support.monitor.agent.core.context.TraceContext;
 import com.support.monitor.agent.core.interceptor.ConstructorInterceptor;
 import com.support.monitor.agent.core.interceptor.enhance.EnhancedDefine;
-import lombok.Getter;
 
 import java.util.Objects;
 
 /**
- * 构造器调用注入当前SpanRecorder
- *
  * @author 江浩
  */
-@Getter
 public class AbstractConstructorInterceptor implements ConstructorInterceptor {
 
     protected TraceContext traceContext;
@@ -23,9 +20,9 @@ public class AbstractConstructorInterceptor implements ConstructorInterceptor {
 
     @Override
     public void onConstruct(EnhancedDefine enhancedDefine, Object[] allArguments) {
-        if (!Objects.isNull(traceContext)) {
-            enhancedDefine.setEnhancedInstanceTraceContext(traceContext.getCurrentSpan());
+        SofaTracerSpan sofaTracerSpan = traceContext.getCurrentSpan();
+        if (!Objects.isNull(enhancedDefine)) {
+            enhancedDefine.setEnhancedInstanceTraceContext(sofaTracerSpan);
         }
-
     }
 }

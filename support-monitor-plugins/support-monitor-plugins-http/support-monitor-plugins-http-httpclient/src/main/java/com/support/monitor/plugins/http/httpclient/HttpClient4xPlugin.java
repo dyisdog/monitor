@@ -12,9 +12,12 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
  */
 public class HttpClient4xPlugin extends AbstractPluginDefine {
 
+    public static final String PLUGIN_NAME = "org.apache.HttpClient4x";
+
+
     @Override
     public void init() {
-        pointName("org.apache.HttpClient4x");
+        pointName(PLUGIN_NAME);
         pointClass(named("org.apache.http.impl.client.MinimalHttpClient")
                 .or(named("org.apache.http.impl.client.InternalHttpClient"))
                 .or(named("org.apache.http.impl.client.AbstractHttpClient")));

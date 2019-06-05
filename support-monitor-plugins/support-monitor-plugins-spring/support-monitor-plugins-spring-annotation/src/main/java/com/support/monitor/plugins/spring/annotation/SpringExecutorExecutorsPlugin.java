@@ -1,7 +1,7 @@
 package com.support.monitor.plugins.spring.annotation;
 
 import com.support.monitor.agent.core.plugin.AbstractPluginDefine;
-import com.support.monitor.plugins.spring.annotation.interceptor.SpringBeanMethodInterceptor;
+import com.support.monitor.plugins.spring.annotation.interceptor.SpringPluginMethodInterceptor;
 
 import java.util.concurrent.Callable;
 
@@ -12,12 +12,12 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  *
  * @author 江浩
  */
-public class SpringAsyncExecutorsPlugin extends AbstractPluginDefine {
+public class SpringExecutorExecutorsPlugin extends AbstractPluginDefine {
 
 
     @Override
     public void init() {
-        pointName("spring-async");
+        pointName("spring-executor");
         pointClass(named("org.springframework.scheduling.concurrent.ConcurrentTaskExecutor")
                 .or(named("org.springframework.core.task.SimpleAsyncTaskExecutor"))
                 .or(named("org.springframework.scheduling.quartz.SimpleThreadPoolTaskExecutor"))
@@ -29,7 +29,8 @@ public class SpringAsyncExecutorsPlugin extends AbstractPluginDefine {
         );
         pointMethod(named("execute").and(takesArguments(1))
                         .and(takesArgument(0, Runnable.class).or(takesArgument(0, Callable.class)))
-                , SpringBeanMethodInterceptor.class);
-        pointMethod(named("submit"), SpringBeanMethodInterceptor.class);
+                , SpringPluginMethodInterceptor.class);
+
+        pointMethod(named("submit"), SpringPluginMethodInterceptor.class);
     }
 }

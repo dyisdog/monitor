@@ -28,13 +28,13 @@ public class EnhanceFactoryProvider implements Provider<EnhanceFactory> {
             InterceptorFactory interceptorFactory,
             @Named(EnhanceRule.Key.METHOD) EnhanceRule enhanceMethod,
             @Named(EnhanceRule.Key.CONSTRUCTOR) EnhanceRule enhanceConstructor,
-            @Named(EnhanceRule.Key.STATIC_METHOD) EnhanceRule enhanceStatic) {
+            @Named(EnhanceRule.Key.STATIC_METHOD) EnhanceRule enhanceStatic,
+            @Named(EnhanceRule.Key.SOURCE) EnhanceRule enhanceSource) {
         this.interceptorFactory = interceptorFactory;
         this.enhanceRules.add(enhanceConstructor);
         this.enhanceRules.add(enhanceMethod);
         this.enhanceRules.add(enhanceStatic);
-        //this.enhanceRules.add(enhanceSource);
-        //@Named(EnhanceRule.Key.SOURCE) EnhanceRule enhanceSource
+        this.enhanceRules.add(enhanceSource);
     }
 
     @Override

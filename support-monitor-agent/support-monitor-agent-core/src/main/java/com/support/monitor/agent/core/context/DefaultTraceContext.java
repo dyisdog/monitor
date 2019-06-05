@@ -1,5 +1,6 @@
 package com.support.monitor.agent.core.context;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.common.tracer.core.SofaTracer;
 import com.alipay.common.tracer.core.context.trace.SofaTracerThreadLocalTraceContext;
 import com.alipay.common.tracer.core.span.SofaTracerSpan;
@@ -36,12 +37,20 @@ public class DefaultTraceContext extends SofaTracerThreadLocalTraceContext imple
     }
 
     @Override
-    public SofaTracerSpan stopCurrentTracerSpan() {
+    public SofaTracerSpan stopCurrentTracerSpan(JSONObject jsonObject) {
         SofaTracerSpan sofaTracerSpan = this.pop();
+        if (!Objects.isNull(jsonObject)) {
+            sofaTracerSpan.setBaggageItem(TraceContext.STOP_OBJECT_KEY, jsonObject.toJSONString());
+        }
         if (!Objects.isNull(sofaTracerSpan)) {
             sofaTracerSpan.finish();
         }
         return sofaTracerSpan;
+    }
+
+    @Override
+    public SofaTracerSpan stopCurrentTracerSpan() {
+        return this.stopCurrentTracerSpan(null);
     }
 
 

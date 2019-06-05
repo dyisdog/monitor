@@ -1,5 +1,6 @@
 package com.support.monitor.agent.core.interceptor.callable;
 
+import com.support.monitor.agent.core.interceptor.InterceptContext;
 import com.support.monitor.agent.core.interceptor.MethodAroundInterceptor;
 import net.bytebuddy.implementation.bind.annotation.*;
 
@@ -26,13 +27,22 @@ public class MethodsInterceptWithOverrideArgsCallable {
             @Morph OverrideCallable callable) throws Exception {
 
         Object result = null;
+        Throwable throwable = null;
+
+        InterceptContext interceptContext = InterceptContext.builder()
+                .target(object)
+                .method(method)
+                .args(allArguments)
+                .build();
         try {
-            methodAroundInterceptor.before(object, method, allArguments, method.getParameterTypes());
+            methodAroundInterceptor.before(interceptContext);
             result = callable.invoker(allArguments);
-            methodAroundInterceptor.after(object, method, allArguments, method.getParameterTypes(), result);
         } catch (Exception e) {
-            methodAroundInterceptor.exception(object, method, allArguments, method.getParameterTypes(), e);
+            throwable = e;
+        } finally {
+            methodAroundInterceptor.after(interceptContext, result, throwable);
         }
+
         return result;
     }
 

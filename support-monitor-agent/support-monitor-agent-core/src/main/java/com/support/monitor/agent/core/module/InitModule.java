@@ -13,10 +13,7 @@ import com.support.monitor.agent.core.handler.ApplicationHandler;
 import com.support.monitor.agent.core.handler.DefaultApplicationHandler;
 import com.support.monitor.agent.core.interceptor.InterceptorFactory;
 import com.support.monitor.agent.core.interceptor.enhance.EnhanceFactory;
-import com.support.monitor.agent.core.interceptor.enhance.rule.EnhanceConstructorRule;
-import com.support.monitor.agent.core.interceptor.enhance.rule.EnhanceMethodRule;
-import com.support.monitor.agent.core.interceptor.enhance.rule.EnhanceRule;
-import com.support.monitor.agent.core.interceptor.enhance.rule.EnhanceStaticMethodRule;
+import com.support.monitor.agent.core.interceptor.enhance.rule.*;
 import com.support.monitor.agent.core.module.provider.*;
 import net.bytebuddy.agent.builder.AgentBuilder;
 
@@ -73,7 +70,7 @@ public class InitModule extends AbstractModule {
         bind(EnhanceRule.class).annotatedWith(Names.named(EnhanceRule.Key.METHOD)).to(EnhanceMethodRule.class).in(Scopes.SINGLETON);
         bind(EnhanceRule.class).annotatedWith(Names.named(EnhanceRule.Key.CONSTRUCTOR)).to(EnhanceConstructorRule.class).in(Scopes.SINGLETON);
         bind(EnhanceRule.class).annotatedWith(Names.named(EnhanceRule.Key.STATIC_METHOD)).to(EnhanceStaticMethodRule.class).in(Scopes.SINGLETON);
-        //bind(EnhanceRule.class).annotatedWith(Names.named(EnhanceRule.Key.SOURCE)).to(EnhanceSourceRule.class).in(Scopes.SINGLETON);
+        bind(EnhanceRule.class).annotatedWith(Names.named(EnhanceRule.Key.SOURCE)).to(EnhanceSourceRule.class).in(Scopes.SINGLETON);
     }
 
 }

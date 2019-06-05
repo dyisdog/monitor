@@ -1,92 +1,71 @@
 package com.support.monitor.agent.core.interceptor.supper;
 
-import com.alipay.common.tracer.core.SofaTracer;
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.common.tracer.core.span.SofaTracerSpan;
 import com.support.monitor.agent.core.context.TraceContext;
+import com.support.monitor.agent.core.interceptor.InterceptContext;
+import com.support.monitor.agent.core.interceptor.InterceptorAware;
 import com.support.monitor.agent.core.interceptor.MethodAroundInterceptor;
-import io.opentracing.tag.Tags;
+import com.support.monitor.agent.core.plugin.PluginDefine;
 import lombok.Getter;
 
-import java.lang.reflect.Method;
-import java.util.Objects;
+import static io.opentracing.tag.Tags.SPAN_KIND;
+import static io.opentracing.tag.Tags.SPAN_KIND_SERVER;
 
 /**
+ * 方法拦截器
+ *
  * @author 江浩
  */
 @Getter
-public abstract class AbstractMethodAroundInterceptor implements MethodAroundInterceptor {
+public abstract class AbstractMethodAroundInterceptor implements MethodAroundInterceptor, InterceptorAware {
+
+    public static final String TRANSMISSION_KEY = "TRANSMISSION_KEY";
 
     private TraceContext traceContext;
+
+    private PluginDefine pluginDefine;
 
     public AbstractMethodAroundInterceptor(TraceContext traceContext) {
         this.traceContext = traceContext;
     }
 
     @Override
-    public void before(Object target, Method method, Object[] allArguments, Class<?>[] parameterTypes) {
-        try {
-
-            SofaTracerSpan sofaTracerSpan = traceContext.getCurrentSpan();
-
-            if (Objects.isNull(sofaTracerSpan)) {
-                SofaTracer sofaTracer = getTraceContext().getSofaTracer();
-                sofaTracerSpan = (SofaTracerSpan) sofaTracer.buildSpan(this.getClass().getSimpleName())
-                        .withTag(Tags.SPAN_KIND.getKey(), Tags.SPAN_KIND_SERVER).start();
-            } else {
-                //构建新的span
-                sofaTracerSpan = (SofaTracerSpan) getTraceContext().getSofaTracer()
-                        .buildSpan(this.getClass().getSimpleName())
-                        .withTag(Tags.SPAN_KIND.getKey(), Tags.SPAN_KIND_SERVER)
-                        .asChildOf(sofaTracerSpan)
-                        .start();
-            }
-            sofaTracerSpan.setBaggageItem("className", target.getClass().getSimpleName());
-            sofaTracerSpan.setBaggageItem("methodName", method.getName());
-
-            getTraceContext().push(sofaTracerSpan);
-            this.doBefore(sofaTracerSpan, target, method, allArguments, parameterTypes);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void interceptorWithPlugin(PluginDefine pluginDefine) {
+        this.pluginDefine = pluginDefine;
     }
-
-    /**
-     * do before
-     *
-     * @param sofaTracerSpan :
-     * @param target         :
-     * @param method         :
-     * @param allArguments   :
-     * @param parameterTypes :
-     * @return : void
-     * @author 江浩
-     */
-    protected abstract void doBefore(SofaTracerSpan sofaTracerSpan, Object target, Method method, Object[] allArguments, Class<?>[] parameterTypes);
 
     @Override
-    public void after(Object target, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result) {
-        SofaTracerSpan sofaTracerSpan = traceContext.stopCurrentTracerSpan();
-        this.doAfter(sofaTracerSpan, target, method, allArguments, parameterTypes, result);
+    public void before(InterceptContext interceptContext) {
+        SofaTracerSpan sofaTracerSpan = traceContext.getCurrentSpan();
+        this.nextSofaTracerSpan(sofaTracerSpan);
     }
 
-    /**
-     * do after
-     *
-     * @param sofaTracerSpan :
-     * @param target         :
-     * @param method         :
-     * @param allArguments   :
-     * @param parameterTypes :
-     * @param result         :
-     * @return : void
-     * @author 江浩
-     */
-    protected abstract void doAfter(SofaTracerSpan sofaTracerSpan, Object target, Method method, Object[] allArguments, Class<?>[] parameterTypes, Object result);
+
+    public SofaTracerSpan nextSofaTracerSpan(SofaTracerSpan preSofaTracerSpan) {
+        SofaTracerSpan thisSofaTracerSpan = (SofaTracerSpan) getTraceContext()
+                .getSofaTracer()
+                .buildSpan(pluginDefine.name())
+                .withTag(SPAN_KIND.getKey(), SPAN_KIND_SERVER)
+                .asChildOf(preSofaTracerSpan)
+                .start();
+
+        getTraceContext().push(thisSofaTracerSpan);
+
+        return thisSofaTracerSpan;
+    }
+
 
     @Override
-    public void exception(Object target, Method method, Object[] allArguments, Class<?>[] parameterTypes, Throwable t) {
-
+    public void after(InterceptContext interceptContext, Object result, Throwable throwable) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("target", interceptContext.getTarget().getClass().getName());
+        jsonObject.put("method", interceptContext.getMethod().getName());
+        jsonObject.put("args", interceptContext.getArgs());
+        jsonObject.put("result", result);
+        jsonObject.put("throwable", throwable);
+        getTraceContext().stopCurrentTracerSpan(jsonObject);
     }
+
 
 }

@@ -3,11 +3,8 @@ package com.support.monitor.plugins.custom.interceptor;
 import com.support.monitor.agent.core.context.TraceContext;
 import com.support.monitor.agent.core.interceptor.supper.AbstractConstructorInterceptor;
 
-public class CustomSdkConstructorInterceptor extends AbstractConstructorInterceptor {
-
-    private TraceContext traceContext;
-
-    public CustomSdkConstructorInterceptor(TraceContext traceContext) {
+public class CustomSdkPluginConstructorInterceptor extends AbstractConstructorInterceptor {
+    public CustomSdkPluginConstructorInterceptor(TraceContext traceContext) {
         super(traceContext);
     }
 }

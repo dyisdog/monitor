@@ -1,7 +1,7 @@
 package com.support.monitor.plugins.container.tomcat;
 
+import com.support.monitor.agent.core.interceptor.supper.AbstractMethodAroundInterceptor;
 import com.support.monitor.agent.core.plugin.AbstractPluginDefine;
-import com.support.monitor.plugins.container.tomcat.interceptor.TomcatMethodInterceptor;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
@@ -24,7 +24,7 @@ public class Tomcat7xPlugin extends AbstractPluginDefine {
         pointMethod(named("invoke").and(takesArguments(2))
                         .and(takesArgument(0, named("org.apache.catalina.connector.Request")))
                         .and(takesArgument(1, named("org.apache.catalina.connector.Response")))
-                , TomcatMethodInterceptor.class
+                , AbstractMethodAroundInterceptor.class
         );
     }
 }

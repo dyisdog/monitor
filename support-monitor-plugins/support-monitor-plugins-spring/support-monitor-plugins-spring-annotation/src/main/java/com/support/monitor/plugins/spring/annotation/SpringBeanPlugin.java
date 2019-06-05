@@ -1,7 +1,7 @@
 package com.support.monitor.plugins.spring.annotation;
 
 import com.support.monitor.agent.core.plugin.AbstractPluginDefine;
-import com.support.monitor.plugins.spring.annotation.interceptor.SpringBeanMethodInterceptor;
+import com.support.monitor.plugins.spring.annotation.interceptor.SpringPluginMethodInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -18,7 +18,7 @@ public class SpringBeanPlugin extends AbstractPluginDefine {
     @Override
     public void init() {
 
-        pointName("bean");
+        pointName("spring-bean");
         //@Service
         pointClass(isAnnotatedWith(named(Service.class.getName()))
                 //@Component
@@ -29,7 +29,7 @@ public class SpringBeanPlugin extends AbstractPluginDefine {
         );
 
         pointMethod(any(),
-                SpringBeanMethodInterceptor.class);
+                SpringPluginMethodInterceptor.class);
 
     }
 }

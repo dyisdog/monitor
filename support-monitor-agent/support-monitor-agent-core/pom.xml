@@ -69,6 +69,11 @@
             <artifactId>mockito-core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+
 
         <!--使用opentracing 协议，aliplay的具体实现-->
         <!--后期规划以插件的方式替换-->
