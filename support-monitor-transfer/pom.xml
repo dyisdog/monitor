@@ -7,16 +7,20 @@
         <groupId>com.support.monitor</groupId>
         <version>1.1.0-Final</version>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
+
     <artifactId>support-monitor-transfer</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <module>support-monitor-transfer-dubbo</module>
-        <module>support-monitor-transfer-kafka</module>
-        <module>support-monitor-transfer-netty</module>
-        <module>support-monitor-transfer-core</module>
+        <module>support-monitor-transfer-web</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.support.monitor</groupId>
+            <artifactId>support-monitor-commons</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

@@ -15,9 +15,9 @@
         <module>support-monitor-server</module>
         <module>support-monitor-dependencies</module>
         <module>support-monitor-agent</module>
-        <module>support-monitor-transfer</module>
         <module>support-monitor-store</module>
         <module>support-monitor-sdk</module>
+        <module>support-monitor-transfer</module>
     </modules>
 
     <properties>

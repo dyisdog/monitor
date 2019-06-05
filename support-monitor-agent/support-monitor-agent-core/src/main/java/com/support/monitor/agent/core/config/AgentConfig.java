@@ -1,5 +1,7 @@
 package com.support.monitor.agent.core.config;
 
+import com.typesafe.config.Config;
+
 import java.io.File;
 
 /**
@@ -8,6 +10,9 @@ import java.io.File;
  * @author 江浩
  */
 public interface AgentConfig {
+
+
+    Config getConfig();
 
     /**
      * 根据绝对路径加载
@@ -68,6 +73,6 @@ public interface AgentConfig {
      * @author 江浩
      */
     default String getTransfer() {
-        return "kafka";
+        return "webflux";
     }
 }

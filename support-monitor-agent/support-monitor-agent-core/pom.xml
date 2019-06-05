@@ -20,6 +20,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.support.monitor</groupId>
+            <artifactId>support-monitor-transfer-web</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
         </dependency>
@@ -74,7 +79,6 @@
             <artifactId>fastjson</artifactId>
         </dependency>
 
-
         <!--使用opentracing 协议，aliplay的具体实现-->
         <!--后期规划以插件的方式替换-->
         <dependency>
@@ -97,6 +101,7 @@
             <groupId>com.alipay.sofa</groupId>
             <artifactId>tracer-core</artifactId>
         </dependency>
+
 
     </dependencies>
 

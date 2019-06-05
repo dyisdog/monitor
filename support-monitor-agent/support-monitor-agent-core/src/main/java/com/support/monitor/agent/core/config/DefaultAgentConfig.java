@@ -29,6 +29,11 @@ public class DefaultAgentConfig implements AgentConfig {
     }
 
     @Override
+    public Config getConfig() {
+        return this.config;
+    }
+
+    @Override
     public void load(String path) {
         load(new File(path));
     }
@@ -59,6 +64,6 @@ public class DefaultAgentConfig implements AgentConfig {
 
     @Override
     public String getTransfer() {
-        return this.getString("agent.plugin.transfer.type", "kafka");
+        return this.getString("agent.plugin.transfer.type", "webflux");
     }
 }
