@@ -21,6 +21,11 @@ public interface TraceContext extends SofaTraceContext {
      */
     SofaTracer getSofaTracer();
 
-
+    /**
+     * 记录当前span停止
+     *
+     * @param interceptContext
+     * @return
+     */
     SofaTracerSpan stopCurrentTracerSpan(InterceptContext interceptContext);
 }

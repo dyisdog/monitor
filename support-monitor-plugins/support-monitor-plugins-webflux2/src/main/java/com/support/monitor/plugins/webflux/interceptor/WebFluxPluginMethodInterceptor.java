@@ -41,10 +41,7 @@ public class WebFluxPluginMethodInterceptor extends AbstractTransmissionMethodAr
         }
         ServerWebExchange serverWebExchange = (ServerWebExchange) arg0;
 
-        final ServerHttpRequest httpServletRequest = serverWebExchange.getRequest();
-        interceptContext.setIgnored(Objects.isNull(httpServletRequest)
-                || serverWebExchange.getRequest().getURI().toString().matches(IGNORED_URL)
-        );
+        interceptContext.setIgnored(serverWebExchange.getRequest().getURI().toString().matches(IGNORED_URL));
         if (interceptContext.isIgnored()) {
             return;
         }

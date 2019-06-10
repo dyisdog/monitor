@@ -8,6 +8,7 @@ import com.support.monitor.agent.core.context.TraceContext;
 import com.support.monitor.agent.core.interceptor.InterceptContext;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -17,6 +18,7 @@ import java.util.Objects;
  */
 @Getter
 @Setter
+@Slf4j
 public abstract class AbstractTransmissionMethodAroundInterceptor<H> extends AbstractMethodAroundInterceptor {
 
     public AbstractTransmissionMethodAroundInterceptor(TraceContext traceContext) {
@@ -30,20 +32,14 @@ public abstract class AbstractTransmissionMethodAroundInterceptor<H> extends Abs
     @Override
     public void before(InterceptContext interceptContext) {
         SofaTracerSpan sofaTracerSpan = getTraceContext().getCurrentSpan();
-        if (Objects.isNull(sofaTracerSpan)) {
-            return;
+        if (!Objects.isNull(sofaTracerSpan)) {
+            remoteTransmission.transmission(remoteHandle, TRANSMISSION_KEY, sofaTracerSpan.getSofaTracerSpanContext());
         }
-        remoteTransmission.transmission(remoteHandle, TRANSMISSION_KEY, sofaTracerSpan.getSofaTracerSpanContext());
+        //before
         super.before(interceptContext);
     }
 
-
-    @Override
-    public void after(InterceptContext interceptContext, Object result, Throwable throwable) {
-        super.after(interceptContext, result, throwable);
-    }
-
-    public void nextSofaTracerSpan(H handler) {
+    protected void nextSofaTracerSpan(H handler) {
         try {
             SofaTracerSpanContext sofaTracerSpanContext = getSpanContextFrom(handler);
             this.nextSofaTracerSpan(sofaTracerSpanContext);
@@ -63,7 +59,7 @@ public abstract class AbstractTransmissionMethodAroundInterceptor<H> extends Abs
         }
     }
 
-    public SofaTracerSpanContext getSpanContextFrom(H handler) {
+    private SofaTracerSpanContext getSpanContextFrom(H handler) {
         return this.remoteTransmission.receive(handler, TRANSMISSION_KEY);
     }
 }

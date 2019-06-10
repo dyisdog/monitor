@@ -20,6 +20,7 @@ public class TomcatMethodInterceptor extends AbstractTransmissionMethodAroundInt
 
     public TomcatMethodInterceptor(TraceContext traceContext) {
         super(traceContext);
+
         setRemoteTransmission(new RemoteTransmission<HttpServletRequest>() {
             @Override
             public SofaTracerSpanContext receive(HttpServletRequest handler, String key) {

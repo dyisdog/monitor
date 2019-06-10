@@ -30,9 +30,8 @@ public class HttpClientMethodInterceptor extends AbstractTransmissionMethodAroun
     @Override
     public void before(InterceptContext interceptContext) {
         HttpRequest httpRequest = getHttpRequest(interceptContext.getArgs());
-        super.nextSofaTracerSpan(httpRequest);
+        setRemoteHandle(httpRequest);
         super.before(interceptContext);
-
     }
 
     private HttpRequest getHttpRequest(Object[] args) {

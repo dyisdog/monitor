@@ -7,9 +7,11 @@ import com.support.monitor.agent.core.interceptor.InterceptContext;
 import com.support.monitor.agent.core.interceptor.InterceptorPluginAware;
 import com.support.monitor.agent.core.interceptor.MethodAroundInterceptor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import static io.opentracing.tag.Tags.SPAN_KIND;
 import static io.opentracing.tag.Tags.SPAN_KIND_SERVER;
@@ -20,6 +22,7 @@ import static io.opentracing.tag.Tags.SPAN_KIND_SERVER;
  * @author 江浩
  */
 @Getter
+@Slf4j
 public abstract class AbstractMethodAroundInterceptor implements MethodAroundInterceptor, InterceptorPluginAware {
 
     public static final String TRANSMISSION_KEY = "TRANSMISSION_KEY";
@@ -41,24 +44,29 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
     @Override
     public void before(InterceptContext interceptContext) {
         SofaTracerSpan sofaTracerSpan = traceContext.getCurrentSpan();
+        if (Objects.isNull(sofaTracerSpan)) {
+            log.info("current span is empty !");
+            return;
+        }
         this.nextSofaTracerSpan(sofaTracerSpan);
     }
 
 
-    public SofaTracerSpan nextSofaTracerSpan(SofaTracerSpan preSofaTracerSpan) {
+    protected SofaTracerSpan nextSofaTracerSpan(SofaTracerSpan preSofaTracerSpan) {
         SofaTracerSpan thisSofaTracerSpan = (SofaTracerSpan) getTraceContext()
                 .getSofaTracer()
                 .buildSpan(StringUtils.isBlank(pluginName) ? this.getClass().getName() : pluginName)
                 .withTag(SPAN_KIND.getKey(), SPAN_KIND_SERVER)
                 .asChildOf(preSofaTracerSpan)
                 .start();
+
         getTraceContext().push(thisSofaTracerSpan);
 
         return thisSofaTracerSpan;
     }
 
 
-    public SofaTracerSpan nextSofaTracerSpan(SofaTracerSpanContext sofaTracerSpanContext) {
+    public void nextSofaTracerSpan(SofaTracerSpanContext sofaTracerSpanContext) {
 
         SofaTracerSpan thisSofaTracerSpan = new SofaTracerSpan(getTraceContext().getSofaTracer(), System.currentTimeMillis(), pluginName, sofaTracerSpanContext
                 , new HashMap<String, String>(5) {
@@ -66,9 +74,8 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
                 put(SPAN_KIND.getKey(), SPAN_KIND_SERVER);
             }
         });
-        getTraceContext().push(thisSofaTracerSpan);
 
-        return thisSofaTracerSpan;
+        getTraceContext().push(thisSofaTracerSpan);
     }
 
 
