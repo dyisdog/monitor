@@ -36,8 +36,10 @@ public class DefaultReporter implements Reporter {
     @Override
     public void report(SofaTracerSpan sofaTracerSpan) {
 
+
+        System.out.println(sofaTracerSpan);
         if (Objects.isNull(this.transferDefine)) {
-            log.info("transferDefine is empty, span: {}", sofaTracerSpan);
+            //log.info("transferDefine is empty, span: {}", sofaTracerSpan);
             return;
         }
 

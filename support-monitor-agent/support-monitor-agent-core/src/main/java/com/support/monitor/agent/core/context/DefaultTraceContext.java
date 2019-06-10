@@ -1,11 +1,12 @@
 package com.support.monitor.agent.core.context;
 
-import com.alibaba.fastjson.JSONObject;
 import com.alipay.common.tracer.core.SofaTracer;
 import com.alipay.common.tracer.core.context.trace.SofaTracerThreadLocalTraceContext;
 import com.alipay.common.tracer.core.span.SofaTracerSpan;
+import com.support.monitor.agent.core.interceptor.InterceptContext;
 import com.support.monitor.commons.binder.NamedThreadLocal;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.EmptyStackException;
 import java.util.Objects;
@@ -16,7 +17,9 @@ import java.util.Objects;
  * @author 江浩
  */
 @Getter
+@Slf4j
 public class DefaultTraceContext extends SofaTracerThreadLocalTraceContext implements TraceContext {
+
 
     private SofaTracer sofaTracer;
 
@@ -36,21 +39,18 @@ public class DefaultTraceContext extends SofaTracerThreadLocalTraceContext imple
         return this.sofaTracer;
     }
 
-    @Override
-    public SofaTracerSpan stopCurrentTracerSpan(JSONObject jsonObject) {
-        SofaTracerSpan sofaTracerSpan = this.pop();
-        if (!Objects.isNull(jsonObject)) {
-            sofaTracerSpan.setBaggageItem(TraceContext.STOP_OBJECT_KEY, jsonObject.toJSONString());
-        }
-        if (!Objects.isNull(sofaTracerSpan)) {
-            sofaTracerSpan.finish();
-        }
-        return sofaTracerSpan;
-    }
 
     @Override
-    public SofaTracerSpan stopCurrentTracerSpan() {
-        return this.stopCurrentTracerSpan(null);
+    public SofaTracerSpan stopCurrentTracerSpan(InterceptContext interceptContext) {
+        SofaTracerSpan sofaTracerSpan = this.pop();
+        if (Objects.isNull(sofaTracerSpan)) {
+            return null;
+        }
+        //TODO
+
+
+        sofaTracerSpan.finish();
+        return sofaTracerSpan;
     }
 
 

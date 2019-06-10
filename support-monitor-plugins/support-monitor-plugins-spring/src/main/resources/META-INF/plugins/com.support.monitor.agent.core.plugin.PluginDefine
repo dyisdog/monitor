@@ -1,0 +1,3 @@
+plugin-springWebMvc = com.support.monitor.plugins.spring.SpringWebMvcPlugin
+plugin-springExecutor = com.support.monitor.plugins.spring.SpringExecutorExecutorsPlugin
+plugin-springBean = com.support.monitor.plugins.spring.SpringBeanPlugin

@@ -1,6 +1,6 @@
 package com.support.monitor.agent.core.interceptor.supper;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alipay.common.tracer.core.context.span.SofaTracerSpanContext;
 import com.alipay.common.tracer.core.span.SofaTracerSpan;
 import com.support.monitor.agent.core.context.TraceContext;
 import com.support.monitor.agent.core.interceptor.InterceptContext;
@@ -8,6 +8,8 @@ import com.support.monitor.agent.core.interceptor.InterceptorPluginAware;
 import com.support.monitor.agent.core.interceptor.MethodAroundInterceptor;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashMap;
 
 import static io.opentracing.tag.Tags.SPAN_KIND;
 import static io.opentracing.tag.Tags.SPAN_KIND_SERVER;
@@ -55,15 +57,26 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
         return thisSofaTracerSpan;
     }
 
+
+    public SofaTracerSpan nextSofaTracerSpan(SofaTracerSpanContext sofaTracerSpanContext) {
+
+        SofaTracerSpan thisSofaTracerSpan = new SofaTracerSpan(getTraceContext().getSofaTracer(), System.currentTimeMillis(), pluginName, sofaTracerSpanContext
+                , new HashMap<String, String>(5) {
+            {
+                put(SPAN_KIND.getKey(), SPAN_KIND_SERVER);
+            }
+        });
+        getTraceContext().push(thisSofaTracerSpan);
+
+        return thisSofaTracerSpan;
+    }
+
+
     @Override
     public void after(InterceptContext interceptContext, Object result, Throwable throwable) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("target", interceptContext.getTarget().getClass().getName());
-        jsonObject.put("method", interceptContext.getMethod().getName());
-        jsonObject.put("args", interceptContext.getArgs());
-        jsonObject.put("result", result);
-        jsonObject.put("throwable", throwable);
-        getTraceContext().stopCurrentTracerSpan(jsonObject);
+        interceptContext.setResult(result);
+        interceptContext.setThrowable(throwable);
+        getTraceContext().stopCurrentTracerSpan(interceptContext);
     }
 
 

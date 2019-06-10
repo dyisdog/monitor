@@ -13,11 +13,13 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>support-monitor-plugins-spring</module>
         <module>support-monitor-plugins-bom</module>
         <module>support-monitor-plugins-custom</module>
-        <module>support-monitor-plugins-http</module>
-        <module>support-monitor-plugins-container</module>
+        <module>support-monitor-plugins-httpclient</module>
+        <module>support-monitor-plugins-tomcat</module>
+        <module>support-monitor-plugins-spring</module>
+        <module>support-monitor-plugins-okhttp</module>
+        <module>support-monitor-plugins-webflux2</module>
     </modules>
 
     <dependencies>

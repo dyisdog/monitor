@@ -16,7 +16,7 @@
 
         <dependency>
             <groupId>com.support.monitor</groupId>
-            <artifactId>support-monitor-plugins-spring-annotation</artifactId>
+            <artifactId>support-monitor-plugins-spring</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -28,13 +28,20 @@
 
         <dependency>
             <groupId>com.support.monitor</groupId>
-            <artifactId>support-monitor-plugins-http-httpclient</artifactId>
+            <artifactId>support-monitor-plugins-httpclient</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.support.monitor</groupId>
-            <artifactId>support-monitor-plugins-container-tomcat</artifactId>
+            <artifactId>support-monitor-plugins-tomcat</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.support.monitor</groupId>
+            <artifactId>support-monitor-plugins-webflux2</artifactId>
             <version>${project.version}</version>
         </dependency>
 
