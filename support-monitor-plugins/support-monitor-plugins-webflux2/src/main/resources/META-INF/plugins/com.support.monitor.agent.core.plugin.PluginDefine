@@ -1,3 +1,7 @@
 #plugin-webflux-dispatcher = com.support.monitor.plugins.webflux.WebFluxPluginDispatcherHandler
 #plugin-webflux-handlerAdaptor= com.support.monitor.plugins.webflux.WebFluxPluginHandlerAdaptor
-plugin-webflux-serverOperations= com.support.monitor.plugins.webflux.WebFluxPluginServerOperations
+#plugin-webflux-serverOperations= com.support.monitor.plugins.webflux.WebFluxPluginServerOperations
+
+plugin-webflux-onInbound = com.support.monitor.plugins.webflux.WebFluxOnInboundNextPlugin
+
+#plugin-webflux-onOutbound = com.support.monitor.plugins.webflux.WebFluxOnOutboundCompletePlugin
