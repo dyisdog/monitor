@@ -41,18 +41,18 @@ public class TomcatMethodInterceptor extends AbstractTransmissionMethodAroundInt
         if (interceptContext.isIgnored()) {
             return;
         }
-
-        super.nextSofaTracerSpan(httpServletRequest);
+        super.currentTracerSpan(httpServletRequest, interceptContext);
 
     }
 
     @Override
-    public void after(InterceptContext interceptContext, Object result, Throwable throwable) {
+    public void after(InterceptContext interceptContext) {
 
         if (interceptContext.isIgnored()) {
             return;
         }
-        super.after(interceptContext, result, throwable);
+
+        super.after(interceptContext);
     }
 
 }

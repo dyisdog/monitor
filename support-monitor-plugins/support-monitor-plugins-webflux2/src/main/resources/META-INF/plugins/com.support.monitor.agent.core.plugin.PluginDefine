@@ -1,1 +1,3 @@
-plugin-webflux = com.support.monitor.plugins.webflux.WebFluxPlugin
+#plugin-webflux-dispatcher = com.support.monitor.plugins.webflux.WebFluxPluginDispatcherHandler
+#plugin-webflux-handlerAdaptor= com.support.monitor.plugins.webflux.WebFluxPluginHandlerAdaptor
+plugin-webflux-serverOperations= com.support.monitor.plugins.webflux.WebFluxPluginServerOperations

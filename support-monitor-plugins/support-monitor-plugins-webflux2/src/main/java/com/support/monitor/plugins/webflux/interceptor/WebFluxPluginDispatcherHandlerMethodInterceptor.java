@@ -13,11 +13,11 @@ import java.util.Objects;
 /**
  * @author 江浩
  */
-public class WebFluxPluginMethodInterceptor extends AbstractTransmissionMethodAroundInterceptor<ServerHttpRequest> {
+public class WebFluxPluginDispatcherHandlerMethodInterceptor extends AbstractTransmissionMethodAroundInterceptor<ServerHttpRequest> {
 
     static final String IGNORED_URL = ".*favicon.ico.*";
 
-    public WebFluxPluginMethodInterceptor(TraceContext traceContext) {
+    public WebFluxPluginDispatcherHandlerMethodInterceptor(TraceContext traceContext) {
         super(traceContext);
         setRemoteTransmission(new RemoteTransmission<ServerHttpRequest>() {
             @Override
@@ -46,15 +46,16 @@ public class WebFluxPluginMethodInterceptor extends AbstractTransmissionMethodAr
             return;
         }
 
-        super.nextSofaTracerSpan(serverWebExchange.getRequest());
+        super.currentTracerSpan(serverWebExchange.getRequest(), interceptContext);
     }
 
     @Override
-    public void after(InterceptContext interceptContext, Object result, Throwable throwable) {
+    public void after(InterceptContext interceptContext) {
 
         if (interceptContext.isIgnored()) {
             return;
         }
-        super.after(interceptContext, result, throwable);
+        //TODO reactor 方式的处理逻辑？
+        super.after(interceptContext);
     }
 }

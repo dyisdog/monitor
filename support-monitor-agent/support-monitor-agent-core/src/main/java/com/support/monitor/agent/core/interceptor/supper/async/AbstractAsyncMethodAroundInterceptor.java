@@ -37,7 +37,7 @@ public abstract class AbstractAsyncMethodAroundInterceptor extends AbstractMetho
         if (object instanceof EnhancedDefine) {
             EnhancedDefine enhancedDefine = (EnhancedDefine) object;
             SofaTracerSpan sofaTracerSpan = enhancedDefine.getEnhancedInstanceTraceContext();
-            super.nextSofaTracerSpan(sofaTracerSpan);
+            super.currentTracerSpan(sofaTracerSpan, interceptContext);
         }
 
     }

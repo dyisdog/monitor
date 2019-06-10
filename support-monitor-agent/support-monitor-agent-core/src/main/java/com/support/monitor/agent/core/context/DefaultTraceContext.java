@@ -1,15 +1,12 @@
 package com.support.monitor.agent.core.context;
 
 import com.alipay.common.tracer.core.SofaTracer;
-import com.alipay.common.tracer.core.context.span.SofaTracerSpanContext;
 import com.alipay.common.tracer.core.context.trace.SofaTracerThreadLocalTraceContext;
 import com.alipay.common.tracer.core.span.SofaTracerSpan;
-import com.support.monitor.agent.core.interceptor.InterceptContext;
 import com.support.monitor.commons.binder.NamedThreadLocal;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Method;
 import java.util.EmptyStackException;
 import java.util.Objects;
 
@@ -43,34 +40,16 @@ public class DefaultTraceContext extends SofaTracerThreadLocalTraceContext imple
 
 
     @Override
-    public SofaTracerSpan stopCurrentTracerSpan(InterceptContext interceptContext) {
+    public SofaTracerSpan stopCurrentTracerSpan() {
         SofaTracerSpan sofaTracerSpan = this.pop();
         if (Objects.isNull(sofaTracerSpan)) {
             return null;
         }
-
-        //标记当前的span信息
-        this.remarkSpan(sofaTracerSpan, interceptContext);
         sofaTracerSpan.finish();
+
         return sofaTracerSpan;
     }
 
-    private void remarkSpan(SofaTracerSpan sofaTracerSpan, InterceptContext interceptContext) {
-
-        if (Objects.isNull(sofaTracerSpan) || Objects.isNull(interceptContext)) {
-            return;
-        }
-
-        Object target = interceptContext.getTarget();
-        Method method = interceptContext.getMethod();
-
-        //TODO
-        //system prop
-        SofaTracerSpanContext sofaTracerSpanContext = sofaTracerSpan.getSofaTracerSpanContext();
-        sofaTracerSpanContext.setSysBaggageItem("target", target.getClass().getName());
-        sofaTracerSpanContext.setSysBaggageItem("method", method.getName());
-
-    }
 
     @Override
     public void push(SofaTracerSpan span) {

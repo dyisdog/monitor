@@ -21,11 +21,9 @@ public interface MethodAroundInterceptor {
      * 执行之后
      *
      * @param interceptContext :
-     * @param result           :
-     * @param throwable        :
      * @return : void
      * @author 江浩
      */
-    void after(InterceptContext interceptContext, Object result, Throwable throwable);
+    void after(InterceptContext interceptContext);
 
 }

@@ -41,7 +41,9 @@ public class MethodsInterceptWithOverrideArgsCallable {
         } catch (Exception e) {
             throwable = e;
         } finally {
-            methodAroundInterceptor.after(interceptContext, result, throwable);
+            interceptContext.setResult(result);
+            interceptContext.setThrowable(throwable);
+            methodAroundInterceptor.after(interceptContext);
         }
 
         return result;

@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 import static io.opentracing.tag.Tags.SPAN_KIND;
@@ -43,47 +42,49 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
 
     @Override
     public void before(InterceptContext interceptContext) {
-        SofaTracerSpan sofaTracerSpan = traceContext.getCurrentSpan();
-        if (Objects.isNull(sofaTracerSpan)) {
-            log.info("current span is empty !");
-            return;
+        try {
+            SofaTracerSpan sofaTracerSpan = traceContext.getCurrentSpan();
+            if (Objects.isNull(sofaTracerSpan)) {
+                log.info("current span is empty ! {} \n\t\t{}\t{}", Thread.currentThread().getId()
+                        , interceptContext.getTarget().getClass(), interceptContext.getMethod().getName());
+                return;
+            }
+            this.currentTracerSpan(sofaTracerSpan, interceptContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
-        this.nextSofaTracerSpan(sofaTracerSpan);
     }
 
 
-    protected SofaTracerSpan nextSofaTracerSpan(SofaTracerSpan preSofaTracerSpan) {
-        SofaTracerSpan thisSofaTracerSpan = (SofaTracerSpan) getTraceContext()
+    /**
+     * 构建当前的span信息
+     *
+     * @param preSofaTracerSpan :  上一个span信息
+     * @param interceptContext  :   构建当前span请求信息
+     * @return : com.alipay.common.tracer.core.span.SofaTracerSpan
+     * @author 江浩
+     */
+    public SofaTracerSpan currentTracerSpan(SofaTracerSpan preSofaTracerSpan, InterceptContext interceptContext) {
+        SofaTracerSpan thatSofaTracerSpan = (SofaTracerSpan) getTraceContext()
                 .getSofaTracer()
                 .buildSpan(StringUtils.isBlank(pluginName) ? this.getClass().getName() : pluginName)
                 .withTag(SPAN_KIND.getKey(), SPAN_KIND_SERVER)
                 .asChildOf(preSofaTracerSpan)
                 .start();
 
-        getTraceContext().push(thisSofaTracerSpan);
-
-        return thisSofaTracerSpan;
-    }
-
-
-    public void nextSofaTracerSpan(SofaTracerSpanContext sofaTracerSpanContext) {
-
-        SofaTracerSpan thisSofaTracerSpan = new SofaTracerSpan(getTraceContext().getSofaTracer(), System.currentTimeMillis(), pluginName, sofaTracerSpanContext
-                , new HashMap<String, String>(5) {
-            {
-                put(SPAN_KIND.getKey(), SPAN_KIND_SERVER);
-            }
-        });
-
-        getTraceContext().push(thisSofaTracerSpan);
+        SofaTracerSpanContext sofaTracerSpanContext = thatSofaTracerSpan.getSofaTracerSpanContext();
+        //options setting
+        sofaTracerSpanContext.setSysBaggageItem("TARGET_CLASS", interceptContext.getTarget().getClass().getName());
+        sofaTracerSpanContext.setSysBaggageItem("METHOD_CLASS", interceptContext.getMethod().getName());
+        getTraceContext().push(thatSofaTracerSpan);
+        return thatSofaTracerSpan;
     }
 
 
     @Override
-    public void after(InterceptContext interceptContext, Object result, Throwable throwable) {
-        interceptContext.setResult(result);
-        interceptContext.setThrowable(throwable);
-        getTraceContext().stopCurrentTracerSpan(interceptContext);
+    public void after(InterceptContext interceptContext) {
+        getTraceContext().stopCurrentTracerSpan();
     }
 
 

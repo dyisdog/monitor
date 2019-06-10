@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 @NoArgsConstructor
 public class InterceptContext implements Serializable {
 
+
     private Object target;
 
     private Method method;

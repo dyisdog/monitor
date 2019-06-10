@@ -37,7 +37,7 @@ public class DefaultReporter implements Reporter {
     public void report(SofaTracerSpan sofaTracerSpan) {
 
 
-        System.out.println(sofaTracerSpan);
+        System.out.println(Thread.currentThread().getId() + "  " + sofaTracerSpan);
         if (Objects.isNull(this.transferDefine)) {
             //log.info("transferDefine is empty, span: {}", sofaTracerSpan);
             return;

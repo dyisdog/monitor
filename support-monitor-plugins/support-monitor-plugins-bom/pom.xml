@@ -39,11 +39,11 @@
         </dependency>
 
 
-        <!--<dependency>-->
-        <!--<groupId>com.support.monitor</groupId>-->
-        <!--<artifactId>support-monitor-plugins-webflux2</artifactId>-->
-        <!--<version>${project.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.support.monitor</groupId>
+            <artifactId>support-monitor-plugins-webflux2</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
 
     </dependencies>
