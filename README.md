@@ -5,10 +5,7 @@ TODO 需要实现规范
 * 参考实现
     * [opentracing-java](https://github.com/opentracing/opentracing-java)
     * [opentracing](https://opentracing.io/specification/)
-    * [java-spring-jaeger](https://github.com/opentracing-contrib/java-spring-jaeger?files=1)
-    * [jaeger代码思路](https://www.jianshu.com/p/2f5d5638b8b0)
-    * [skywalking](https://github.com/apache/skywalking)
-    * [zipkin](https://github.com/apache/incubator-zipkin)
+    * [sofa-tracer](https://github.com/sofastack/sofa-tracer)
 ```
         [Span A]  ←←←(the root span)
             |
@@ -35,9 +32,6 @@ TODO 需要实现规范
          [Span E·······]        [Span F··] [Span G··] [Span H··]
 
 ```
-
-
-
 
 ---
 * [设计](https://github.com/dyisdog/files/blob/master/%E8%AE%BE%E8%AE%A1.md)
