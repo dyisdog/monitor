@@ -38,4 +38,8 @@ public class TransmitObject implements Serializable {
 
     private Map<String, String> sysBaggage;
 
+    private Long startTime;
+
+    private Long endTime;
+
 }

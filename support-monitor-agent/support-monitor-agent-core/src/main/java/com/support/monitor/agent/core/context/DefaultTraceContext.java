@@ -1,8 +1,11 @@
 package com.support.monitor.agent.core.context;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.common.tracer.core.SofaTracer;
+import com.alipay.common.tracer.core.context.span.SofaTracerSpanContext;
 import com.alipay.common.tracer.core.context.trace.SofaTracerThreadLocalTraceContext;
 import com.alipay.common.tracer.core.span.SofaTracerSpan;
+import com.support.monitor.agent.core.interceptor.InterceptContext;
 import com.support.monitor.commons.binder.NamedThreadLocal;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -40,11 +43,19 @@ public class DefaultTraceContext extends SofaTracerThreadLocalTraceContext imple
 
 
     @Override
-    public SofaTracerSpan stopCurrentTracerSpan() {
+    public SofaTracerSpan stopCurrentTracerSpan(InterceptContext interceptContext) {
         SofaTracerSpan sofaTracerSpan = this.pop();
         if (Objects.isNull(sofaTracerSpan)) {
             return null;
         }
+
+        SofaTracerSpanContext sofaTracerSpanContext = sofaTracerSpan.getSofaTracerSpanContext();
+        //options setting
+        //TODO 这很容易出问题
+        sofaTracerSpanContext.setSysBaggageItem("TARGET_CLASS", interceptContext.getTarget().getClass().getName());
+        sofaTracerSpanContext.setSysBaggageItem("METHOD_CLASS", interceptContext.getMethod().getName());
+        sofaTracerSpanContext.setSysBaggageItem("INVOKER_RESULT", JSONObject.toJSONString(interceptContext.getResult()));
+
         sofaTracerSpan.finish();
 
         return sofaTracerSpan;

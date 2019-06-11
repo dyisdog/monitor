@@ -1,6 +1,5 @@
 package com.support.monitor.agent.core.interceptor.supper;
 
-import com.alipay.common.tracer.core.context.span.SofaTracerSpanContext;
 import com.alipay.common.tracer.core.span.SofaTracerSpan;
 import com.support.monitor.agent.core.context.TraceContext;
 import com.support.monitor.agent.core.interceptor.InterceptContext;
@@ -73,10 +72,6 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
                 .asChildOf(preSofaTracerSpan)
                 .start();
 
-        SofaTracerSpanContext sofaTracerSpanContext = thatSofaTracerSpan.getSofaTracerSpanContext();
-        //options setting
-        sofaTracerSpanContext.setSysBaggageItem("TARGET_CLASS", interceptContext.getTarget().getClass().getName());
-        sofaTracerSpanContext.setSysBaggageItem("METHOD_CLASS", interceptContext.getMethod().getName());
         getTraceContext().push(thatSofaTracerSpan);
         return thatSofaTracerSpan;
     }
@@ -84,7 +79,7 @@ public abstract class AbstractMethodAroundInterceptor implements MethodAroundInt
 
     @Override
     public void after(InterceptContext interceptContext) {
-        getTraceContext().stopCurrentTracerSpan();
+        getTraceContext().stopCurrentTracerSpan(interceptContext);
     }
 
 

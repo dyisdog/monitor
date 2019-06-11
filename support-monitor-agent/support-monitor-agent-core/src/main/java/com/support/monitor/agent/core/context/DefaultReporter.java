@@ -37,7 +37,8 @@ public class DefaultReporter implements Reporter {
     public void report(SofaTracerSpan sofaTracerSpan) {
 
 
-        System.out.println(Thread.currentThread().getId() + "  " + sofaTracerSpan);
+        System.out.println(Thread.currentThread().getId() + "  " + sofaTracerSpan
+                + " use " + (sofaTracerSpan.getEndTime() - sofaTracerSpan.getStartTime()) + " ms ");
         if (Objects.isNull(this.transferDefine)) {
             //log.info("transferDefine is empty, span: {}", sofaTracerSpan);
             return;
@@ -55,6 +56,8 @@ public class DefaultReporter implements Reporter {
                 .setSpanId(sofaTracerSpanContext.getSpanId())
                 .setBizBaggage(sofaTracerSpanContext.getBizBaggage())
                 .setSysBaggage(sofaTracerSpanContext.getSysBaggage())
+                .setStartTime(sofaTracerSpan.getStartTime())
+                .setEndTime(sofaTracerSpan.getEndTime())
                 .setSampled(sofaTracerSpanContext.isSampled());
 
         //step1 setting config
