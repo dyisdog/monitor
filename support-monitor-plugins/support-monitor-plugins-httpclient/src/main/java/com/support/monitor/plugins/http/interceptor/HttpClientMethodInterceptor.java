@@ -1,6 +1,5 @@
 package com.support.monitor.plugins.http.interceptor;
 
-import com.alibaba.fastjson.JSONObject;
 import com.alipay.common.tracer.core.context.span.SofaTracerSpanContext;
 import com.support.monitor.agent.core.context.RemoteTransmission;
 import com.support.monitor.agent.core.context.TraceContext;
@@ -21,7 +20,7 @@ public class HttpClientMethodInterceptor extends AbstractTransmissionMethodAroun
         setRemoteTransmission(new RemoteTransmission<HttpRequest>() {
             @Override
             public void transmission(HttpRequest handler, String key, SofaTracerSpanContext spanContext) {
-                handler.setHeader(key, JSONObject.toJSONString(spanContext));
+                handler.setHeader(key, convert(spanContext));
             }
         });
     }
@@ -30,8 +29,7 @@ public class HttpClientMethodInterceptor extends AbstractTransmissionMethodAroun
     @Override
     public void before(InterceptContext interceptContext) {
         HttpRequest httpRequest = getHttpRequest(interceptContext.getArgs());
-        setRemoteHandle(httpRequest);
-        super.before(interceptContext);
+        super.before(httpRequest, interceptContext);
     }
 
     private HttpRequest getHttpRequest(Object[] args) {

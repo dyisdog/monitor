@@ -7,6 +7,7 @@ import com.support.monitor.agent.core.context.RemoteTransmission;
 import com.support.monitor.agent.core.context.TraceContext;
 import com.support.monitor.agent.core.interceptor.InterceptContext;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +39,16 @@ public abstract class AbstractTransmissionMethodAroundInterceptor<H> extends Abs
 
     @Override
     public void before(InterceptContext interceptContext) {
+        invoker(interceptContext);
+    }
+
+
+    public void before(@NonNull H handler, @NonNull InterceptContext interceptContext) {
+        setRemoteHandle(handler);
+        invoker(interceptContext);
+    }
+
+    private void invoker(InterceptContext interceptContext) {
         SofaTracerSpan sofaTracerSpan = getTraceContext().getCurrentSpan();
         if (!Objects.isNull(sofaTracerSpan)) {
             SofaTracerSpanContext sofaTracerSpanContext = sofaTracerSpan.getSofaTracerSpanContext();
@@ -46,6 +57,7 @@ public abstract class AbstractTransmissionMethodAroundInterceptor<H> extends Abs
         //before
         super.before(interceptContext);
     }
+
 
     /**
      * 构建当前span信息
@@ -58,7 +70,6 @@ public abstract class AbstractTransmissionMethodAroundInterceptor<H> extends Abs
     protected void currentTracerSpan(H handler, InterceptContext interceptContext) {
         try {
             SofaTracerSpanContext sofaTracerSpanContext = getSpanContextFrom(handler);
-            System.out.println("remote2:  " + sofaTracerSpanContext);
             this.currentTracerSpan(sofaTracerSpanContext, interceptContext);
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,6 +113,16 @@ public abstract class AbstractTransmissionMethodAroundInterceptor<H> extends Abs
             return null;
         }
     }
+
+
+    public String convert(SofaTracerSpanContext sofaTracerSpanContext) {
+        try {
+            return JSONObject.toJSONString(sofaTracerSpanContext);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
     /**
      * 获取信息
