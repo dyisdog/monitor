@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @author 江浩
@@ -35,6 +36,9 @@ public class DefaultEnhanceDebugFactory implements EnhanceDebugFactory {
     @Override
     public void fileWrite(File file, TypeDescription typeDescription, DynamicType dynamicType) {
 
+        if (Objects.isNull(file)) {
+            return;
+        }
         synchronized (this) {
             file.deleteOnExit();
             file.mkdir();
